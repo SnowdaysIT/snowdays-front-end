@@ -25,6 +25,8 @@ import ContactAndSocials from "./index-sections/ContactAndSocials.js";
 // import Tabs from "./index-sections/Tabs.js";
 import EventExplanation from "./index-sections/EventExplanation.js"
 
+// Useless comment just to make a commit in the new dev branch
+
 function Index() {
   const areaFocus = React.useState(false);
   const emailFocus = React.useState(false);
