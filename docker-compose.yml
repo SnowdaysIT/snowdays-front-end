@@ -9,7 +9,7 @@ services:
 
   node_install:
     extends:
-      service: node_base
+      service: node_baseT
     command: npm install
 
   webserver:
@@ -17,4 +17,4 @@ services:
       service: node_base
     command: npm start
     ports:
-      - 8088:3000
+      - 8088:3000 ##port on your network:port on docker network
