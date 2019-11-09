@@ -1,18 +1,18 @@
-context('Window', () => {
+context('RootPage', () => {
 
   beforeEach(() => {
     cy.visit(Cypress.env('HOST'))
   })
 
   // Keep as example and default check
-  it('cy.document() - get the document object', () => {
+  it('has the default charset', () => {
     // https://on.cypress.io/document
     cy.document().should('have.property', 'charset').and('eq', 'UTF-8')
   })
 
-  it('cy.title() - get the title', () => {
+  it('has the event name as title', () => {
     // https://on.cypress.io/title
-    cy.title().should('include', 'Snowdays')
+    cy.title().should('include', 'Snowdays 2020')
   })
 
 })
