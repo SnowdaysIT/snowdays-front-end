@@ -42,5 +42,8 @@
   },
   "optionalDependencies": {
     "typescript": "3.5.3"
+  },
+  "devDependencies": {
+    "cypress": "^3.6.1"
   }
 }
