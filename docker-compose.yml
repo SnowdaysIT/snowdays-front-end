@@ -9,7 +9,7 @@ services:
 
   node_install:
     extends:
-      service: node_baseT
+      service: node_base
     command: npm install
 
   webserver:
