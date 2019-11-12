@@ -7,3 +7,16 @@
 .category {
     color: #4BB5FF;
 }
+
+.explanationList {
+    list-style-type: none;
+}
+
+.explanationListItem:before {
+    content: '\2744';
+    margin-left: -20px;
+    margin-right: 10px;
+    font-size: 18px;
+    color: #4BB5FF;
+}
+    

@@ -1,4 +1,5 @@
 import React from "react";
+import '../assets/css/index.css'
 
 // reactstrap components
 import {
@@ -48,9 +49,10 @@ function Index() {
       <div className="wrapper">
         <IndexHeader />
         <div className="main">
-          {/* <Images /> */}
-          <EventExplanation />
-          {/* <Tabs /> */}
+          <section id="eventSection">
+            <EventExplanation />
+          </section>
+          <section id="contactSection">
           <Form action="" className="form" method="">
             <CardHeader className="text-center">
               <CardTitle className="title-up" tag="h3">
@@ -77,6 +79,7 @@ function Index() {
               </Button>
             </CardFooter>
           </Form>
+          </section>
           <ContactAndSocials />
         </div>
         <DarkFooter />

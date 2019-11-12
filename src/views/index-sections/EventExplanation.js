@@ -83,20 +83,31 @@ function Event() {
                                                 From the 7th until the 9th of March SCUB organises sporting competitions, entertainment and parties in Bozen and surroundings.
                                                 The organising committee consists solely of volunteers, enthusiastic about sports, snow and mountains.
                                                 Involved are students from the varying faculties of the UniBz, which is supporting the event.
-                        </p>
+                                            </p>
+                                            <p>
+                                                <b>Included in our package are:</b>
+                                                <ul className="explanationList">
+                                                    <li className="explanationListItem">all meals (breakfast, lunch, snacks, dinner)</li>
+                                                    <li className="explanationListItem">accommodation in student dorm or apartment</li>
+                                                    <li className="explanationListItem">2 ski passes</li>
+                                                    <li className="explanationListItem">transport to the ski areas</li>
+                                                    <li className="explanationListItem">3 parties</li>
+                                                    <li className="explanationListItem">Welcome pack containing the official t-shirt and many sponsor gadgets</li>
+                                                </ul>
+                                            </p>
                                         </TabPane>
                                         <TabPane tabId="iconPills2">
+                                            <h4>What would Snowdays be without it's sports activities?</h4>
                                             <p>
-                                                What would Snowdays be without it's sports activities?
                                                 Still a fantastic event in our opinion, but not quite the same.
-                                                Here are all the sport activities that take place during the event:
-                        <ul>
-                                                    <li>Ski</li>
-                                                    <li>Snowboard</li>
-                                                    <li>Ski Touring</li>
-                                                    <li>Snowvolley</li>
-                                                    <li>Sledging</li>
-                                                    <li>Snowfootball</li>
+                                                Here are the sport activities that you can try out and also compete in throughout the event:
+                                                <ul className="explanationList">
+                                                    <li className="explanationListItem">Ski</li>
+                                                    <li className="explanationListItem">Snowboard</li>
+                                                    <li className="explanationListItem">Ski Touring</li>
+                                                    <li className="explanationListItem">Snowvolley</li>
+                                                    <li className="explanationListItem">Sledging</li>
+                                                    <li className="explanationListItem">Snowfootball</li>
                                                 </ul>
                                             </p>
                                         </TabPane>
