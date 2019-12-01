@@ -26,7 +26,6 @@ function Event() {
                 <Container>
                     <Row>
                         <Col className="ml-auto mr-auto" md="10" xl="6">
-                            {/* <p className="category">THERE ARE NO DAYS LIKE SNOWDAYS</p> */}
                             <h3 className="h3-seo category">THERE ARE NO DAYS LIKE SNOWDAYS</h3>
                             <Card>
                                 <CardHeader>

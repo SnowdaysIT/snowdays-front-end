@@ -20,6 +20,7 @@ import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import IndexHeader from "components/Headers/IndexHeader.js";
 import DarkFooter from "components/Footers/DarkFooter.js";
 
+
 // sections for this page
 // import Images from "./index-sections/Images.js";
 import ContactAndSocials from "./index-sections/ContactAndSocials.js";
@@ -82,6 +83,7 @@ function Index() {
           </section>
           <ContactAndSocials />
         </div>
+        {/* <DarkFooter /> */}
         <DarkFooter />
       </div>
     </>

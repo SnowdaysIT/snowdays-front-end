@@ -19,4 +19,18 @@
     font-size: 18px;
     color: #4BB5FF;
 }
+
+.main-header-div {
+    margin-top: -4vw;
+}
+
+.main-header-text {
+    font-size: 10vw;
+}
+
+@media (max-width: 500px) {
+    .main-header-text {
+        font-size: 14vw;
+    }
+}
     
