@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -37,24 +38,14 @@ function LoginPage() {
   return (
     <>
       <div className="page-header clear-filter" filter-color="blue">
-        <div
-          className="page-header-image"
-          // style={{
-          //   backgroundImage: "url(" + require("assets/img/login.jpg") + ")"
-          // }}
-        ></div>
         <div className="content">
           <Container>
+          <h1>Snowdays 2020</h1>
             <Col className="ml-auto mr-auto" md="4">
               <Card className="card-login card-plain">
+                
                 <Form action="" className="form" method="">
                   <CardHeader className="text-center">
-                    <div className="logo-container">
-                      <img
-                        alt="..."
-                        // src={require("assets/img/now-logo.png")}
-                      ></img>
-                    </div>
                   </CardHeader>
                   <CardBody>
                     <InputGroup
@@ -69,7 +60,7 @@ function LoginPage() {
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        placeholder="First Name..."
+                        placeholder="E-Mail"
                         type="text"
                         onFocus={() => setFirstFocus(true)}
                         onBlur={() => setFirstFocus(false)}
@@ -87,7 +78,7 @@ function LoginPage() {
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        placeholder="Last Name..."
+                        placeholder="Password"
                         type="text"
                         onFocus={() => setLastFocus(true)}
                         onBlur={() => setLastFocus(false)}
@@ -103,28 +94,16 @@ function LoginPage() {
                       onClick={e => e.preventDefault()}
                       size="lg"
                     >
-                      Get Started
+                      Login
                     </Button>
                     <div className="pull-left">
                       <h6>
-                        <a
-                          className="link"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          Create Account
-                        </a>
+                        <Link to="/sign-up" style={{color: "white"}}>Register</Link>
                       </h6>
                     </div>
                     <div className="pull-right">
-                      <h6>
-                        <a
-                          className="link"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          Need Help?
-                        </a>
+                    <h6>
+                        <Link to="/index" style={{color: "white"}}>Need Help?</Link>
                       </h6>
                     </div>
                   </CardFooter>

@@ -50,7 +50,7 @@ function IndexHeader() {
             <h1 className="main-header-text">SNOWDAYS</h1>
             <h3 className="h3-seo">Europe's biggest student winter sports event</h3>
             <div className="dates-container">
-              <h3 className="h3-seo">6 7 March 2020</h3>
+              <h3 className="h3-seo">5 6 7 March 2020</h3>
               <Countdown
                 date={Date.parse("03/05/2020")}
                 renderer={renderer}

@@ -5,7 +5,7 @@ import { Button, Container, Row, Col, UncontrolledTooltip } from "reactstrap";
 
 // core components
 
-function ContactAndSocials() {
+function Socials() {
   return (
     <>
       <div
@@ -66,4 +66,4 @@ function ContactAndSocials() {
   );
 }
 
-export default ContactAndSocials;
+export default Socials;

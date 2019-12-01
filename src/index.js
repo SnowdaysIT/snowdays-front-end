@@ -29,6 +29,7 @@ import Index from "views/Index.js";
 import NucleoIcons from "views/NucleoIcons.js";
 import LoginPage from "views/examples/LoginPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
+import RegisterPage from "views/index-sections/SignUp";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -43,9 +44,11 @@ ReactDOM.render(
           path="/profile-page"
           render={props => <ProfilePage {...props} />}
         />
-        <Route path="/login-page" render={props => <LoginPage {...props} />} />
+        <Route path="/login" render={props => <LoginPage {...props} />} />
+        <Route path="/sign-up" render={props => <RegisterPage {...props} />} />
         <Redirect to="/index" />
         <Redirect from="/" to="/index" />
+
       </Switch>
     </Switch>
   </BrowserRouter>,
