@@ -10,7 +10,7 @@ services:
   node_install:
     extends:
       service: node_base
-    command: npm install
+    command: /bin/sh docker_dev_node_install.sh
 
   webserver:
     extends:
