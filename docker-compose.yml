@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  node_base:
+    image: node:10.16.3-alpine
+    volumes:
+      - ${PWD}:/snowdays-front-end
+    working_dir: /snowdays-front-end
+
+  node_install:
+    extends:
+      service: node_base
+    command: /bin/sh docker_dev_node_install.sh
+
+  webserver:
+    extends:
+      service: node_base
+    command: npm start
+    ports:
+      - 8088:3000 ##port on your network:port on docker network
