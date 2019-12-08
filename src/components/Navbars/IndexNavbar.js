@@ -1,5 +1,5 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+
 // reactstrap components
 import {
   Collapse,
@@ -72,43 +72,32 @@ function IndexNavbar() {
           >
             <Nav navbar>
               <NavItem>
-                <NavLink
-                  href="#event"
+                <NavLink 
+                  href="#eventSection"
                   onClick={e => {
-                    
+                    e.preventDefault();
+                    document.getElementById("eventSection").scrollIntoView();
                   }}
                 >
                   <p>Event</p>
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink
-                  href="#what"
-                  onClick={e => {
-                    
-                  }}
-                >
+                <NavLink href="#what">
                   <p>Staff</p>
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink
-                  href="#contacts"
-                  onClick={e => {
-                    
-                  }}
-                >
+                <NavLink href="#contacts">
                   <p>Sponsors</p>
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink
-                  href="#contacts"
+                  href="#contactSection"
                   onClick={e => {
-                    // e.preventDefault();
-                    // document
-                    //   .getElementById("download-section")
-                    //   .scrollIntoView();
+                    e.preventDefault();
+                    document.getElementById("contactSection").scrollIntoView();
                   }}
                 >
                   <p>Contact Us</p>

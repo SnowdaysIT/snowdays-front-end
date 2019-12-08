@@ -12,38 +12,113 @@ import {
     TabPane,
     Container,
     Row,
-    Col
+    Col,
+    Carousel,
+    CarouselItem
 } from "reactstrap";
 
-// core components
-import Carousel from "./Carousel.js"
+const carousel_images = [
+    {
+        src: require("assets/img/sport1.jpg"),
+    },
+    {
+        src: require("assets/img/sport2.jpg"),
+    },
+    {
+        src: require("assets/img/sport3.jpg"),
+    },
+    {
+        src: require("assets/img/sport4.jpg"),
+    },
+    {
+        src: require("assets/img/sport5.jpg"),
+    },
+    {
+        src: require("assets/img/sport6.jpg"),
+    },
+    {
+        src: require("assets/img/party1.jpg"),
+    },
+    {
+        src: require("assets/img/party2.jpg"),
+    },
+    {
+        src: require("assets/img/party3.jpg"),
+    },
+    {
+        src: require("assets/img/party4.jpg"),
+    },
+    {
+        src: require("assets/img/party5.jpg"),
+    },
+    {
+        src: require("assets/img/party6.jpg"),
+    }
+];
+
 
 function Event() {
+
     const [iconPills, setIconPills] = React.useState("1");
+    const [activeIndex, setActiveIndex] = React.useState(0);
+    const [animating, setAnimating] = React.useState(false);
+    const onExiting = () => {
+      setAnimating(true);
+    };
+    const onExited = () => {
+      setAnimating(false);
+    };
+    const next = () => {
+      if (animating) return;
+      const nextIndex = activeIndex === carousel_images.length - 1 ? 0 : activeIndex + 1;
+      setActiveIndex(nextIndex);
+    };
+    const previous = () => {
+      if (animating) return;
+      const nextIndex = activeIndex === 0 ? carousel_images.length - 1 : activeIndex - 1;
+      setActiveIndex(nextIndex);
+    };
+    const changeIndex = (index) => {
+      setActiveIndex(index);
+    }
+
     return (
         <>
             <div className="section">
                 <Container>
-                    <Row>
-                        <Col className="ml-auto mr-auto" md="10" xl="6">
-                            {/* <p className="category">THERE ARE NO DAYS LIKE SNOWDAYS</p> */}
-                            <h3 className="h3-seo category">THERE ARE NO DAYS LIKE SNOWDAYS</h3>
+                    <Row> 
+                        <h3 className="h3-seo category ml-3">THERE ARE NO DAYS LIKE SNOWDAYS</h3>
+                        <Col className="ml-auto mr-auto" md="11" xl="7">
                             <Card>
                                 <CardHeader>
-                                    <Nav className="justify-content-center" role="tablist" tabs>
+                                    <Nav
+                                        className="nav-tabs-neutral justify-content-center"
+                                        data-background-color="blue"
+                                        role="tablist"
+                                        tabs>
+                                        
                                         <NavItem>
                                             <NavLink
-                                                className={iconPills === "1" ? "active" : ""}
+                                                className={iconPills === "1" ? "active" : "" }
                                                 href="#pablo"
                                                 onClick={e => {
                                                     e.preventDefault();
                                                     setIconPills("1");
+                                                    changeIndex(0);
                                                 }}
+                                                style={{marginTop: "7%"}}
                                             >
-                                                <i class="far fa-snowflake info-icon"></i>
-                                                General
-                      </NavLink>
+                                                <i className="fas fa-skiing info-icon"></i>
+                                                Sports
+                                            </NavLink>
                                         </NavItem>
+
+                                        <NavItem>
+                                            <NavLink className="disabled" style={{marginTop: "12%"}}>
+                                                <i className="fas fa-plus info-icon"></i>
+                                            </NavLink>
+                                        </NavItem>
+                            
                                         <NavItem>
                                             <NavLink
                                                 className={iconPills === "2" ? "active" : ""}
@@ -51,12 +126,21 @@ function Event() {
                                                 onClick={e => {
                                                     e.preventDefault();
                                                     setIconPills("2");
+                                                    changeIndex(6);
                                                 }}
+                                                style={{marginTop: "7%"}}
                                             >
-                                                <i class="fas fa-skiing info-icon"></i>
-                                                Sports
-                      </NavLink>
+                                                <i className="fas fa-glass-cheers info-icon"></i>
+                                                Parties
+                                            </NavLink>
                                         </NavItem>
+
+                                        <NavItem>
+                                            <NavLink className="disabled" style={{marginTop: "12%"}}>
+                                                <i className="fas fa-equals info-icon"></i>
+                                            </NavLink>
+                                        </NavItem>
+
                                         <NavItem>
                                             <NavLink
                                                 className={iconPills === "3" ? "active" : ""}
@@ -66,10 +150,10 @@ function Event() {
                                                     setIconPills("3");
                                                 }}
                                             >
-                                                <i class="fas fa-glass-cheers info-icon"></i>
-                                                Parties
-                      </NavLink>
+                                                <i className="far fa-snowflake info-icon" style={{fontSize: 40}}></i>
+                                            </NavLink>
                                         </NavItem>
+
                                     </Nav>
                                 </CardHeader>
                                 <CardBody>
@@ -78,39 +162,80 @@ function Event() {
                                         activeTab={"iconPills" + iconPills}
                                     >
                                         <TabPane tabId="iconPills1">
-                                            <h4>Snowdays is the biggest winter sports event organised for students by students in Europe.</h4>
-                                            <p>
-                                                From the 7th until the 9th of March SCUB organises sporting competitions, entertainment and parties in Bozen and surroundings.
-                                                The organising committee consists solely of volunteers, enthusiastic about sports, snow and mountains.
-                                                Involved are students from the varying faculties of the UniBz, which is supporting the event.
-                        </p>
+                                            <div>
+                                                <h4>What would Snowdays be without it's sports activities?</h4>
+                                                <p>
+                                                    Still a fantastic event in our opinion, but not quite the same. 
+                                                    Here are the sport activities that you can try out and also compete in throughout the event:
+                                                </p>
+                                                <ul className="explanationList">
+                                                    <li className="explanationListItem">Ski</li>
+                                                    <li className="explanationListItem">Snowboard</li>
+                                                    <li className="explanationListItem">Ski Touring</li>
+                                                    <li className="explanationListItem">Snowvolley</li>
+                                                    <li className="explanationListItem">Sledging</li>
+                                                    <li className="explanationListItem">Snowfootball</li>
+                                                </ul>
+                                            </div>
                                         </TabPane>
                                         <TabPane tabId="iconPills2">
-                                            <p>
-                                                What would Snowdays be without it's sports activities?
-                                                Still a fantastic event in our opinion, but not quite the same.
-                                                Here are all the sport activities that take place during the event:
-                        <ul>
-                                                    <li>Ski</li>
-                                                    <li>Snowboard</li>
-                                                    <li>Ski Touring</li>
-                                                    <li>Snowvolley</li>
-                                                    <li>Sledging</li>
-                                                    <li>Snowfootball</li>
-                                                </ul>
-                                            </p>
+                                            <h4>3 Parties. 3 Locations. 3 Themes.</h4>
+                                            <h5>The time of your life</h5>
+                                            <h6>Get ready for some serious fun</h6>
                                         </TabPane>
                                         <TabPane tabId="iconPills3">
-                                            <h4>3 Parties. 3 Locations. 3 Themes.</h4>
-                                            <h6>The time of your life</h6>
-                                            <p>Check out our <a href="www.google.com">Gallery</a> to see how we party over here</p>
+                              
                                         </TabPane>
                                     </TabContent>
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col className="ml-auto mr-auto" md="10" xl="6">
-                            <Carousel className="index-carousel" />
+                        <Col className="ml-auto mr-auto">
+                        <Carousel
+                            activeIndex={activeIndex}
+                            next={next}
+                            previous={previous}
+                            >
+                            {carousel_images.map(item => {
+                                return (
+                                <CarouselItem
+                                    onExiting={onExiting}
+                                    onExited={onExited}
+                                    key={item.src}
+                                    style={{width:"100%", height: "500px"}}
+                                >
+                                    <img src={item.src} alt={item.altText} />
+                                    <div className="carousel-caption d-none d-md-block">
+                                    <h5>{item.caption}</h5>
+                                    </div>
+                                </CarouselItem>
+                                );
+                            })}
+                            <a
+                                className="carousel-control-prev"
+                                data-slide="prev"
+                                href="#pablo"
+                                onClick={e => {
+                                e.preventDefault();
+                                previous();
+                                }}
+                                role="button"
+                            >
+                                <i className="now-ui-icons arrows-1_minimal-left"></i>
+                            </a>
+                            <a
+                                className="carousel-control-next"
+                                data-slide="next"
+                                href="#pablo"
+                                onClick={e => {
+                                e.preventDefault();
+                                next();
+                                }}
+                                role="button"
+                            >
+                                <i className="now-ui-icons arrows-1_minimal-right"></i>
+                            </a>
+                            </Carousel>
                         </Col>
                     </Row>
                 </Container>
