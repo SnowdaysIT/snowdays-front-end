@@ -1,4 +1,4 @@
-Snowdays 2020 front-end repo
+# Snowdays 2020 front-end repo
 
 [![Build Status](https://jenkins.tiakane.it/buildStatus/icon?job=snowdays-front-end)](https://jenkins.tiakane.it/job/snowdays-front-end/)
 
