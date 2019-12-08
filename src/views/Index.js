@@ -44,7 +44,7 @@ function Index() {
             <EventExplanation />
           </section>
           <section id="staffSection">
-            <Tabs />
+            {/* <Tabs /> */}
           </section>
           <section id="contactSection">
             <HomeContact />
