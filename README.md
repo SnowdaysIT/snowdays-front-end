@@ -1,5 +1,7 @@
 Snowdays 2020 front-end repo
-built using [NOW UI React Kit](https://demos.creative-tim.com/now-ui-kit-react/#/documentation/introduction)
+
+[![Build Status](https://jenkins.tiakane.it/buildStatus/icon?job=snowdays-front-end)](https://jenkins.tiakane.it/job/snowdays-front-end/)
+
 
 To install packages and then run the server use the command
 `npm run install:clean`
