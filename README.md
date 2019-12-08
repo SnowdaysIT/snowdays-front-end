@@ -22,3 +22,5 @@ docker-compose up webserver
 By default the app will run on [localhost:8088](http://localhost:8088)
 
 As in the un-containerized version, any update in the source will be automatically reflected in the app.
+
+The single Dockerfile is just for Jenkins, don't consider it for development.
