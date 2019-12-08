@@ -10,12 +10,16 @@
 
 .explanationList {
     list-style-type: none;
+    font-size: medium;
+    font-weight: 200;
+    margin-top: 10px;
 }
 
 .explanationListItem:before {
     content: '\2744';
     margin-left: -20px;
     margin-right: 10px;
+    margin-top: 100px;
     font-size: 18px;
     color: #4BB5FF;
 }
@@ -32,5 +36,10 @@
     .main-header-text {
         font-size: 14vw;
     }
+}
+
+.info-card-nav {
+    background-color: red;
+    color: red;
 }
     

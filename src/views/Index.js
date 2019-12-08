@@ -13,6 +13,7 @@ import Socials from "./index-sections/Socials.js";
 import EventExplanation from "./index-sections/EventExplanation.js"
 import HomeContact from "./index-sections/HomeContact.js"
 import Tabs from "./index-sections/Tabs";
+import EventLocation from "./index-sections/EventLocation.js"
 
 
 // Useless comment just to make a commit in the new dev branch
@@ -36,7 +37,10 @@ function Index() {
       <div className="wrapper">
         <IndexHeader />
         <div className="main">
-          <section id="eventSection">
+        <section id="eventSection">
+            <EventLocation />
+          </section>
+          <section id="sportPartySection">
             <EventExplanation />
           </section>
           <section id="staffSection">
