@@ -4,12 +4,12 @@ import React from "react";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
-
+import Countdown from 'react-countdown-now';
 // custom css
 import '../../assets/css/index.css';
 
-
 function IndexHeader() {
+
   let pageHeader = React.createRef();
 
   React.useEffect(() => {
@@ -26,9 +26,18 @@ function IndexHeader() {
     }
   });
 
+  // Renderer of the timer
+  const renderer = ({ days, hours, minutes, seconds }) => {
+    return (
+      <div className="timer-box">
+        <h5><strong>{days}d {hours}h {minutes}m {seconds}s</strong></h5>
+      </div>
+    );
+  };
+
   return (
     <>
-      <div className="page-header clear-filter" filter-color="blue">
+      <div className="page-header clear-filter" filter-color="blue" >
         <div
           className="page-header-image"
           style={{
@@ -36,12 +45,19 @@ function IndexHeader() {
           }}
           ref={pageHeader}
         ></div>
-        <Container>
-          <div className="content-center brand">
-            <h1 className="h1-seo" style={{fontSize: "8vw"}} >SNOWDAYS</h1>
-            <h3 style={{fontSize: "2vw"}}>Europe's biggest student winter sports event</h3>
+        <div>
+          <div className="content-center brand main-header-div">
+            <h1 className="main-header-text">SNOWDAYS</h1>
+            <h3 className="h3-seo">Europe's biggest student winter sports event</h3>
+            <div className="dates-container">
+              <h3 className="h3-seo">5 6 7 March 2020</h3>
+              <Countdown
+                date={Date.parse("03/05/2020")}
+                renderer={renderer}
+              />
+            </div>  
           </div>
-        </Container>
+        </div>
       </div>
     </>
   );
