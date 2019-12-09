@@ -12,11 +12,8 @@ import DarkFooter from "components/Footers/DarkFooter.js";
 import Socials from "./index-sections/Socials.js";
 import EventExplanation from "./index-sections/EventExplanation.js"
 import HomeContact from "./index-sections/HomeContact.js"
-import Tabs from "./index-sections/Tabs";
 import EventLocation from "./index-sections/EventLocation.js"
 
-
-// Useless comment just to make a commit in the new dev branch
 
 function Index() {
 
@@ -31,6 +28,7 @@ function Index() {
       document.body.classList.remove("sidebar-collapse");
     };
   });
+
   return (
     <>
       <IndexNavbar />
@@ -43,7 +41,12 @@ function Index() {
           <section id="sportPartySection">
             <EventExplanation />
           </section>
+          <section id="videoSection">
+            {/* <EventExplanation /> */}
+            Videos
+          </section>
           <section id="staffSection">
+            Staff
             {/* <Tabs /> */}
           </section>
           <section id="contactSection">

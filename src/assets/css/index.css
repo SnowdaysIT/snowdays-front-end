@@ -1,3 +1,21 @@
+@font-face {
+    font-family: 'Circular';
+    src: url("../fonts/Circular-Book.eot");
+    src: url("../fonts/Circular-Book.eot") format("embedded-opentype"), url("../fonts/Circular-Book.woff2") format("woff2"), url("../fonts/Circular-Book.woff") format("woff"), url("../fonts/Circular-Book.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Jaapoki';
+    src: url("../fonts/jaapokki-regular-webfont.eot");
+    src: url("../fonts/jaapokki-regular-webfont.eot") format("embedded-opentype"), url("../fonts/jaapokki-regular-webfont.woff2") format("woff2"), url("../fonts/jaapokki-regular-webfont.woff") format("woff"), url("../fonts/jaapokki-regular-webfont.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal; 
+}
+
+* {
+    font-family: 'Circular';
+}
+
 .info-icon {
     padding-left: 5px;
     padding-right: 5px;
@@ -30,11 +48,12 @@
 
 .main-header-text {
     font-size: 10vw;
+    font-family: 'Jaapoki';
 }
-
 @media (max-width: 500px) {
     .main-header-text {
         font-size: 14vw;
+        font-family: 'Jaapoki';
     }
 }
 
