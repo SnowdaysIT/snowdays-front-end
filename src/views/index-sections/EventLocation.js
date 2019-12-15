@@ -3,12 +3,11 @@ import React from "react";
 // reactstrap components
 import {
   Card,
-  CardBody,
-  TabContent,
-  TabPane,
+  CardText,
+  CardHeader,
   Container,
   Row,
-  Col
+  Col,
 } from "reactstrap";
 
 // core components
@@ -25,59 +24,27 @@ function EventLocation() {
         >
         <Container>
           <Row>
-            <Col className="ml-auto mr-auto" md="10" xl="6">
-              <Card>
-                <CardBody>
-                  <TabContent
-                    className="text-left"
-                    activeTab="iconPills1"
-                  >
-                    <TabPane tabId="iconPills1">
-                        <h4 className="category">Snowdays is the biggest winter sports event organised for students by students in Europe.</h4>
-                        <p>
-                            From the 7th until the 9th of March SCUB organises sporting competitions, entertainment and parties in Bozen and surroundings.
-                            The organising committee consists solely of volunteers, enthusiastic about sports, snow and mountains.
-                            Involved are students from the varying faculties of the UniBz, which is supporting the event.
-                        </p>
-                        <b>Included in our package are:</b>
-                        <ul className="explanationList">
-                            <li className="explanationListItem">all meals (breakfast, lunch, snacks, dinner)</li>
-                            <li className="explanationListItem">accommodation in student dorm or apartment</li>
-                            <li className="explanationListItem">2 ski passes</li>
-                            <li className="explanationListItem">transport to the ski areas</li>
-                            <li className="explanationListItem">3 parties</li>
-                            <li className="explanationListItem">Welcome pack containing the official t-shirt and many sponsor gadgets</li>
-                        </ul>
-                    </TabPane>
-                    <TabPane tabId="iconPills2">
-                      <p>
-                        I will be the leader of a company that ends up being
-                        worth billions of dollars, because I got the answers. I
-                        understand culture. I am the nucleus. I think that’s a
-                        responsibility that I have, to push possibilities, to
-                        show people, this is the level that things could be at.
-                        I think that’s a responsibility that I have, to push
-                        possibilities, to show people, this is the level that
-                        things could be at.
-                      </p>
-                    </TabPane>
-                  </TabContent>
-                </CardBody>
+            <Col sm="12" md="12" lg="6" xl="6">
+              <Card body outline color="#4BB5FF" className="type1-card">
+                <CardHeader>
+                  <h3 className="category">Snowdays is the biggest winter sports event organised by students for students</h3>
+                </CardHeader>
+                <CardText>
+                  Every year hundreds of people gather from all over Europe for three gorgeous days full of sports, parties and friendly atmospheres.
+                  The organising committee consists solely of volunteers, enthusiastic about sports, snow and mountains.
+                  Involved are students from the varying faculties of the UniBz, which is supporting the event.
+                </CardText>
               </Card>
             </Col>
-            <Col className="ml-auto mr-auto" md="10" xl="6">
-              <Card>
-                <CardBody>
-                  <TabContent
-                    className="text-left"
-                    activeTab={"pills1"}
-                  >
-                    <TabPane tabId="pills1">
-                    <h4 className="category">Location description goes here</h4>
-                    </TabPane>
-                    
-                  </TabContent>
-                </CardBody>
+            <Col sm="12" md="12" lg="6" xl="6">
+              <Card body outline color="#4BB5FF" className="type1-card">
+                <CardHeader>
+                  <h3 className="category">Hosted in the province of South-Tyrol in Italy</h3>
+                </CardHeader>
+                <CardText>
+                  Snowdays is set on the best ski slopes of the Italian Dolomites; 
+                  breathtaking landscapes and soft snowfalls will make your Snowdays experience unforgettable. 
+                </CardText>
               </Card>
             </Col>
           </Row>

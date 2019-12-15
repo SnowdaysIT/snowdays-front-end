@@ -57,8 +57,11 @@
     }
 }
 
-.info-card-nav {
-    background-color: red;
-    color: red;
+.yt-video-container {
+    background-color: white;
+    width: auto;
 }
     
+.type1-card {
+    border-radius: 2%;
+}

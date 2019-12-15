@@ -10,9 +10,11 @@ import DarkFooter from "components/Footers/DarkFooter.js";
 // sections for this page
 // import Images from "./index-sections/Images.js";
 import Socials from "./index-sections/Socials.js";
-import EventExplanation from "./index-sections/EventExplanation.js"
 import HomeContact from "./index-sections/HomeContact.js"
 import EventLocation from "./index-sections/EventLocation.js"
+import EventExplanation from "./index-sections/EventExplanation.js"
+import Videos from "./index-sections/Videos.js"
+
 
 
 function Index() {
@@ -42,11 +44,10 @@ function Index() {
             <EventExplanation />
           </section>
           <section id="videoSection">
-            {/* <EventExplanation /> */}
-            Videos
+            <Videos />
           </section>
           <section id="staffSection">
-            Staff
+            
             {/* <Tabs /> */}
           </section>
           <section id="contactSection">

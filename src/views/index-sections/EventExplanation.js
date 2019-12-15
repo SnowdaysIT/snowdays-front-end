@@ -144,10 +144,10 @@ function Event() {
                                         <NavItem>
                                             <NavLink
                                                 className={iconPills === "3" ? "active" : ""}
-                                                href="#pablo"
+                                                href="#videos"
                                                 onClick={e => {
                                                     e.preventDefault();
-                                                    setIconPills("3");
+                                                    document.getElementById("videoSection").scrollIntoView();
                                                 }}
                                             >
                                                 <i className="far fa-snowflake info-icon" style={{fontSize: 40}}></i>
@@ -163,10 +163,11 @@ function Event() {
                                     >
                                         <TabPane tabId="iconPills1">
                                             <div>
-                                                <h4>What would Snowdays be without it's sports activities?</h4>
+                                                <h4>Go ahead and do your best!</h4>
                                                 <p>
-                                                    Still a fantastic event in our opinion, but not quite the same. 
-                                                    Here are the sport activities that you can try out and also compete in throughout the event:
+                                                    Compete with other universities in races and tournaments, 
+                                                    and try some new sports with your best friends or other fantastic people you may meet around here. 
+                                                    Here are all the sport activities you can try:
                                                 </p>
                                                 <ul className="explanationList">
                                                     <li className="explanationListItem">Ski</li>
@@ -179,12 +180,12 @@ function Event() {
                                             </div>
                                         </TabPane>
                                         <TabPane tabId="iconPills2">
-                                            <h4>3 Parties. 3 Locations. 3 Themes.</h4>
-                                            <h5>The time of your life</h5>
-                                            <h6>Get ready for some serious fun</h6>
-                                        </TabPane>
-                                        <TabPane tabId="iconPills3">
-                              
+                                            <h4>Snowdays cares also about your entertainment</h4>
+                                            <p>
+                                                Enjoy partying both on the ski slopes’ basecamp and at night!
+                                                Three days means <b>three different theme parties</b> in <b>three different locations</b>, you will not let yourself down! 
+                                            </p>                                            
+
                                         </TabPane>
                                     </TabContent>
                                 </CardBody>
