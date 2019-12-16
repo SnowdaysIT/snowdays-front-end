@@ -1,4 +1,5 @@
 {
   "domain": "snowman.eu.auth0.com",
-  "clientId": "yVYUGt4fKqCT1OG9VH5qllqa6Zhxhxsb"
+  "clientId": "yVYUGt4fKqCT1OG9VH5qllqa6Zhxhxsb",
+  "audience": "YOUR_API_IDENTIFIER"
 }
