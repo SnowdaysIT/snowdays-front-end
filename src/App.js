@@ -9,6 +9,8 @@ import LoginPage from "./views/examples/LoginPage.js";
 import RegisterPage from "./views/index-sections/SignUp";
 import ProfilePage from "./views/Profile.js";
 
+import PrivateRoute from "./components/PrivateRoute";
+
 function App() {
   const { loading } = useAuth0();
 
@@ -27,7 +29,7 @@ function App() {
           />
           <Route path="/login" render={props => <LoginPage {...props} />} />
           <Route path="/sign-up" render={props => <RegisterPage {...props} />} />
-          <Route path="/profile" render={props => <ProfilePage {...props} />} />
+          <PrivateRoute path="/profile" component={ProfilePage} />
           <Redirect to="/index" />
           <Redirect from="/" to="/index" />
         </Switch>
