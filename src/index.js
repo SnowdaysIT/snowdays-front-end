@@ -17,39 +17,34 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 // styles for this kit
 import "assets/css/bootstrap.min.css";
 import "assets/scss/now-ui-kit.scss";
 
-// pages for this kit
-import Index from "views/Index.js";
-import NucleoIcons from "views/NucleoIcons.js";
-import LoginPage from "views/examples/LoginPage.js";
-import ProfilePage from "views/examples/ProfilePage.js";
-import RegisterPage from "views/index-sections/SignUp";
+import { Auth0Provider } from "./react-auth0-spa";
+import config from "./auth_config.json";
+import history from "./utils/history";
+import App from './App';
+
+// A function that routes the user to the right place
+// after login
+const onRedirectCallback = appState => {
+  history.push(
+    appState && appState.targetUrl
+      ? appState.targetUrl
+      : window.location.pathname
+  );
+};
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      <Switch>
-        <Route path="/index" render={props => <Index {...props} />} />
-        <Route
-          path="/nucleo-icons"
-          render={props => <NucleoIcons {...props} />}
-        />
-        <Route
-          path="/profile-page"
-          render={props => <ProfilePage {...props} />}
-        />
-        <Route path="/login" render={props => <LoginPage {...props} />} />
-        <Route path="/sign-up" render={props => <RegisterPage {...props} />} />
-        <Redirect to="/index" />
-        <Redirect from="/" to="/index" />
-
-      </Switch>
-    </Switch>
-  </BrowserRouter>,
+  <Auth0Provider
+    domain={config.domain}
+    client_id={config.clientId}
+    redirect_uri={window.location.origin}
+    onRedirectCallback={onRedirectCallback}
+  >
+    <App />
+  </Auth0Provider>,
   document.getElementById("root")
 );

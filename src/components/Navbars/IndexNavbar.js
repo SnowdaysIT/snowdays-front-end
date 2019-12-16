@@ -11,7 +11,10 @@ import {
   Container,
 } from "reactstrap";
 
+import { useAuth0 } from "../../react-auth0-spa";
+
 function IndexNavbar() {
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const [navbarColor, setNavbarColor] = React.useState("navbar-transparent");
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   React.useEffect(() => {
@@ -71,6 +74,18 @@ function IndexNavbar() {
             navbar
           >
             <Nav navbar>
+              <NavItem>
+              {!isAuthenticated && (
+                <NavLink onClick={() => loginWithRedirect({})}>
+                  <p>Log in</p>
+                </NavLink>
+              )}
+              {isAuthenticated && (
+                <NavLink onClick={() => logout()}>
+                  <p>Log out</p>
+                </NavLink>
+              )}
+              </NavItem>
               <NavItem>
                 <NavLink 
                   href="#eventSection"
