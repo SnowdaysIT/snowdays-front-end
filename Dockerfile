@@ -7,10 +7,12 @@ WORKDIR $DIR
 
 COPY package.json $DIR
 
-RUN npm install
+RUN npm install --production --no-package-lock
 
 COPY . $DIR
 
+RUN npm run build
+
 EXPOSE 8080
 
-CMD npm start
+CMD npm run serve:docker
