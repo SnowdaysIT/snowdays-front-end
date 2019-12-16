@@ -1,13 +1,13 @@
 import React from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { useAuth0 } from "./react-auth0-spa";
+import history from "./utils/history";
 
-// pages for this kit
-import Index from "./views/Index.js";
 import NucleoIcons from "./views/NucleoIcons.js";
+import Index from "./views/Index.js";
 import LoginPage from "./views/examples/LoginPage.js";
-import ProfilePage from "./views/examples/ProfilePage.js";
 import RegisterPage from "./views/index-sections/SignUp";
+import ProfilePage from "./views/Profile.js";
 
 function App() {
   const { loading } = useAuth0();
@@ -17,7 +17,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
+    <Router history={history}>
       <Switch>
         <Switch>
           <Route path="/index" render={props => <Index {...props} />} />
@@ -25,18 +25,14 @@ function App() {
             path="/nucleo-icons"
             render={props => <NucleoIcons {...props} />}
           />
-          <Route
-            path="/profile-page"
-            render={props => <ProfilePage {...props} />}
-          />
           <Route path="/login" render={props => <LoginPage {...props} />} />
           <Route path="/sign-up" render={props => <RegisterPage {...props} />} />
+          <Route path="/profile" render={props => <ProfilePage {...props} />} />
           <Redirect to="/index" />
           <Redirect from="/" to="/index" />
-
         </Switch>
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 }
 

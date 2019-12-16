@@ -1,6 +1,4 @@
 import React from "react";
-
-// reactstrap components
 import {
   Collapse,
   NavbarBrand,
@@ -10,7 +8,7 @@ import {
   Nav,
   Container,
 } from "reactstrap";
-
+import { Link } from 'react-router-dom';
 import { useAuth0 } from "../../react-auth0-spa";
 
 function IndexNavbar() {
@@ -47,13 +45,12 @@ function IndexNavbar() {
           }}
         />
       ) : null}
-      <Navbar className={"fixed-top " + navbarColor} expand="lg" color="info">
+      <Navbar className={`fixed-top ${navbarColor}`} expand="lg" color="info">
         <Container>
           <div className="navbar-translate">
             <NavbarBrand href="/index" target="_self" id="navbar-brand">
               SNOWDAYS 2020
             </NavbarBrand>
-
             <button
               className="navbar-toggler navbar-toggler"
               onClick={() => {
@@ -63,9 +60,9 @@ function IndexNavbar() {
               aria-expanded={collapseOpen}
               type="button"
             >
-              <span className="navbar-toggler-bar top-bar"></span>
-              <span className="navbar-toggler-bar middle-bar"></span>
-              <span className="navbar-toggler-bar bottom-bar"></span>
+              <span className="navbar-toggler-bar top-bar" />
+              <span className="navbar-toggler-bar middle-bar" />
+              <span className="navbar-toggler-bar bottom-bar" />
             </button>
           </div>
           <Collapse
@@ -74,18 +71,33 @@ function IndexNavbar() {
             navbar
           >
             <Nav navbar>
-              <NavItem>
               {!isAuthenticated && (
-                <NavLink onClick={() => loginWithRedirect({})}>
-                  <p>Log in</p>
-                </NavLink>
+                <NavItem>
+                  <NavLink
+                    href="#"
+                    onClick={() => loginWithRedirect({})}
+                  >
+                    <p>Log in</p>
+                  </NavLink>
+                </NavItem>
               )}
               {isAuthenticated && (
-                <NavLink onClick={() => logout()}>
-                  <p>Log out</p>
-                </NavLink>
+                <>
+                  <NavItem>
+                    <NavLink
+                      href="#"
+                      onClick={() => logout()}
+                    >
+                      <p>Log out</p>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink tag={Link} to="/profile">
+                      <p>Profile</p>
+                    </NavLink>
+                  </NavItem>
+                </>
               )}
-              </NavItem>
               <NavItem>
                 <NavLink 
                   href="#eventSection"
