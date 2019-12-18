@@ -9,7 +9,6 @@ import DarkFooter from "components/Footers/DarkFooter.js";
 
 // sections for this page
 // import Images from "./index-sections/Images.js";
-import Socials from "./index-sections/Socials.js";
 import HomeContact from "./index-sections/HomeContact.js"
 import EventLocation from "./index-sections/EventLocation.js"
 import EventExplanation from "./index-sections/EventExplanation.js"
@@ -52,7 +51,6 @@ function Index() {
           </section>
           <section id="contactSection">
             <HomeContact />
-            <Socials />
           </section>
         </div>
         <DarkFooter />

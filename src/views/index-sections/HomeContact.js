@@ -11,45 +11,98 @@ import {
     InputGroupText,
     InputGroup,
     Row,
-    Col
-  } from "reactstrap";
+    Col,
+    Container,
+    UncontrolledTooltip
+} from "reactstrap";
 
 
 function HomeContact(params) {
     const areaFocus = React.useState(false);
     const emailFocus = React.useState(false);
 
-    return(
-            <Form action="" className="form" method="">
-            <CardHeader className="text-center">
-                <CardTitle className="title-up category" tag="h2">
+    return (
+        <>
+            <CardHeader className="text-center" style={{backgroundColor: "#404040"}} >
+                <CardTitle className="title-up mt-2" tag="h2" style={{color: "white"}} >
                     Contact Us
                 </CardTitle>
             </CardHeader>
-            <CardBody>
+            <CardBody data-background-color="black">
                 <Row>
-                    <Col className="ml-auto mr-auto">
-                        <InputGroup className={"no-border" + (emailFocus ? " input-group-focus" : "")}>
-                        <InputGroupAddon addonType="prepend">
-                            <InputGroupText>
-                            <i className="now-ui-icons ui-1_email-85" style={{paddingRight: "2vw"}}></i>
-                            </InputGroupText>
-                        </InputGroupAddon>
-                        <Input placeholder="Your Email" type="email"></Input>
-                        </InputGroup>
-                        <InputGroup className={"no-border" + (areaFocus ? " input-group-focus" : "")}>
-                        <Input placeholder="Your questions" type="textarea"></Input>
-                        </InputGroup>
-                        <Button className="btn btn-round" color="info" href="#pablo" 
-                        onClick={e => e.preventDefault()} size="lg">
-                        Send
-                        </Button>
+                    <Col>
+                        <Form action="" className="form" method="">
+                            <InputGroup className={"no-border" + (emailFocus ? " input-group-focus" : "")}>
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText>
+                                        <i className="now-ui-icons ui-1_email-85 pr-5 pl-3"></i>
+                                    </InputGroupText>
+                                </InputGroupAddon>
+                                <Input placeholder="Your Email" type="email"></Input>
+                            </InputGroup>
+                            <InputGroup className={"no-border" + (areaFocus ? " input-group-focus" : "")}>
+                                <Input placeholder="Your questions" type="textarea"></Input>
+                            </InputGroup>
+                            <Button className="btn btn-round" color="info" href="#pablo"
+                                onClick={e => e.preventDefault()} size="lg">
+                                Send
+                            </Button>
+                        </Form>
                     </Col>
-                    <Col className="ml-auto mr-auto"> Demo text to fill up other half</Col>
+
+                    <Col>
+                        <h3 className="text-center">Follow us on social media!</h3>
+                        <Row className="justify-content-center text-center" style={{width: "50%", marginLeft: "25%"}}>
+                            <Col>
+                                <Button
+                                    className="btn-neutral btn-icon btn-round"
+                                    color="twitter"
+                                    href="https://twitter.com/bolzanosnowdays"
+                                    id="tooltip86114138"
+                                    size="lg"
+                                    target="_blank"
+                                >
+                                    <i className="fab fa-twitter"></i>
+                                </Button>
+                                <UncontrolledTooltip delay={0} target="tooltip86114138">
+                                    Follow us
+                                </UncontrolledTooltip>
+                            </Col>
+                            <Col>
+                                <Button
+                                    className="btn-neutral btn-icon btn-round"
+                                    color="facebook"
+                                    href="https://www.facebook.com/Snowdays.Bolzano/"
+                                    id="tooltip735272548"
+                                    size="lg"
+                                    target="_blank"
+                                >
+                                    <i className="fab fa-facebook-square"></i>
+                                </Button>
+                                <UncontrolledTooltip delay={0} target="tooltip735272548">
+                                    Like us
+                                </UncontrolledTooltip>
+                            </Col>
+                            <Col>
+                                <Button
+                                    className="btn-neutral btn-icon btn-round"
+                                    color="instagram"
+                                    href="https://www.instagram.com/snowdays.bolzano/"
+                                    id="tooltip647117716"
+                                    size="lg"
+                                    target="_blank"
+                                >
+                                    <i className="fab fa-instagram"></i>
+                                </Button>
+                                <UncontrolledTooltip delay={0} target="tooltip647117716">
+                                    Follow us
+                                </UncontrolledTooltip>
+                            </Col>
+                        </Row>
+                    </Col>
                 </Row>
             </CardBody>
-            </Form>
-            
+        </>
     )
 }
 

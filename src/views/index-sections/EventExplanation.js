@@ -18,9 +18,9 @@ import {
 } from "reactstrap";
 
 const carousel_images = [
-    {
-        src: require("assets/img/sport1.jpg"),
-    },
+    // {
+    //     src: require("assets/img/sport1.jpg"),
+    // },
     {
         src: require("assets/img/sport2.jpg"),
     },
@@ -36,21 +36,21 @@ const carousel_images = [
     {
         src: require("assets/img/sport6.jpg"),
     },
-    {
-        src: require("assets/img/party1.jpg"),
-    },
-    {
-        src: require("assets/img/party2.jpg"),
-    },
-    {
-        src: require("assets/img/party3.jpg"),
-    },
-    {
-        src: require("assets/img/party4.jpg"),
-    },
-    {
-        src: require("assets/img/party5.jpg"),
-    },
+    // {
+    //     src: require("assets/img/party1.jpg"),
+    // },
+    // {
+    //     src: require("assets/img/party2.jpg"),
+    // },
+    // {
+    //     src: require("assets/img/party3.jpg"),
+    // },
+    // {
+    //     src: require("assets/img/party4.jpg"),
+    // },
+    // {
+    //     src: require("assets/img/party5.jpg"),
+    // },
     {
         src: require("assets/img/party6.jpg"),
     }
@@ -203,12 +203,9 @@ function Event() {
                                     onExiting={onExiting}
                                     onExited={onExited}
                                     key={item.src}
-                                    style={{width:"100%", height: "500px"}}
+                                    style={{width: "100%"}}
                                 >
-                                    <img src={item.src} alt={item.altText} />
-                                    <div className="carousel-caption d-none d-md-block">
-                                    <h5>{item.caption}</h5>
-                                    </div>
+                                    <img src={item.src} alt="carousel" className=""/>
                                 </CarouselItem>
                                 );
                             })}
