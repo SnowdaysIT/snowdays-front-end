@@ -38,21 +38,29 @@ import Error from './Error';
 // NOTE => could be used <ApolloProvider> instead
 import Client from './Client';
 
-function ApiQuery(WrappedComponent, query, ...queryHookOptions) {
+function ApiQuery(WrappedComponent, query, queryHookOptions) {
   const displayName = `ApiQuery(${
     WrappedComponent.displayName ||
     WrappedComponent.name
   })`;
   const Wrapper = (props) => {
-    const { loading, error, data } = useQuery(gql`${query}`, {
+    const {
+      loading,
+      error,
+      data,
+      refetch,
+    } = useQuery(gql`${query}`, {
       client: Client,
       displayName,
       ...queryHookOptions,
     });
     if (loading) return <Loading />;
-    if (error) return <Error />;    
+    if (error) return <Error error={error} />;    
     return (
-      <WrappedComponent apiData={data} {...props} />
+      <WrappedComponent
+        apiData={data}
+        refetch={refetch}
+        {...props} />
     );
   }
   Wrapper.displayName = `Component-${displayName}`;  
