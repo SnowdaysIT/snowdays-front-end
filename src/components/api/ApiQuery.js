@@ -5,7 +5,7 @@
  * > Usage e.g.:
  * 
  * function Component({ apiData }) {
- *  return apiData.forEach(({ id, title }) => (
+ *  return apiData.todo.map(({ id, title }) => (
  *    <>
  *      <span>{id}</span>
  *      <span>{title}</span>
@@ -19,7 +19,7 @@
  *      title
  *    }
  *  }
- * `)
+ * `);
  * 
  * Your Component will be decorated with the new property 'apiData'
  * 
@@ -35,21 +35,27 @@ import { gql } from 'apollo-boost';
 import Loading from './Loading';
 import Error from './Error';
 
-function ApiQuery(WrappedComponent, query) {
-  const { loading, error, data } = useQuery(gql`${query}`);
+// NOTE => could be used <ApolloProvider> instead
+import Client from './Client';
 
-  if (loading) return <Loading />;
-  if (error) return <Error />;
-  
-  const Wrapper = (props) => (
-    <WrappedComponent apiData={data} {...props} />
-  );
-
-  Wrapper.displayName = `ApiQuery(${
+function ApiQuery(WrappedComponent, query, ...queryHookOptions) {
+  const displayName = `ApiQuery(${
     WrappedComponent.displayName ||
     WrappedComponent.name
   })`;
-  
+  const Wrapper = (props) => {
+    const { loading, error, data } = useQuery(gql`${query}`, {
+      client: Client,
+      displayName,
+      ...queryHookOptions,
+    });
+    if (loading) return <Loading />;
+    if (error) return <Error />;    
+    return (
+      <WrappedComponent apiData={data} {...props} />
+    );
+  }
+  Wrapper.displayName = `Component-${displayName}`;  
   return Wrapper;
 }
 
