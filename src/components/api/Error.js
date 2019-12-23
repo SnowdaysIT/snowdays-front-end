@@ -17,7 +17,7 @@ function Error({ error }) {
       <h3>Error</h3>
       <p>{message}</p>
       <p>{extraInfo}</p>
-      {networkError.result.errors.map((x) => (
+      {networkError?.result?.errors?.map((x) => (
         <p key={x}>{x.message}</p>
       ))}
     </Container>

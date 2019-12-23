@@ -56,15 +56,19 @@ function ApiQuery(WrappedComponent, query, queryHookOptions) {
     });
     if (loading) return <Loading />;
     if (error) return <Error error={error} />;    
+    const { forwardedRef, ...rest } = props;
     return (
       <WrappedComponent
         apiData={data}
         refetch={refetch}
-        {...props} />
+        ref={forwardedRef}
+        {...rest} />
     );
   }
   Wrapper.displayName = `Component-${displayName}`;  
-  return Wrapper;
+  return React.forwardRef((props, ref) => {
+    return <Wrapper {...props} forwardedRef={ref} />;
+  });
 }
 
 export default ApiQuery;
