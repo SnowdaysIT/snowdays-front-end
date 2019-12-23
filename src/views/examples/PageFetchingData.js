@@ -19,7 +19,7 @@ function PageFetchingData({ apiData, refetch }) {
       <form onSubmit={fetchRates}>
         <input type="text" defaultValue={currency} onChange={updateCurrency} />
       </form>
-      {apiData.rates && apiData.rates.map(({ currency, rate }) => (
+      {apiData.rates?.map(({ currency, rate }) => (
         <div key={currency}>
           <p>
             {currency}: {rate}
