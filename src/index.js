@@ -24,11 +24,11 @@ import "assets/css/bootstrap.min.css";
 import "assets/scss/now-ui-kit.scss";
 
 // pages for this kit
-import Index from "views/Index.js";
+import Index from "views/index/Index.js";
 import NucleoIcons from "views/NucleoIcons.js";
-import LoginPage from "views/examples/LoginPage.js";
-import ProfilePage from "views/examples/ProfilePage.js";
-import RegisterPage from "views/index-sections/SignUp";
+import LoginPage from "views/login/LoginPage.js";
+import ProfilePage from "views/profile/ProfilePage.js";
+import RegisterPage from "views/registration/SignUp.js";
 
 ReactDOM.render(
   <BrowserRouter>

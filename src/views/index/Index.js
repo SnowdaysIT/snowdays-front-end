@@ -1,5 +1,5 @@
 import React from "react";
-import '../assets/css/index.css'
+import '../../assets/css/index.css'
 
 // core components
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
@@ -9,10 +9,10 @@ import DarkFooter from "components/Footers/DarkFooter.js";
 
 // sections for this page
 // import Images from "./index-sections/Images.js";
-import HomeContact from "./index-sections/HomeContact.js"
-import EventLocation from "./index-sections/EventLocation.js"
-import EventExplanation from "./index-sections/EventExplanation.js"
-import Videos from "./index-sections/Videos.js"
+import HomeContact from "./HomeContact.js"
+import EventLocation from "./EventLocation.js"
+import EventExplanation from "./EventExplanation.js"
+import Videos from "./Videos.js"
 
 
 

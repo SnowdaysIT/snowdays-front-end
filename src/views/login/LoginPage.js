@@ -18,7 +18,6 @@ import {
 } from "reactstrap";
 
 // core components
-//import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
 import DarkFooter from "components/Footers/DarkFooter.js";
 
 function LoginPage() {
