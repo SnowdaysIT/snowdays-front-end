@@ -28,7 +28,7 @@ import Index from "views/index/Index.js";
 import NucleoIcons from "views/NucleoIcons.js";
 import LoginPage from "views/login/LoginPage.js";
 import ProfilePage from "views/profile/ProfilePage.js";
-import RegisterPage from "views/registration/SignUp.js";
+import InternalRegistration from "views/registration/InternalRegistration.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -44,7 +44,7 @@ ReactDOM.render(
           render={props => <ProfilePage {...props} />}
         />
         <Route path="/login" render={props => <LoginPage {...props} />} />
-        <Route path="/sign-up" render={props => <RegisterPage {...props} />} />
+        <Route path="/sign-up" render={props => <InternalRegistration {...props} />} />
         <Redirect to="/index" />
         <Redirect from="/" to="/index" />
 

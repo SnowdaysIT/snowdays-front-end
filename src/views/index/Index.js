@@ -14,8 +14,6 @@ import EventLocation from "./EventLocation.js"
 import EventExplanation from "./EventExplanation.js"
 import Videos from "./Videos.js"
 
-
-
 function Index() {
 
   React.useEffect(() => {

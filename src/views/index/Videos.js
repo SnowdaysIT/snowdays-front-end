@@ -6,6 +6,7 @@ import {
 } from "reactstrap";
 
 import {Carousel} from "react-responsive-carousel"
+// eslint-disable-next-line
 import styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 function Videos() {

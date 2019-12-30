@@ -1,6 +1,6 @@
 import React from "react";
+import '../../assets/css/signup.css'
 import { Link } from "react-router-dom";
-// reactstrap components
 import {
   Button,
   Card,
@@ -16,8 +16,6 @@ import {
   Container,
   Row
 } from "reactstrap";
-
-// core components
 
 function SignUp() {
   const [firstFocus, setFirstFocus] = React.useState(false);
