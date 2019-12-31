@@ -29,9 +29,9 @@ function HomeContact(params) {
             </CardHeader>
             <CardBody data-background-color="black">
                 <Row>
-                    <Col xs="3"></Col>
+                    <Col xs="2"></Col>
 
-                    <Col className="justify-content-center text-center mb-4 mt-2" xs="6">
+                    <Col className="justify-content-center text-center mb-4 mt-2">
                         <Form action="" className="form" method="">
                         <InputGroup className={"no-border" + (emailFocus ? " input-group-focus" : "")}>
                             <InputGroupAddon addonType="prepend">
@@ -51,9 +51,9 @@ function HomeContact(params) {
                         </Form>
                     </Col>
 
-                    <Col xs="3"></Col>
+                    <Col xs="2"></Col>
                 </Row>
-                <h3 className="text-center">Follow us on social media!</h3>
+                <h3 className="text-center mt-2">Follow us on social media!</h3>
                 <Row> 
                     <Col></Col>
                     

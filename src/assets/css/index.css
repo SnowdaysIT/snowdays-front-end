@@ -59,9 +59,12 @@
 
 .yt-video-container {
     background-color: white;
-    width: auto;
 }
     
 .type1-card {
     border-radius: 2%;
+}
+
+.staff-container {
+    width: 90%;
 }

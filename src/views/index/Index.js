@@ -13,6 +13,7 @@ import HomeContact from "./HomeContact.js"
 import EventLocation from "./EventLocation.js"
 import EventExplanation from "./EventExplanation.js"
 import Videos from "./Videos.js"
+import StaffCarousel from "./StaffCarousel.js"
 
 function Index() {
 
@@ -40,12 +41,14 @@ function Index() {
           <section id="sportPartySection">
             <EventExplanation />
           </section>
-          <section id="videoSection">
+          <section id="videoSection" className="mb-5">
             <Videos />
           </section>
           <section id="staffSection">
-            
-            {/* <Tabs /> */}
+            <div className="container mt-5 mb-5 staff-container">
+              <h3 className="title-up category">The ones who make it possible</h3>
+              <StaffCarousel />
+            </div>  
           </section>
           <section id="contactSection">
             <HomeContact />

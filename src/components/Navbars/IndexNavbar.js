@@ -73,7 +73,7 @@ function IndexNavbar() {
             <Nav navbar>
               <NavItem>
                 <NavLink 
-                  href="#eventSection"
+                  href="#event"
                   onClick={e => {
                     e.preventDefault();
                     document.getElementById("eventSection").scrollIntoView();
@@ -83,12 +83,16 @@ function IndexNavbar() {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="#what">
+                <NavLink href="#staff"
+                  onClick={e => {
+                    e.preventDefault();
+                    document.getElementById("staffSection").scrollIntoView();
+                  }}>
                   <p>Staff</p>
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="#contacts">
+                <NavLink href="#sponsors">
                   <p>Sponsors</p>
                 </NavLink>
               </NavItem>
