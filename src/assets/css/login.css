@@ -1,0 +1,114 @@
+/* colors */
+@font-face {
+    font-family: 'Circular';
+    src: url("../fonts/Circular-Book.eot");
+    src: url("../fonts/Circular-Book.eot") format("embedded-opentype"), url("../fonts/Circular-Book.woff2") format("woff2"), url("../fonts/Circular-Book.woff") format("woff"), url("../fonts/Circular-Book.ttf") format("truetype");
+}
+@font-face {
+    font-family: 'Jaapoki';
+    src: url("../fonts/jaapokki-regular-webfont.eot");
+    src: url("../fonts/jaapokki-regular-webfont.eot") format("embedded-opentype"), url("../fonts/jaapokki-regular-webfont.woff2") format("woff2"), url("../fonts/jaapokki-regular-webfont.woff") format("woff"), url("../fonts/jaapokki-regular-webfont.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+* {
+    font-family: 'Circular';
+}
+
+.login-title {
+    font-family: 'Jaapoki';
+}
+.svgContainer {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1em;
+    border-radius: 50%;
+    pointer-events: none;
+}
+.svgContainer div {
+    position: relative;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 50%;
+    padding-bottom: 100%;
+}
+.svgContainer .mySVG {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+.svgContainer:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: inherit;
+    height: inherit;
+    box-sizing: border-box;
+    border: solid 2.5px #217093;
+    border-radius: 50%;
+}
+
+.login-form .inputGroup {
+    margin: 0 0 2em;
+    padding: 0;
+    position: relative;
+}
+
+.login-form .inputGroup:last-of-type {
+    margin-bottom: 0;
+}
+
+.login-form label {
+    font-size: 1.25em;
+    font-weight: 700;
+    font-family: inherit;
+}
+.login-form input[type='email'], .login-form input[type="text"], .login-form input[type="number"], .login-form input[type="url"], .login-form input[type="search"], .login-form input[type="password"] {
+    display: block;
+    margin: 0;
+    padding: 0 1em 0;
+    padding: 0.875em 1em 0;
+    background-color: #f3fafd;
+    border: solid 2px #217093;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    width: 100%;
+    height: 60px;
+    font-size: 1.55em;
+    color: #353538;
+    font-weight: 600;
+    font-family: inherit;
+    transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
+}
+
+.login-form input[type='email']:focus, .login-form input[type="text"]:focus, .login-form input[type="number"]:focus, .login-form input[type="url"]:focus, .login-form input[type="search"]:focus, .login-form input[type="password"]:focus {
+    outline: none;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, .1);
+    border: solid 2px #4bb5ff;
+}
+
+.login-form button {
+    display: block;
+    margin: 0;
+    padding: 0.65em 1em 1em;
+    background-color: #4bb5ff;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: none;
+    width: 100%;
+    height: 55px;
+    font-size: 1.55em;
+    color: #fff;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.2s ease-out;
+}
