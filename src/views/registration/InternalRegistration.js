@@ -196,6 +196,14 @@ class InternalRegistration extends React.Component {
                                 </Col>
                                 
                             </Row>
+                            <br/>
+                            <FormGroup row>
+                                <Label className="ml-3 mt-1" for="nrHosted">Number of people you plan on hosting</Label> 
+                                <Col sm={2}>
+                                <Input type="number" name="nrHosted" id="nrHosted" placeholder="3"/>
+                                </Col>
+                            </FormGroup>
+
                         </CardBody>
                     </Card>
     
@@ -217,6 +225,60 @@ class InternalRegistration extends React.Component {
                                     </FormGroup>
                                 </Col>
                             </Row>
+
+                            <Row form>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="lunchTime">Lunch Timeslot</Label>
+                                        <Input type="select" name="lunchTime" id="lunchTime">
+                                        <option>12-13</option>
+                                        <option>13-14</option>
+                                        <option>14-15</option>
+                                        </Input>
+                                    </FormGroup>
+                                </Col>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="dinnerTime">Lunch Timeslot</Label>
+                                        <Input type="select" name="dinnerTime" id="dinnerTime">
+                                        <option>18-19</option>
+                                        <option>19-20</option>
+                                        <option>20-21</option>
+                                        </Input>
+                                    </FormGroup>
+                                </Col>
+                                <Col md={2}>
+                                    <FormGroup>
+                                        <Label for="vegetarian">Are you vegetarian?</Label>
+                                        <Input type="select" name="vegetarian" id="vegetarian">
+                                        <option>Yes</option>
+                                        <option>No</option>
+                                        </Input>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+
+
+                            <Row form>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="tSize">T-Shirt Size</Label>
+                                        <Input type="select" name="tSize" id="tSize">
+                                        <option>S</option>
+                                        <option>M</option>
+                                        <option>L</option>
+                                        <option>XL</option>
+                                        </Input>
+                                    </FormGroup>
+                                </Col>
+                                <Col md={4}>
+                                    <FormGroup>
+                                        <Label for="zip">Chosing sports here</Label>
+                                        <Input type="number" name="weight" id="weight" placeholder="80"/>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+
                             <span className="details">Be aware that you won’t be able to modify the information given here after the enrolment closes.</span>
                             <br/>
                             <span className="details">Rental material will be prepared before the event based on the given information.</span>

@@ -341,16 +341,16 @@ function LoginPage() {
                   </div>
                   <FormGroup className="mt-2">
                     <Label for="exampleEmail">Email</Label>
-                    <Input type="email" name="email" id="email" placeholder="Email" />
+                    <Input type="email" name="email" id="email" placeholder="mario@unibz.it" />
                   </FormGroup>
                   <FormGroup className="mt-2">
                     <Label for="examplePassword">Password</Label>
-                    <Input type="password" name="password" id="password" placeholder="Password" />
+                    <Input type="password" name="password" id="password" placeholder="*********" />
                   </FormGroup>
                 <Button className="btn-lg mt-5 mb-2" style={{backgroundColor: "#4BB5FF"}}>Log In</Button>
                 <div className="pull-left">
                   <h6>
-                    <Link to="/sign-up" style={{color: "white"}}>Register</Link>
+                    <Link to="/internal-sign-up" style={{color: "white"}}>Register</Link>
                   </h6>
                 </div>
                 <div className="pull-right">
