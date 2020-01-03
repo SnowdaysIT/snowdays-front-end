@@ -29,3 +29,7 @@ select {
     font-size: 11px;
     color: red;
 }
+
+.collapsed {
+    display: none;
+}

@@ -55,13 +55,13 @@
     border-radius: 50%;
 }
 
-.login-form .inputGroup {
+.login-form .form-group {
     margin: 0 0 2em;
     padding: 0;
     position: relative;
 }
 
-.login-form .inputGroup:last-of-type {
+.login-form .form-group:last-of-type {
     margin-bottom: 0;
 }
 

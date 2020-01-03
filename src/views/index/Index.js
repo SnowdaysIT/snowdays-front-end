@@ -45,9 +45,8 @@ function Index() {
             <Videos />
           </section>
           <section id="staffSection">
-            <div className="container mt-5 mb-5 staff-container">
-              <h3 className="title-up category">The ones who make it possible</h3>
-              <StaffCarousel />
+            <div className="container mt-5 mb-5"> 
+              <StaffCarousel className="staff-carousel"/>
             </div>  
           </section>
           <section id="contactSection">

@@ -44,7 +44,7 @@ ReactDOM.render(
           render={props => <ProfilePage {...props} />}
         />
         <Route path="/login" render={props => <LoginPage {...props} />} />
-        <Route path="/sign-up" render={props => <InternalRegistration {...props} />} />
+        <Route path="/internal-sign-up" render={props => <InternalRegistration {...props} />} />
         <Redirect to="/index" />
         <Redirect from="/" to="/index" />
 

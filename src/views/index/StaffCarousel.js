@@ -53,6 +53,13 @@ const items = [
   },
 ];
 
-const StaffCarousel = () => <UncontrolledCarousel items={items} />;
+const StaffCarousel = () => {
+  return (
+    <>
+    <h3 className="title-up category">The ones who make it possible</h3>
+    <UncontrolledCarousel items={items} />
+    </>
+  );
+}
 
 export default StaffCarousel;
