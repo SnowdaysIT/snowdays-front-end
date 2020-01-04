@@ -114,15 +114,15 @@ class InternalRegistration extends React.Component {
                                             <Label check>
                                                 <Input type="radio" name="gender" />{' '}
                                                 Male
-                                    </Label>
+                                            </Label>
                                             <Label check>
                                                 <Input type="radio" name="gender" />{' '}
                                                 Female
-                                    </Label>
+                                            </Label>
                                             <Label check >
                                                 <Input type="radio" name="gender" />{' '}
                                                 Other
-                                    </Label>
+                                            </Label>
                                         </FormGroup>
                                     </FormGroup>
                                 </Col>
@@ -196,7 +196,6 @@ class InternalRegistration extends React.Component {
                                 </Col>
                                 
                             </Row>
-                            <br/>
                             <FormGroup row>
                                 <Label className="ml-3 mt-1" for="nrHosted">Number of people you plan on hosting</Label> 
                                 <Col sm={2}>
@@ -239,7 +238,7 @@ class InternalRegistration extends React.Component {
                                 </Col>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="dinnerTime">Lunch Timeslot</Label>
+                                        <Label for="dinnerTime">Dinner Timeslot</Label>
                                         <Input type="select" name="dinnerTime" id="dinnerTime">
                                         <option>18-19</option>
                                         <option>19-20</option>
@@ -256,11 +255,8 @@ class InternalRegistration extends React.Component {
                                         </Input>
                                     </FormGroup>
                                 </Col>
-                            </Row>
 
-
-                            <Row form>
-                                <Col>
+                                <Col md={2}>
                                     <FormGroup>
                                         <Label for="tSize">T-Shirt Size</Label>
                                         <Input type="select" name="tSize" id="tSize">
@@ -271,14 +267,57 @@ class InternalRegistration extends React.Component {
                                         </Input>
                                     </FormGroup>
                                 </Col>
-                                <Col md={4}>
-                                    <FormGroup>
-                                        <Label for="zip">Chosing sports here</Label>
-                                        <Input type="number" name="weight" id="weight" placeholder="80"/>
-                                    </FormGroup>
-                                </Col>
                             </Row>
 
+                            <h5 className="title category">Second day activities</h5>
+                            <Row>
+                                <Col sm={3}>
+                                    <Label for="ynSki" >Will you be skiing or snowboarding?</Label> 
+                                </Col>
+
+                                <Col sm={3} className="radio-ynSki">
+                                    <FormGroup check>
+                                        <Label check>
+                                            <Input type="radio" name="ynSki" />{' '}
+                                            Yes
+                                        </Label>
+                                        <Label check>
+                                            <Input type="radio" name="ynSki" />{' '}
+                                            No
+                                        </Label>
+                                    </FormGroup> 
+                                </Col>
+
+                            </Row>
+                            {/* <FormGroup row>
+
+                                <Col sm={9}>
+                                    <FormGroup check>
+                                        <Label check>
+                                            <Input type="radio" id="checkbox2" />{' '}
+                                            Check me out
+                                        </Label>
+                                    </FormGroup>
+                                </Col>
+                            </FormGroup> */}
+                            
+                        </CardBody>
+                    </Card>
+
+                    <Card>
+                        <CardBody className="p-1">
+                            <CardTitle tag="h3" style={{ color: "#4BB5FF" }}>Rental Data</CardTitle>
+                            <FormGroup>
+                                <Label for="helperPreference">Pick your poison</Label>
+                                {/* <Input type="select" name="helperPreference" id="helperPreference">
+                                    <option>Catering</option>
+                                    <option>Sports</option>
+                                    <option>Logistics</option>
+                                    <option>Party</option>
+                                    <option>C&A</option>
+                                    <option>Spirit</option>
+                                </Input> */}
+                            </FormGroup>
                             <span className="details">Be aware that you won’t be able to modify the information given here after the enrolment closes.</span>
                             <br/>
                             <span className="details">Rental material will be prepared before the event based on the given information.</span>
