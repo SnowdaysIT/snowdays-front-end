@@ -29,11 +29,13 @@ import NucleoIcons from "views/NucleoIcons.js";
 import LoginPage from "views/examples/LoginPage.js";
 import ProfilePage from "views/examples/ProfilePage.js";
 import RegisterPage from "views/index-sections/SignUp";
+import PageFetchingData from 'views/examples/PageFetchingData';
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Switch>
+        <Route path="/eg" render={props => <PageFetchingData {...props} />} />
         <Route path="/index" render={props => <Index {...props} />} />
         <Route
           path="/nucleo-icons"
