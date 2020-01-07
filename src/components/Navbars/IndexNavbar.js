@@ -76,32 +76,32 @@ function IndexNavbar() {
                   href="#event"
                   onClick={e => {
                     e.preventDefault();
-                    document.getElementById("eventSection").scrollIntoView();
+                    document.getElementById("eventSection").scrollIntoView({behavior: "smooth"});
                   }}
                 >
                   <p>Event</p>
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="#staff"
+                <NavLink href="#crew"
                   onClick={e => {
                     e.preventDefault();
-                    document.getElementById("staffSection").scrollIntoView();
+                    document.getElementById("staffSection").scrollIntoView({behavior: "smooth", block: "end"});
                   }}>
-                  <p>Staff</p>
+                  <p>Crew</p>
                 </NavLink>
               </NavItem>
-              <NavItem>
+              {/* <NavItem>
                 <NavLink href="#sponsors">
                   <p>Sponsors</p>
                 </NavLink>
-              </NavItem>
+              </NavItem> */}
               <NavItem>
                 <NavLink
                   href="#contactSection"
                   onClick={e => {
                     e.preventDefault();
-                    document.getElementById("contactSection").scrollIntoView();
+                    document.getElementById("contactSection").scrollIntoView({behavior: "smooth"});
                   }}
                 >
                   <p>Contact Us</p>

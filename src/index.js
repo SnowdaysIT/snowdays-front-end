@@ -29,22 +29,20 @@ import NucleoIcons from "views/NucleoIcons.js";
 import LoginPage from "views/login/LoginPage.js";
 import ProfilePage from "views/profile/ProfilePage.js";
 import InternalRegistration from "views/registration/InternalRegistration.js";
+import Sponsors from "views/sponsors/Sponsors.js"
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Switch>
+        
         <Route path="/index" render={props => <Index {...props} />} />
-        <Route
-          path="/nucleo-icons"
-          render={props => <NucleoIcons {...props} />}
-        />
-        <Route
-          path="/profile-page"
-          render={props => <ProfilePage {...props} />}
-        />
+        <Route path="/nucleo-icons" render={props => <NucleoIcons {...props} />}/>
+        <Route path="/profile-page" render={props => <ProfilePage {...props} />}/>
         <Route path="/login" render={props => <LoginPage {...props} />} />
         <Route path="/internal-sign-up" render={props => <InternalRegistration {...props} />} />
+        {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}
+
         <Redirect to="/index" />
         <Redirect from="/" to="/index" />
 

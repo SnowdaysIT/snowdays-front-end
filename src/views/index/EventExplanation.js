@@ -147,7 +147,7 @@ function Event() {
                                                 href="#videos"
                                                 onClick={e => {
                                                     e.preventDefault();
-                                                    document.getElementById("videoSection").scrollIntoView();
+                                                    document.getElementById("videoSection").scrollIntoView({behavior: "smooth", block: "nearest"});
                                                 }}
                                             >
                                                 <i className="far fa-snowflake info-icon" style={{fontSize: 40}}></i>
