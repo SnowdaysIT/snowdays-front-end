@@ -46,7 +46,7 @@ function Index() {
           </section>
           <section id="staffSection">
             <div className="container mt-5 mb-5"> 
-              <StaffCarousel className="staff-carousel"/>
+              <StaffCarousel />
             </div>  
           </section>
           <section id="contactSection">

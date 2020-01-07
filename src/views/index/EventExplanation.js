@@ -150,7 +150,7 @@ function Event() {
                                                     document.getElementById("videoSection").scrollIntoView({behavior: "smooth", block: "nearest"});
                                                 }}
                                             >
-                                                <i className="far fa-snowflake info-icon" style={{fontSize: 40}}></i>
+                                                <i className="far fa-snowflake info-icon" style={{fontSize: 38}}></i>
                                             </NavLink>
                                         </NavItem>
 
@@ -196,6 +196,7 @@ function Event() {
                             activeIndex={activeIndex}
                             next={next}
                             previous={previous}
+                            className="explanation-carousel"
                             >
                             {carousel_images.map(item => {
                                 return (
