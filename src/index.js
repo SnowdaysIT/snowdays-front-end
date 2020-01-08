@@ -24,29 +24,26 @@ import "assets/css/bootstrap.min.css";
 import "assets/scss/now-ui-kit.scss";
 
 // pages for this kit
-import Index from "views/Index.js";
+import Index from "views/index/Index.js";
 import NucleoIcons from "views/NucleoIcons.js";
-import LoginPage from "views/examples/LoginPage.js";
-import ProfilePage from "views/examples/ProfilePage.js";
-import RegisterPage from "views/index-sections/SignUp";
-import PageFetchingData from 'views/examples/PageFetchingData';
+import LoginPage from "views/login/LoginPage.js";
+import ProfilePage from "views/profile/ProfilePage.js";
+import InternalRegistration from "views/registration/InternalRegistration.js";
+// import PageFetchingData from 'views/examples/PageFetchingData';
+// import Sponsors from "views/sponsors/Sponsors.js"
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Switch>
-        <Route path="/eg" render={props => <PageFetchingData {...props} />} />
+        {/* <Route path="/eg" render={props => <PageFetchingData {...props} />} /> */}
         <Route path="/index" render={props => <Index {...props} />} />
-        <Route
-          path="/nucleo-icons"
-          render={props => <NucleoIcons {...props} />}
-        />
-        <Route
-          path="/profile-page"
-          render={props => <ProfilePage {...props} />}
-        />
+        <Route path="/nucleo-icons" render={props => <NucleoIcons {...props} />}/>
+        <Route path="/profile-page" render={props => <ProfilePage {...props} />}/>
         <Route path="/login" render={props => <LoginPage {...props} />} />
-        <Route path="/sign-up" render={props => <RegisterPage {...props} />} />
+        <Route path="/internal-sign-up" render={props => <InternalRegistration {...props} />} />
+        {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}
+
         <Redirect to="/index" />
         <Redirect from="/" to="/index" />
 

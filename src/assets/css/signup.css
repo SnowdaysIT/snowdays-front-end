@@ -1,0 +1,53 @@
+@font-face {
+    font-family: 'Circular';
+    src: url("../fonts/Circular-Book.eot");
+    src: url("../fonts/Circular-Book.eot") format("embedded-opentype"), url("../fonts/Circular-Book.woff2") format("woff2"), url("../fonts/Circular-Book.woff") format("woff"), url("../fonts/Circular-Book.ttf") format("truetype");
+}
+
+* {
+    font-family: 'Circular';
+}
+
+select option {
+    font-size: 1.3em;
+}
+
+.form-control:focus {
+    border-color: #4BB5FF;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(75, 181, 255, 0.6);
+}
+
+.btn-primary {
+    background-color: #4BB5FF;
+    font-size: large;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+}
+
+.details {
+    font-size: 11px;
+    color: red;
+    margin-top: 1%;
+}
+
+.collapsed {
+    display: none;
+}
+.radio-ynSki {
+    margin-top: -1%;
+    margin-left: -4%;
+}
+
+.check-separator {
+    margin-right: 2%;
+}
+
+.rental-checkbox {
+    margin-left: 5px;
+    transform: scale(1.3);
+}

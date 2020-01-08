@@ -16,6 +16,12 @@
     font-family: 'Circular';
 }
 
+@media (max-width: 500px) {
+    h3 {
+        font-size: 5vw;
+    }
+}
+
 .info-icon {
     padding-left: 5px;
     padding-right: 5px;
@@ -57,8 +63,41 @@
     }
 }
 
-.info-card-nav {
-    background-color: red;
-    color: red;
+.yt-video-container {
+    background-color: white;
 }
     
+.type1-card {
+    border-radius: 2%;
+}
+
+.register-button {
+    border-color: #4BB5FF;
+    background-color: white;
+    color: #4BB5FF;
+}
+
+.register-button:hover, .register-button:focus, .register-button:active, .register-button.active, .open>.dropdown-toggle.register-button {
+    color: #fff;
+    background-color: #4BB5FF;
+    border-color: #285e8e; /*set the color you want here*/
+}
+
+.staff-carousel .carousel-item {
+    height: 100vh;
+}
+@media (max-width: 500px) {
+    .staff-carousel .carousel-item {
+        height: 230px;
+    }
+}
+
+.explanation-carousel .carousel-inner{
+    display: table-cell;
+    vertical-align: middle
+}
+
+.explanation-carousel .carousel-item {
+    height: 490px;
+    width: 100%;
+}

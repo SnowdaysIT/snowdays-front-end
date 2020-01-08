@@ -1,5 +1,5 @@
 import React from "react";
-import '../assets/css/index.css'
+import '../../assets/css/index.css'
 
 // core components
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
@@ -9,11 +9,11 @@ import DarkFooter from "components/Footers/DarkFooter.js";
 
 // sections for this page
 // import Images from "./index-sections/Images.js";
-import Socials from "./index-sections/Socials.js";
-import EventExplanation from "./index-sections/EventExplanation.js"
-import HomeContact from "./index-sections/HomeContact.js"
-import EventLocation from "./index-sections/EventLocation.js"
-
+import HomeContact from "./HomeContact.js"
+import EventLocation from "./EventLocation.js"
+import EventExplanation from "./EventExplanation.js"
+import Videos from "./Videos.js"
+import StaffCarousel from "./StaffCarousel.js"
 
 function Index() {
 
@@ -41,17 +41,16 @@ function Index() {
           <section id="sportPartySection">
             <EventExplanation />
           </section>
-          <section id="videoSection">
-            {/* <EventExplanation /> */}
-            Videos
+          <section id="videoSection" className="mb-5">
+            <Videos />
           </section>
           <section id="staffSection">
-            Staff
-            {/* <Tabs /> */}
+            <div className="container mt-5 mb-5"> 
+              <StaffCarousel />
+            </div>  
           </section>
           <section id="contactSection">
             <HomeContact />
-            <Socials />
           </section>
         </div>
         <DarkFooter />
