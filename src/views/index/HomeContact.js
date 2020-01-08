@@ -11,7 +11,6 @@ import {
     InputGroupText,
     InputGroup,
     Row,
-    Col,
     UncontrolledTooltip
 } from "reactstrap";
 

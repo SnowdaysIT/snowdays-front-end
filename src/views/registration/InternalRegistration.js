@@ -7,46 +7,9 @@ class InternalRegistration extends React.Component {
     constructor() {
         super()
         this.state = {
-            showHostCard: true,
-            showHelperCard: false,
+            willHost: true,
+            willHelp: false,
             showAddressFields: false
-        }
-    }
-
-    toggleHostHelper = (e) => {
-        let selected_value = e.target.value
-        selected_value = selected_value.toLowerCase();
-
-        if (selected_value === "host") {
-            this.setState({
-                showHostCard: true,
-                showHelperCard: false,
-            });
-        } else if(selected_value === "helper") {
-            this.setState({
-                showHostCard: false,
-                showHelperCard: true,
-            });
-        } else {
-            this.setState({
-                showHostCard: false,
-                showHelperCard: false,
-            });
-        }
-    }
-
-    toggleAddressHalls = (e) => {
-        let selected_value = e.target.value
-        selected_value = selected_value.toLowerCase();
-
-        if (selected_value === "student hall") {
-            this.setState({
-                showAddressFields: false
-            });
-        } else {
-            this.setState({
-                showAddressFields: true
-            });
         }
     }
 
@@ -99,10 +62,28 @@ class InternalRegistration extends React.Component {
                                 <Col>
                                     <FormGroup>
                                         <Label for="participationType">Participation Type</Label>
-                                        <Input type="select" name="participationType" id="participationType" onChange={this.toggleHostHelper}>
-                                            <option>Host</option>
-                                            <option>Helper</option>
-                                            <option>Normal</option>
+                                        <Input type="select" name="participationType" id="participationType">
+                                            <option onClick={ (e) => {
+                                                this.setState({
+                                                    willHost: true,
+                                                    willHelp: false,
+                                                });
+                                            }
+                                            }>Host</option>
+                                            <option onClick={ (e) => {
+                                                this.setState({
+                                                    willHost: false,
+                                                    willHelp: true,
+                                                });
+                                            }
+                                            }>Helper</option>
+                                            <option onClick={ (e) => {
+                                                this.setState({
+                                                    willHost: false,
+                                                    willHelp: false,
+                                                });
+                                            }
+                                            }>Normal</option>
                                         </Input>
                                     </FormGroup>
                                 </Col>
@@ -131,7 +112,7 @@ class InternalRegistration extends React.Component {
                         </CardBody>
                     </Card>
     
-                    <Card className={this.state.showHelperCard ? "p-2 mt-1" : "p-2 mt-1 collapsed"}>
+                    <Card className={this.state.willHelp ? "p-2 mt-1" : "p-2 mt-1 collapsed"}>
                         <CardBody className="p-1">
                             <CardTitle tag="h3" style={{ color: "#4BB5FF" }}>Helper Data</CardTitle>
                             <FormGroup>
@@ -148,22 +129,28 @@ class InternalRegistration extends React.Component {
                         </CardBody>
                     </Card>
 
-                    <Card className={this.state.showHostCard ? "p-2 mt-1" : "p-2 mt-1 collapsed"}>
+                    <Card className={this.state.willHost ? "p-2 mt-1" : "p-2 mt-1 collapsed"}>
                         <CardBody className="p-1">
                             <CardTitle tag="h3" style={{ color: "#4BB5FF" }}>Hosting Data</CardTitle>
                             <Row form>
                                 <Col>
                                     <FormGroup>
                                         <Label for="hostingType">Helper Preference</Label>
-                                        <Input type="select" name="hostingType" id="hostingType" onChange={this.toggleAddressHalls}>
-                                            <option>Student hall</option>
-                                            <option>WG</option>
+                                        <Input type="select" name="hostingType" id="hostingType">
+                                            <option onClick={ (e) => {
+                                                this.setState({showAddressFields: false});
+                                            }
+                                            }>Student hall</option>
+                                            <option onClick={ (e) => {
+                                                this.setState({showAddressFields: true});
+                                            }
+                                            }>WG</option>
                                         </Input>
                                     </FormGroup>
                                 </Col>
                                 <Col md={4} className={this.state.showAddressFields ? "collapsed" : ""}>
                                 <FormGroup>
-                                    <Label for="hostHall">Student Hall</Label>
+                                    <Label for="hostHall">Student Hall Selection</Label>
                                     <Input type="select" name="hostHall" id="hostHall">
                                         <option>Peter-Rigler</option>
                                         <option>University</option>
@@ -272,58 +259,225 @@ class InternalRegistration extends React.Component {
                             <h5 className="title category">Second day activities</h5>
                             <Row>
                                 <Col sm={3}>
-                                    <Label for="ynSki" >Will you be skiing or snowboarding?</Label> 
+                                    <FormGroup>
+                                        <Label for="secondskiorsnow">Will you be skiing or snowboarding?</Label>
+                                        <Input type="select" name="secondskiorsnow" id="secondskiorsnow">
+                                        <option>Yes</option>
+                                        <option>No</option>
+                                        </Input>
+                                    </FormGroup>                                
                                 </Col>
 
-                                <Col sm={3} className="radio-ynSki">
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input type="radio" name="ynSki" />{' '}
-                                            Yes
-                                        </Label>
-                                        <Label check>
-                                            <Input type="radio" name="ynSki" />{' '}
-                                            No
-                                        </Label>
-                                    </FormGroup> 
+                                <Col sm={3}>
+                                    <FormGroup>
+                                        <Label for="skicourse">Ski/Snowboard Course</Label>
+                                        <Input type="select" name="skicourse" id="skicourse">
+                                        <option>Ski (beginner)</option>
+                                        <option>Ski (intermediate)</option>
+                                        <option>Snowboard (beginner)</option>
+                                        <option>Snowboard (intermediate)</option>
+                                        <option>None</option>
+                                        </Input>
+                                    </FormGroup>                                
                                 </Col>
 
+                                <Col sm={3}>
+                                    <FormGroup>
+                                        <Label for="skirace">Ski/Snowboard Race</Label>
+                                        <Input type="select" name="skirace" id="skirace">
+                                        <option>Ski</option>
+                                        <option>Snowboard</option>
+                                        <option>None</option>
+                                        </Input>
+                                    </FormGroup>                                
+                                </Col>
+
+                                <Col sm={3}>
+                                    <FormGroup>
+                                        <Label for="jib">JIB Session</Label>
+                                        <Input type="select" name="jib" id="jib">
+                                        <option>Yes</option>
+                                        <option>No</option>
+                                        </Input>
+                                    </FormGroup>                                
+                                </Col>
                             </Row>
-                            {/* <FormGroup row>
+                            <Row form>
+                                <label className="ml-1 mt-3">Other activities(Check all that apply)</label>
+                                <div className="mt-1 container">
+                                    <span className="check-separator">
+                                        <label htmlFor="secondbeerpong">Beer pong</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondbeerpong" name="secondbeerpong" />
+                                    </span>
 
-                                <Col sm={9}>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input type="radio" id="checkbox2" />{' '}
-                                            Check me out
-                                        </Label>
-                                    </FormGroup>
+                                    <span className="check-separator">
+                                        <label htmlFor="snowwalking">Snowshoes walking</label>
+                                        <input className="rental-checkbox" type="checkbox" id="snowwalking" name="snowwalking" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="secondlinedrag">Line dragging</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondlinedrag" name="secondlinedrag" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="secondtwister">Twister</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondtwister" name="secondtwister" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="secondslackline">Slackline</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondslackline" name="secondslackline" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="secondflunkyball">Flunky ball</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondflunkyball" name="secondflunkyball" />
+                                    </span>
+                                </div>                                
+                            </Row>
+
+                            <Row form>
+                                <h6 tag="h5" className="ml-1 mt-3">Second day rental material (check all that apply)</h6>
+                                <div className="mt-1 container-fluid">
+                                    <span className="check-separator">
+                                        <label htmlFor="secondski">Skiis</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondski" name="secondski" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="secondskiboots">Ski boots</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondskiboots" name="secondskiboots" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="secondskisticks">Ski sticks</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondskisticks" name="secondskisticks" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="secondsnowboard">Snowboard</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondsnowboard" name="secondsnowboard" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="secondsnowboots">Snowboard Boots</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondsnowboots" name="secondsnowboots" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="secondhelmet">Helmet</label>
+                                        <input className="rental-checkbox" type="checkbox" id="secondhelmet" name="secondhelmet" />
+                                    </span>
+                                </div>
+                                <span className="details">*Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information</span>                             
+                            </Row>
+
+                            <h5 className="title category">Third day activities</h5>
+                            <Row>
+                                <Col sm={4}>
+                                    <FormGroup>
+                                        <Label for="thirdskiorsnow">Will you be skiing or snowboarding?</Label>
+                                        <Input type="select" name="thirdskiorsnow" id="thirdskiorsnow">
+                                        <option>Yes</option>
+                                        <option>No</option>
+                                        </Input>
+                                    </FormGroup>                                
                                 </Col>
-                            </FormGroup> */}
-                            
-                        </CardBody>
-                    </Card>
 
-                    <Card>
-                        <CardBody className="p-1">
-                            <CardTitle tag="h3" style={{ color: "#4BB5FF" }}>Rental Data</CardTitle>
-                            <FormGroup>
-                                <Label for="helperPreference">Pick your poison</Label>
-                                {/* <Input type="select" name="helperPreference" id="helperPreference">
-                                    <option>Catering</option>
-                                    <option>Sports</option>
-                                    <option>Logistics</option>
-                                    <option>Party</option>
-                                    <option>C&A</option>
-                                    <option>Spirit</option>
-                                </Input> */}
-                            </FormGroup>
-                            <span className="details">Be aware that you won’t be able to modify the information given here after the enrolment closes.</span>
-                            <br/>
-                            <span className="details">Rental material will be prepared before the event based on the given information.</span>
+                                <Col sm={4}>
+                                    <FormGroup>
+                                        <Label for="snowvolley">Snowvolley tournament</Label>
+                                        <Input type="select" name="snowvolley" id="snowvolley" disabled>
+                                        <option>Yes</option>
+                                        <option>No</option>
+                                        </Input>
+                                    </FormGroup>                                
+                                </Col>
+
+                                <Col sm={4}>
+                                    <FormGroup>
+                                        <Label for="htftournament">Human table football tournament</Label>
+                                        <Input type="select" name="htftournament" id="htftournament" disabled>
+                                        <option>Yes</option>
+                                        <option>No</option>
+                                        </Input>
+                                    </FormGroup>                                
+                                </Col>
+                            </Row>
+                            <Row form>
+                                <label className="ml-1 mt-3">Other activities(Check all that apply)</label>
+                                <div className="mt-1 container">
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdbeerpong">Beer pong</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdbeerpong" name="thirdbeerpong" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="tableboulder">Table boulder contest</label>
+                                        <input className="rental-checkbox" type="checkbox" id="tableboulder" name="tableboulder" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdlinedrag">Line dragging</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdlinedrag" name="thirdlinedrag" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdtwister">Twister</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdtwister" name="thirdtwister" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdslackline">Slackline</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdslackline" name="thirdslackline" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdflunkyball">Flunky ball</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdflunkyball" name="thirdflunkyball" />
+                                    </span>
+                                </div>                                
+                            </Row>
+
+                            <Row form>
+                                <h6 tag="h5" className="ml-1 mt-3">Third day rental needs (check all that apply)</h6>
+                                <div className="mt-1 container-fluid">
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdski">Skiis</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdski" name="thirdski" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdskiboots">Ski boots</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdskiboots" name="thirdskiboots" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdskisticks">Ski sticks</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdskisticks" name="thirdskisticks" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdsnowboard">Snowboard</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdsnowboard" name="thirdsnowboard" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdsnowboots">Snowboard Boots</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdsnowboots" name="thirdsnowboots" />
+                                    </span>
+
+                                    <span className="check-separator">
+                                        <label htmlFor="thirdhelmet">Helmet</label>
+                                        <input className="rental-checkbox" type="checkbox" id="thirdhelmet" name="thirdhelmet" />
+                                    </span>
+                                </div>                                
+                            </Row>
+                        
                         </CardBody>
                     </Card>
-    
+                   
                     <Button className="btn btn-primary pull-right">REGISTER</Button>
                 </Form>
             </Container>

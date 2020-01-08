@@ -29,7 +29,7 @@ import NucleoIcons from "views/NucleoIcons.js";
 import LoginPage from "views/login/LoginPage.js";
 import ProfilePage from "views/profile/ProfilePage.js";
 import InternalRegistration from "views/registration/InternalRegistration.js";
-import Sponsors from "views/sponsors/Sponsors.js"
+// import Sponsors from "views/sponsors/Sponsors.js"
 
 ReactDOM.render(
   <BrowserRouter>
