@@ -55,11 +55,11 @@ function IndexHeader() {
                 renderer={renderer}
               />
             </div>
-            <Link to="/internal-sign-up">
-            <button type="button" className="btn btn-lg register-button">
-              Register
-              <i className="fas fa-sign-in-alt ml-2 mt-1"></i>            
-            </button>
+            <Link to="/signup">
+              <button type="button" className="btn btn-lg register-button">
+                Register
+                <i className="fas fa-sign-in-alt ml-2 mt-1"></i>            
+              </button>
             </Link>
             
           </div>

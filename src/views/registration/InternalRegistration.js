@@ -4,13 +4,28 @@ import "../../assets/css/signup.css"
 
 class InternalRegistration extends React.Component {
 
+    // constants for more elegant solutions of jsx building
+    helper_types = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
+
     constructor() {
         super()
         this.state = {
-            willHost: true,
-            willHelp: false,
-            showAddressFields: false
+            name: "",
+            surname: "",
+            enrollmentNumber: 0,
+            phoneNumber: "",
+            isHelper: false,
+            helperType: "",
+            isHost: false,
+            hostType: ""
         }
+    }
+
+    setHelperType(value) {
+        console.log(value)
+        this.setState({
+            helperType: value
+        })
     }
 
     render() {
@@ -24,63 +39,80 @@ class InternalRegistration extends React.Component {
                                 <Col>
                                     <FormGroup>
                                         <Label for="firstName">Name</Label>
-                                        <Input type="text" name="firstName" id="firstName" placeholder="Mario" />
+                                        <Input type="text" name="firstName" id="firstName" placeholder="Mario" 
+                                            onChange={ (e) => {
+                                                this.setState({name: e.target.value})
+                                            }
+                                        }
+                                        />
                                     </FormGroup>
                                 </Col>
                                 <Col>
                                     <FormGroup>
                                         <Label for="lastName">Surname</Label>
-                                        <Input type="text" name="lastName" id="lastName" placeholder="Pizza" />
+                                        <Input type="text" name="lastName" id="lastName" placeholder="Pizza" 
+                                            onChange={ (e) => {
+                                                this.setState({surname: e.target.value})
+                                            }
+                                        }/>
                                     </FormGroup>
                                 </Col>
                             </Row>
-    
-                            <Row form className="mt-2">
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="userEmail">Email</Label>
-                                        <Input type="email" name="email" id="userEmail" placeholder="mario@unibz.it" />
-                                    </FormGroup>
-                                </Col>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="phone">Phone Number</Label>
-                                        <Input type="text" name="phone" id="phone" placeholder="+39 111 22 33 456" />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-    
     
                             <Row form className="mt-2">
                                 <Col>
                                     <FormGroup>
                                         <Label for="enrollmentNumber">Enrollment Number (Matrikelnummer)</Label>
-                                        <Input type="text" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456" />
+                                        <Input type="number" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456"
+                                            onChange={ (e) => {
+                                                this.setState({enrollmentNumber: e.target.value}, () => {
+                                                    if (this.state.enrollmentNumber >= 17573) {
+                                                        document.getElementById('normalParticipationOption').disabled = true;
+                                                        document.getElementById('participationType').selectedIndex = "0"
+                                                        this.setState({participationType: "host"})
+                                                    } else {
+                                                        document.getElementById('normalParticipationOption').disabled = false;
+                                                    }
+                                                });
+                                            }
+                                        }/>
                                     </FormGroup>
                                 </Col>
-    
+
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="phone">Phone Number</Label>
+                                        <Input type="text" name="phone" id="phone" placeholder="+39 111 22 33 456" 
+                                            onChange = { (e) => {
+                                                this.setState({phoneNumber: e.target.value})
+                                            }
+                                        }/>
+                                    </FormGroup>
+                                </Col>
+
                                 <Col>
                                     <FormGroup>
                                         <Label for="participationType">Participation Type</Label>
                                         <Input type="select" name="participationType" id="participationType">
-                                            <option onClick={ (e) => {
-                                                this.setState({
-                                                    willHost: true,
-                                                    willHelp: false,
-                                                });
+                                            <option id="hostParticipationOption" onClick={ () => {
+                                                this.setState({isHost: true});
                                             }
                                             }>Host</option>
-                                            <option onClick={ (e) => {
-                                                this.setState({
-                                                    willHost: false,
-                                                    willHelp: true,
-                                                });
+                                            <option id="helperParticipationOption" onClick={ () => {
+                                                this.setState({isHelper: true});
                                             }
                                             }>Helper</option>
-                                            <option onClick={ (e) => {
+                                            <option id="helperhostParticipationOption" onClick={ () => {
                                                 this.setState({
-                                                    willHost: false,
-                                                    willHelp: false,
+                                                    isHelper: true,
+                                                    isHost: true
+                                                });
+                                            }
+                                            }>Host and Helper</option>
+                                            <option id="normalParticipationOption" onClick={ () => {
+                                                this.setState({
+                                                    isHelper: false,
+                                                    isHost: false                                                
                                                 });
                                             }
                                             }>Normal</option>
@@ -88,48 +120,50 @@ class InternalRegistration extends React.Component {
                                     </FormGroup>
                                 </Col>
     
-                                <Col md={3}>
+                                <Col>
                                     <FormGroup>
                                         <Label for="gender">Gender</Label>
-                                        <FormGroup check>
-                                            <Label check>
-                                                <Input type="radio" name="gender" />{' '}
-                                                Male
-                                            </Label>
-                                            <Label check>
-                                                <Input type="radio" name="gender" />{' '}
-                                                Female
-                                            </Label>
-                                            <Label check >
-                                                <Input type="radio" name="gender" />{' '}
-                                                Other
-                                            </Label>
-                                        </FormGroup>
+                                        <Input type="select" name="gender" id="gender">
+                                            <option onClick={ () => {
+                                                this.setState({gender: "male"});
+                                            }
+                                            }>Male</option>
+                                            <option onClick={ () => {
+                                                this.setState({gender: "female"});
+                                            }
+                                            }>female</option>
+                                            <option disabled onClick={ () => {
+                                                this.setState({gender: "other"});
+                                            }
+                                            }>Other</option>
+                                        </Input>
                                     </FormGroup>
                                 </Col>
-    
                             </Row>
+    
+                            <Row form className="mt-2">
+                                IMG upload of docs
+                            </Row>
+
                         </CardBody>
                     </Card>
     
-                    <Card className={this.state.willHelp ? "p-2 mt-1" : "p-2 mt-1 collapsed"}>
+                    <Card className={(this.state.isHelper === true) ? "p-2 mt-1" : "p-2 mt-1 collapsed"}>
                         <CardBody className="p-1">
                             <CardTitle tag="h3" style={{ color: "#4BB5FF" }}>Helper Data</CardTitle>
+                            
                             <FormGroup>
                                 <Label for="helperPreference">Helper Preference</Label>
                                 <Input type="select" name="helperPreference" id="helperPreference">
-                                    <option>Catering</option>
-                                    <option>Sports</option>
-                                    <option>Logistics</option>
-                                    <option>Party</option>
-                                    <option>C&A</option>
-                                    <option>Spirit</option>
+                                    {this.helper_types.map((helper_type, key) => (
+                                        <option key={key} onClick={ (e) => this.setHelperType(e.target.innerText) }>{helper_type}</option>
+                                    ))}
                                 </Input>
                             </FormGroup>
                         </CardBody>
                     </Card>
 
-                    <Card className={this.state.willHost ? "p-2 mt-1" : "p-2 mt-1 collapsed"}>
+                    <Card className={(this.state.isHost === true) ? "p-2 mt-1" : "p-2 mt-1 collapsed"}>
                         <CardBody className="p-1">
                             <CardTitle tag="h3" style={{ color: "#4BB5FF" }}>Hosting Data</CardTitle>
                             <Row form>
@@ -413,10 +447,10 @@ class InternalRegistration extends React.Component {
                                         <input className="rental-checkbox" type="checkbox" id="thirdbeerpong" name="thirdbeerpong" />
                                     </span>
 
-                                    <span className="check-separator">
+                                    {/* <span className="check-separator">
                                         <label htmlFor="tableboulder">Table boulder contest</label>
                                         <input className="rental-checkbox" type="checkbox" id="tableboulder" name="tableboulder" />
-                                    </span>
+                                    </span> */}
 
                                     <span className="check-separator">
                                         <label htmlFor="thirdlinedrag">Line dragging</label>

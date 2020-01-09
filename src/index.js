@@ -29,6 +29,8 @@ import NucleoIcons from "views/NucleoIcons.js";
 import LoginPage from "views/login/LoginPage.js";
 import ProfilePage from "views/profile/ProfilePage.js";
 import InternalRegistration from "views/registration/InternalRegistration.js";
+import SignUp from "views/registration/SignUp.js";
+
 // import PageFetchingData from 'views/examples/PageFetchingData';
 // import Sponsors from "views/sponsors/Sponsors.js"
 
@@ -41,7 +43,8 @@ ReactDOM.render(
         <Route path="/nucleo-icons" render={props => <NucleoIcons {...props} />}/>
         <Route path="/profile-page" render={props => <ProfilePage {...props} />}/>
         <Route path="/login" render={props => <LoginPage {...props} />} />
-        <Route path="/internal-sign-up" render={props => <InternalRegistration {...props} />} />
+        <Route path="/internal-registration" render={props => <InternalRegistration {...props} />} />
+        <Route path="/signup" render={props => <SignUp {...props} />} />
         {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}
 
         <Redirect to="/index" />

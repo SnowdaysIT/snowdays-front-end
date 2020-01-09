@@ -348,13 +348,13 @@ function LoginPage() {
                     <Input type="password" name="password" id="password" placeholder="*********" />
                   </FormGroup>
                 <Button className="btn-lg mt-5 mb-2" style={{backgroundColor: "#4BB5FF"}}>Log In</Button>
-                <div className="pull-left">
+                <div className="pull-right">
                   <h6>
-                    <Link to="/internal-sign-up" style={{color: "white"}}>Register</Link>
+                    <Link to="/signup" style={{color: "white"}}>Register</Link>
                   </h6>
                 </div>
-                <div className="pull-right">
-                <h6>
+                <div className="pull-left">
+                  <h6>
                     <Link to="/index" style={{color: "white"}}>Need Help?</Link>
                   </h6>
                 </div>
