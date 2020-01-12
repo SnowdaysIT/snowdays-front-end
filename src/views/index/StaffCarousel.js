@@ -47,6 +47,7 @@ const items = [
   {
     src: require("assets/img/staff/party.jpg"),
     header: 'Party',
+    caption: '',
     key: '8'
   },
   {

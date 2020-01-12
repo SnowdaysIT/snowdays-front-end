@@ -1,5 +1,10 @@
+// Core and functional imports
 import React from "react";
 import { Link } from "react-router-dom";
+import { Mutation } from 'react-apollo'
+import gql from 'graphql-tag'
+
+// Styling imports
 import {
   Button,
   Card,
@@ -19,9 +24,25 @@ import {
 } from "reactstrap";
 import '../../assets/css/signup.css'
 
+// GraphQL query for user sign-up
+const SIGNUP = gql`
+  mutation SignUpMutation($email: String!, $password: String!) {
+    signupAccount(input: {email: $email, password: $password}) {
+          clientMutationId
+    }
+  }
+`
+
+// GraphQL query for user auth
+const USER_AUTH = gql`
+  mutation AuthNewUser($email: String!, $password: String!) {
+    authenticate(input: {email: $email, password: $password}) {
+      jwtToken
+    }
+  }
+`
+
 class SignUp extends React.Component {
-  // const [emailFocus, setEmailFocus] = React.useState(false);
-  // const [passwordFocus, setPasswordFocus] = React.useState(false);
 
   constructor() {
     super()
@@ -32,6 +53,13 @@ class SignUp extends React.Component {
       userPassword: "",
       registrationType: "Internal"
     }
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(event) {
+    console.log(this.state)
+    event.preventDefault();
   }
 
   render() {
@@ -345,7 +373,7 @@ class SignUp extends React.Component {
         </div>
         <Row>
           <Card className="card-signup mt-4" data-background-color="" style={{ backgroundColor: "#4bb5ff" }}>
-            <Form action="" className="form" method="">
+            <Form onSubmit={this.handleSubmit} noValidate>
               <CardHeader className="text-center">
                 <CardTitle className="title-up" tag="h3">
                   Sign Up
@@ -361,7 +389,7 @@ class SignUp extends React.Component {
                   >
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
-                        <i className="now-ui-icons ui-1_email-85"></i>
+                        <i className="fas fa-at"></i>                      
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
@@ -370,6 +398,7 @@ class SignUp extends React.Component {
                       type="text"
                       onFocus={() => {this.setState({emailFocus: true})}}
                       onBlur={() => {this.setState({emailFocus: false})}}
+                      onChange={(e) => {this.setState({userEmail: e.target.value})}}
                     ></Input>
                   </InputGroup>
                 </FormGroup>
@@ -382,7 +411,7 @@ class SignUp extends React.Component {
                   >
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
-                        <i class="fas fa-unlock-alt"></i>
+                        <i className="fas fa-unlock-alt"></i>
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
@@ -391,29 +420,76 @@ class SignUp extends React.Component {
                       type="password"
                       onFocus={() => {this.setState({passwordFocus: true})}}
                       onBlur={() => {this.setState({passwordFocus: true})}}
+                      onChange={(e) => {this.setState({userPassword: e.target.value})}}
                     ></Input>
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
                   <Label for="registrationType">Registration type</Label>
-                  <Input type="select" name="registrationType" id="registrationType">
-                    <option>Internal</option>
+                  <Input type="select" name="registrationType" id="registrationType" value={this.state.registrationType} 
+                      onChange={(e) => {
+                        this.setState({
+                          registrationType: e.target.value
+                        })
+                      }}
+                  >
+                    <option value="Internal">Internal</option>
                     <option disabled>External</option>
                     <option disabled>Contact person</option>
                   </Input>
                 </FormGroup>
               </CardBody>
               <CardFooter className="text-center" style={{ marginTop: "-5%" }}>
-                <Link to="/login">
-                  <Button className="btn-neutral btn-round mr-3" outline color="info" size="md">
-                    Back to Login
-                      </Button>
-                </Link>
-                <Link to="/internal-registration">
-                  <Button className="btn-neutral btn-round ml-3" color="info" size="md">
-                    Get Started
-                      </Button>
-                </Link>
+                  <Link to="/login">
+                    <Button className="btn-neutral btn-round mr-3" outline color="info" size="md">
+                      Back to Login
+                    </Button>
+                  </Link>
+                  
+                  <Mutation mutation={SIGNUP} 
+                    variables={{email: this.state.userEmail, password: this.state.userPassword}}
+                    onCompleted={ () => {
+                      console.log("Signed up user!");
+                    }}
+                    onError={(sgError) => {
+                      console.log(sgError);
+                      alert("There was a problem with the registration!\nYou might have inserted an email that is already registered.")
+                      // this.props.history.push("/signup")
+                      window.location.reload(false); 
+                    }}
+                  >
+                    {signupAccount => 
+                      <Mutation mutation={USER_AUTH} 
+                        variables={{email: this.state.userEmail, password: this.state.userPassword}}
+                        onCompleted={ (adata) => {
+                          console.log("User authentication was successful");
+                          console.log(adata);
+                          
+                          let token = adata["authenticate"]["token"];
+                          localStorage.setItem('token', token)
+                          this.props.history.push("/internal-registration")
+                        }}
+                        onError={(authError) => {
+                          console.log(authError);
+                          alert("There was a problem with the authentication!\nThis is likely to be a server error, please check back later.")
+                          this.props.history.push("/")
+                        }}
+                      >
+                        {authUser => 
+                        <Button type="submit" className="btn btn-round mr-3" size="md" 
+                          onClick={ () => {
+                            signupAccount().then( () => {
+                              authUser();
+                            })
+                          }}
+                        style={{backgroundColor: "white", color: "#4BB5FF"}}>Get started</Button>
+                        }
+                      
+                      </Mutation>
+                    }
+                  </Mutation>
+                  
+
               </CardFooter>
             </Form>
           </Card>

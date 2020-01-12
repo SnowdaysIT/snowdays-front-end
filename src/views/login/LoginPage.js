@@ -1,8 +1,10 @@
+// core components
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../assets/css/login.css"
+import { Mutation } from 'react-apollo'
+import gql from 'graphql-tag'
 
-// reactstrap components
+// styling components
 import {
   Button,
   Form,
@@ -11,9 +13,18 @@ import {
   FormGroup,
   Label
 } from "reactstrap";
-
-// core components
 import DarkFooter from "components/Footers/DarkFooter.js";
+import "../../assets/css/login.css"
+
+
+// GraphQL query for user auth
+const USER_AUTH = gql`
+  mutation AuthNewUser($email: String!, $password: String!) {
+    authenticate(input: {email: $email, password: $password}) {
+      jwtToken
+    }
+  }
+`
 
 function LoginPage() {
   
