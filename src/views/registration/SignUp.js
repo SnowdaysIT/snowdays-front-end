@@ -456,7 +456,7 @@ class SignUp extends React.Component {
                 <FormGroup inline className="mt-3 ml-1">
                   I have read and agreed to the <b onClick={this.handlePrivacyToggle}>privacy policy </b>
                   <input className="rental-checkbox" type="checkbox" id="privacy" name="privacy" onChange={(e)=>{this.setState({acceptedPolicy: e.target.checked})}} />
-                  <Modal isOpen={this.state.showPrivacyModal} toggle={this.handlePrivacyToggle}>
+                  <Modal isOpen={this.state.showPrivacyModal} toggle={this.handlePrivacyToggle} size="lg">
                     <ModalHeader toggle={this.handlePrivacyToggle}>Privacy Policy</ModalHeader>
                     <ModalBody>
                     <div>

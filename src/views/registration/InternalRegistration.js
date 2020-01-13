@@ -8,8 +8,8 @@ import "../../assets/css/signup.css"
 // Constants for more elegant jsx building and price calculation
 const HELPER_TYPES = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
 const SHOE_SIZES = [35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]
-const ANIMAL_HOST = [4,5,6,7,8,9,10,11,12,13,14,15]
-const WG_HOST = [2,3,4,5,6,7,8,9,10]
+const ANIMAL_HOST = [4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+const WG_HOST = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 const PRICES = {
     base: 120,
     helper: 90,
@@ -295,7 +295,25 @@ class InternalRegistration extends React.Component {
                                     <FormGroup>
                                         <Label for="uploadCard">Student card picture (front)</Label>
                                         {/* TODO: ADD UPLOAD BUTTON */}
-                                        <Input type="file" id="uploadCard" name="uploadCard" accept="image/png, image/jpeg"></Input>
+                                        <Button type="button" className="btn btn-primary btn-sm" style={{marginTop: "-1%"}}>
+                                        <input disabled id="headerImageFile_filename" defaultValue="Select File" className=""/>
+                                        </Button>
+                                        <Input
+                                            type="file"
+                                            id="headerImageFile"
+                                            name="headerImageFile"
+                                            accept="image/*"
+                                            required
+                                            // onChange={event => {
+                                            // const filename =
+                                            //     event.target.files.length > 0
+                                            //     ? event.target.files[0].name
+                                            //     : "";
+                                            // document.getElementById(
+                                            //     `${event.target.id}_filename`
+                                            // ).value = filename;
+                                            // }}
+                                        />
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -770,10 +788,10 @@ class InternalRegistration extends React.Component {
                             <Row form>
                                 <div className="mt-1 container-fluid">
                                     <FormGroup>
-                                        <Input type="select" name="thirdRental" id="thirdRental" value={this.state.thidRentalType}
+                                        <Input type="select" name="thirdRental" id="thirdRental" value={this.state.thirdRentalType}
                                                 onChange={
                                                     (e) => {
-                                                        this.setState({thidRentalType: e.target.value})
+                                                        this.setState({thirdRentalType: e.target.value})
                                                     }
                                                 }
                                         >
