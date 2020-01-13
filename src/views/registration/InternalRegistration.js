@@ -2,14 +2,15 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 import { Col, Row, Button, Form, FormGroup, Label, Input, Card, CardBody, CardTitle, Container } from 'reactstrap';
+import PreRegistration from "./PreRegistration.js"
 import "../../assets/css/signup.css"
 
 // Constants for more elegant jsx building and price calculation
-const helper_types = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
-const shoe_sizes = [35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]
-const animal_host = [4,5,6,7,8,9,10,11,12,13,14,15]
-const wg_host = [2,3,4,5,6,7,8,9,10]
-const prices = {
+const HELPER_TYPES = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
+const SHOE_SIZES = [35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]
+const ANIMAL_HOST = [4,5,6,7,8,9,10,11,12,13,14,15]
+const WG_HOST = [2,3,4,5,6,7,8,9,10]
+const PRICES = {
     base: 120,
     helper: 90,
     host: 90,
@@ -66,32 +67,45 @@ class InternalRegistration extends React.Component {
             doesTwister: false,
             doesSlackline: false,
             doesFlunkyBall: false,
+            skipassAgree: false,
+            rentalAgree: false,
+            propertyAgree: false,
+            riskAgree: false,
+            busAgree: false,
+            allergiesAgree: false,
+            paymentAgree: false,
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(event) {
-        alert('Welcome to snowdays 2020: ' + this.state.name);        
-        console.log(this.state)
+        let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
+        console.log(agreesToAll)
+        if (!agreesToAll) {
+            alert("You must accept all the terms of participation to complete your registration");        
+        } else {
+            alert('Welcome to snowdays 2020: ' + this.state.name);
+            console.log(this.state)
+        }
         event.preventDefault();
     }
 
     calculateFinalPrice() {
-        let finalPrice = prices["base"]
+        let finalPrice = PRICES["base"]
 
         if (this.state.participationType === "party") {
-            finalPrice = prices["partyAnimal"]
+            finalPrice = PRICES["partyAnimal"]
         } else if (this.state.participationType === "hosthelper") {
-            finalPrice = prices["hosthelper"]
+            finalPrice = PRICES["hosthelper"]
         } else if (this.state.participationType === "host") {
-            finalPrice = prices["host"]
+            finalPrice = PRICES["host"]
         } else {
             finalPrice += 0
         }
 
         if (this.state.nrHosting >= 5) {
-            finalPrice = prices["hostMany"]
+            finalPrice = PRICES["hostMany"]
         }
 
         if (this.state.secondRentalType==="ski" || this.state.secondRentalType==="snow") {
@@ -117,6 +131,7 @@ class InternalRegistration extends React.Component {
         const token = localStorage.getItem('token');  
         return (
             <Container>
+                <PreRegistration props={true} style={{width: "1000px"}}/>
                 {token && 
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <Card className="p-2 mt-4">
@@ -303,7 +318,7 @@ class InternalRegistration extends React.Component {
                                             }
                                         }
                                 >
-                                    {helper_types.map((helper_type, key) => (
+                                    {HELPER_TYPES.map((helper_type, key) => (
                                         <option key={key} value={helper_type.toLowerCase()}>{helper_type}</option>
                                     ))}
                                 </Input>
@@ -424,7 +439,7 @@ class InternalRegistration extends React.Component {
                                     }
                                 >
                                     {this.state.participationType==="party" && 
-                                        animal_host.map((host_nr, key) => (<option key={key} value={host_nr}>{host_nr}</option>))
+                                        ANIMAL_HOST.map((host_nr, key) => (<option key={key} value={host_nr}>{host_nr}</option>))
                                     }
                                     
                                     {this.state.hostType==="studentHall" &&
@@ -435,7 +450,7 @@ class InternalRegistration extends React.Component {
                                     }
 
                                     {(this.state.hostType==="wg" && !(this.state.participationType==="party")) &&
-                                        wg_host.map((host_nr, key) => (<option key={key} value={host_nr}>{host_nr}</option>))
+                                        WG_HOST.map((host_nr, key) => (<option key={key} value={host_nr}>{host_nr}</option>))
                                     }
                                 </Input>                                
                                 </Col>
@@ -472,7 +487,7 @@ class InternalRegistration extends React.Component {
                                             onChange={(e) => {this.setState({shoeSize: e.target.value})}}
                                         >
 
-                                                {shoe_sizes.map((shoe_size, key) => (
+                                                {SHOE_SIZES.map((shoe_size, key) => (
                                                 <option key={key} value={shoe_size}>{shoe_size}</option>
                                             ))}
                                            
@@ -823,6 +838,113 @@ class InternalRegistration extends React.Component {
                             <span>Payment description: Snowdays fee - Surname - Name</span>                                 
                         </CardBody>
                     </Card>
+
+                    <Card className="p-2 mt-1">
+                        <CardBody className="p-1">
+                            <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Terms of partecipation</CardTitle>
+                            <Row form>
+                                <span className="check-separator ml-2" >
+                                    <label htmlFor="skipassAgree" style={{width: "95%"}}>
+                                        <h5>SKIPASSES</h5>
+                                        <p>When you arrive in Bolzano and do the check-in you will receive the skipasses for
+                                        the following days. 
+                                        Non-skiers will also receive a skipass for the second day in order to reach the
+                                        basecamp.
+                                        From the moment you receive the skipass/es you are fully responsible for them. In
+                                        case of loss you will have to buy a new one on your own.</p>
+                                    </label>
+                                    <input className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" onChange={(e)=>{this.setState({skipassAgree: e.target.checked})}} />
+                                </span>
+                            </Row>
+
+                            <Row form>
+                                <span className="check-separator ml-2" >
+                                    <label htmlFor="rentalAgree" style={{width: "95%"}}>
+                                        <h5>RENTAL MATERIAL</h5>
+                                        <p>If you are renting any material or equipment, you agree to return all
+                                        equipment in the same condition as received, reasonable wear and tear excepted. If the
+                                        equipment is not returned in good condition at the end of the event or if repairs or replacements
+                                        are   required,   you  agree  to   pay   all   labor,   material   and   shipping   charges   to  replace   any
+                                        equipment which is lost, stolen or damaged beyond repair.</p>
+                                    </label>
+                                    <input className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" onChange={(e)=>{this.setState({rentalAgree: e.target.checked})}} />
+                                </span>
+                            </Row>
+
+                            <Row form>
+                                <span className="check-separator ml-2" >
+                                    <label htmlFor="propertyAgree" style={{width: "95%"}}>
+                                        <h5>LOSS OR DAMAGE TO PROPERTY</h5>
+                                        <p>Snowdays does not accept responsibility and expressly
+                                        excludes liability to the fullest extent permitted by law for any loss, theft, damage or destruction to
+                                        any personal property in whole or in part for any reason whatsoever, even if left in the care of the
+                                        staff and/or helpers of the event.</p>
+                                    </label>
+                                    <input className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" onChange={(e)=>{this.setState({propertyAgree: e.target.checked})}} />
+                                </span>
+                            </Row>
+
+                            <Row form>
+                                <span className="check-separator ml-2" >
+                                    <label htmlFor="riskAgree" style={{width: "95%"}}>
+                                        <h5>ASSUMPTION OF RISKS</h5>
+                                        <p>In consideration of your participation at Snowdays, you acknowledge
+                                        that you are aware of the possible risks, dangers and hazards associated with your participation
+                                        in the event, including the possible risk of severe or fatal injury to yourself or others. These risks
+                                        include but are not limited to the following: the risks associated with travel to and from locations to
+                                        be visited during the event, including transportation provided by commercial, private and/or public
+                                        motor vehicles; intoxication and/or alcohol poisoning from the alcohol you consume whether
+                                        voluntarily or through coercion. You acknowledge that your participation to Snowdays entail
+                                        known and unknown risks that could result in physical or emotional injury, pregnancy, paralysis,
+                                        death, or damage to yourself, to property or to third parties. You expressly agree and promise to
+                                        accept and assume all of the risks existing the event. Your participation to the event is purely
+                                        voluntary, and you elect to participate despite the risks. 
+                                        You expressly renounce any future claim
+                                        or legal action against Snowdays and its staff.</p>
+                                    </label>
+                                    <input className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" onChange={(e)=>{this.setState({riskAgree: e.target.checked})}} />
+                                </span>
+                            </Row>
+
+                            <Row form>
+                                <span className="check-separator ml-2" >
+                                    <label htmlFor="busAgree" style={{width: "95%"}}>
+                                        <h5>BUS DAMAGES</h5>
+                                        <p>For every damage (including vomit) that occurs to the buses caused by yourself,
+                                        you will pay a fee of 100€ or the amount necessary to cover the damages caused, as agreed with
+                                        the bus company.</p>
+                                    </label>
+                                    <input className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" onChange={(e)=>{this.setState({busAgree: e.target.checked})}} />
+                                </span>
+                            </Row>
+
+                            <Row form>
+                                <span className="check-separator ml-2" >
+                                    <label htmlFor="allergiesAgree" style={{width: "95%"}}>
+                                        <h5>ALLERGIES</h5>
+                                        <p>Snowdays makes every effort to accommodate the various dietary requirements of
+                                        the participants and handles food allergies seriously. Every effort is made to instruct our staff
+                                        regarding the potential severity of food allergies and to minimize allergic reactions. Please be
+                                        advised that every effort will be made to have no allergic reactions, food may come in contact
+                                        with   items   containing   allergens,   and   there   is   always   a   risk   of   contamination   or   cross
+                                        contamination. Participants with concerns need to be aware of these risks. Snowdays will
+                                        assume no liability for any adverse reactions that may occur during the event.</p>
+                                    </label>
+                                    <input className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" onChange={(e)=>{this.setState({allergiesAgree: e.target.checked})}} />
+                                </span>
+                            </Row>
+
+                            <Row form>
+                                <span className="check-separator ml-2" >
+                                    <label htmlFor="paymentAgree">
+                                        <h5>PAYMENT</h5>
+                                        <p>You will receive a confirmation email after the enrolment.The participation fee is payable within 5 days.</p>
+                                    </label>
+                                    <input className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" onChange={(e)=>{this.setState({paymentAgree: e.target.checked})}} />
+                                </span>
+                            </Row>
+                        </CardBody>
+                    </Card>
                    
                     <Button className="btn btn-primary pull-right">REGISTER</Button>
                 </Form>}
@@ -839,5 +961,4 @@ class InternalRegistration extends React.Component {
     }
     
 }
-
 export default InternalRegistration;

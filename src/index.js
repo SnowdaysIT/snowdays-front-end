@@ -42,20 +42,20 @@ const httpLink = createHttpLink({
   uri: 'http://localhost:3000/graphql'
 })
 
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from wherever you store it
-  const token = localStorage.getItem('token')  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: !(token==='undefined') ? `Bearer ${token}` : "",    },
-  };
-});
+// const authLink = setContext((_, { headers }) => {
+//   // get the authentication token from wherever you store it
+//   const token = localStorage.getItem('token')  // return the headers to the context so httpLink can read them
+//   return {
+//     headers: {
+//       ...headers,
+//       authorization: !(token==='undefined') ? `Bearer ${token}` : "",    },
+//   };
+// });
 
 const client = new ApolloClient({
   link: httpLink,
-  onError: ({ networkError, graphQLErrors }) => {
-    console.log('graphQLErrors', graphQLErrors)
+  onError: ({ networkError, graphQLError }) => {
+    console.log('graphQLError', graphQLError)
     console.log('networkError', networkError)
   },
   cache: new InMemoryCache(),

@@ -20,7 +20,11 @@ import {
   Container,
   Row,
   FormGroup,
-  Label
+  Label,
+  Modal, 
+  ModalHeader, 
+  ModalBody, 
+  ModalFooter
 } from "reactstrap";
 import '../../assets/css/signup.css'
 
@@ -51,15 +55,26 @@ class SignUp extends React.Component {
       passwordFocus: false,
       userEmail: "",
       userPassword: "",
-      registrationType: "Internal"
+      registrationType: "Internal",
+      acceptedPolicy: false,
+      showPrivacyModal: false
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePrivacyToggle = this.handlePrivacyToggle.bind(this);
   }
 
   handleSubmit(event) {
     console.log(this.state)
     event.preventDefault();
+  }
+
+  handlePrivacyToggle() {
+    console.log("toggling...")
+    console.log(this.state.showPrivacyModal)
+    this.setState(prevState => ({
+      showPrivacyModal: !prevState.showPrivacyModal
+    }))
   }
 
   render() {
@@ -389,16 +404,16 @@ class SignUp extends React.Component {
                   >
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
-                        <i className="fas fa-at"></i>                      
+                        <i className="fas fa-at"></i>
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input
                       placeholder="mario@unibz.it"
                       id="userEmail"
                       type="text"
-                      onFocus={() => {this.setState({emailFocus: true})}}
-                      onBlur={() => {this.setState({emailFocus: false})}}
-                      onChange={(e) => {this.setState({userEmail: e.target.value})}}
+                      onFocus={() => { this.setState({ emailFocus: true }) }}
+                      onBlur={() => { this.setState({ emailFocus: false }) }}
+                      onChange={(e) => { this.setState({ userEmail: e.target.value }) }}
                     ></Input>
                   </InputGroup>
                 </FormGroup>
@@ -418,79 +433,156 @@ class SignUp extends React.Component {
                       placeholder="......"
                       id="userPassword"
                       type="password"
-                      onFocus={() => {this.setState({passwordFocus: true})}}
-                      onBlur={() => {this.setState({passwordFocus: true})}}
-                      onChange={(e) => {this.setState({userPassword: e.target.value})}}
+                      onFocus={() => { this.setState({ passwordFocus: true }) }}
+                      onBlur={() => { this.setState({ passwordFocus: true }) }}
+                      onChange={(e) => { this.setState({ userPassword: e.target.value }) }}
                     ></Input>
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
                   <Label for="registrationType">Registration type</Label>
-                  <Input type="select" name="registrationType" id="registrationType" value={this.state.registrationType} 
-                      onChange={(e) => {
-                        this.setState({
-                          registrationType: e.target.value
-                        })
-                      }}
+                  <Input type="select" name="registrationType" id="registrationType" value={this.state.registrationType}
+                    onChange={(e) => {
+                      this.setState({
+                        registrationType: e.target.value
+                      })
+                    }}
                   >
                     <option value="Internal">Internal</option>
                     <option disabled>External</option>
                     <option disabled>Contact person</option>
                   </Input>
                 </FormGroup>
+                <FormGroup inline className="mt-3 ml-1">
+                  I have read and agreed to the <b onClick={this.handlePrivacyToggle}>privacy policy </b>
+                  <input className="rental-checkbox" type="checkbox" id="privacy" name="privacy" onChange={(e)=>{this.setState({acceptedPolicy: e.target.checked})}} />
+                  <Modal isOpen={this.state.showPrivacyModal} toggle={this.handlePrivacyToggle}>
+                    <ModalHeader toggle={this.handlePrivacyToggle}>Privacy Policy</ModalHeader>
+                    <ModalBody>
+                    <div>
+                      <h4>INFORMATION ON THE PROCESSING OF PERSONAL DATA
+                      Pursuant to Art. 13 of EU Regulation 679/2016 of 2016/04/27</h4>
+                      
+
+                      <p>Dear interested person we would like to inform you that the "European Regulation 2016/679 Relating to the Protection of Individuals with regard to the Processing of Personal Data, as well as the free Circulation of Such Data" (hereafter "GDPR") provides for the protection of data of natural persons  and other subjects Compared to Personal Data Processing.</p>
+
+                      <p>S.C.U.B. (Sports Club University of Bolzano) in C5.06, Piazza Università 1, 39100 (BZ), P. I.V.A./ Cod. Fisc. 94075450216, which you can contact by e-mail at the e-mail address scub@unibz.it, as the "Data Controller" of the Treatment, Pursuant to Art. 13 GDPR, therefore, provides the following information:</p>
+                      
+                      <ul>
+                        <li>
+                          <h5>DATA CATEGORIES:</h5>
+                          <p>S.C.U.B. will process the Personal Data that will be included in the form. 
+                          Among this data you will be asked to provide data belonging to particular categories of data (i.e. philosophical beliefs such as vegetarianism). This data cannot be treated without your previous consent. However, we inform you that the provision of these data is mandatory in order to fulfill the purposes of the treatment and it affects the participation at the event. 
+                          During the event authorized photographers will take pictures and record videos. You can recognize them through their clothes, since they will wear the staff uniform and they will carry a camera. The voluntary participation to the event is considered a consent to the processing of the images collected during Snowdays. </p>
+                        </li>
+
+                        <li>
+                          <h5>SOURCE OF PERSONAL DATA:</h5>
+                          <p>The personal data in possession are collected directly from the person concerned at the compilation of the present form.</p>
+                        </li>
+
+                        <li>
+                          <h5>PURPOSE OF DATA PROCESSING AND LEGAL BASIS:</h5>
+                          <p>The processing of your data, collected and filed in the form Present form, is based on Legal Consent and is made for the following Purpose: to respond to requests for information, provide support services and for the enrolment to the event.</p>
+                        </li>
+
+                        <li>
+                          <h5>RECIPIENTS OF THE DATA:</h5>
+                          <p>In the relevant limits all Purpose of Processing indicate, the Data may be communicated to a partner, private companies, appointed as persons in charge by the Data Controller. Your data will not be in any way of Ohm Diffusion. The Data Processors and Data Processors in charge The Privacy document is updated on a timely basis.</p>
+                        </li>
+
+                        <li>
+                          <h5>TRANSFER OF DATA ABROAD:</h5>
+                          <p>Collected Data will not be transferred to extra EU countries.</p>
+                        </li>
+
+                        <li>
+                          <h5>CONSERVATION PERIOD:</h5>
+                          <p>The collected data will be kept for a period of time not exceeding the achievement of the purposes for which they are treated ("conservation limitation principle" art.5, GDPR) or in the basis of all the deadlines required by the law. The verification of the obsolescence of the data retained is made periodically.</p>
+                        </li>
+
+                        <li>
+                          <h5>RIGHTS OF THE INTERESTED PARTY:</h5>
+                          <p>The interested party has always the right to request more information from the owner, accessing your data, rectification or cancellation of the same, limitation of treatment or the possibility of opposing the processing, requesting more data portability, revoking the consent to treatment by making use of these and the other rights expected by the GDPR through a simple communication to the Data Controller. The interested party may also propose a control authority claim.</p>
+                        </li>
+
+                        <li>
+                          <h5>CONSERVATION PERIOD:</h5>
+                          <p>The collected data will be kept for a period of time not exceeding the achievement of the purposes for which they are treated ("conservation limitation principle" art.5, GDPR) or in the basis of all the deadlines required by the law. The verification of the obsolescence of the data retained is made periodically.</p>
+                        </li>
+
+                        <li>
+                          <h5>OBLIGATORY OR LESS OF THE CONFERMENT OF DATA:</h5>
+                          <p>We inform you that the provision of data is mandatory and the failure to provide the data involves the non-submission of the form.</p>
+                        </li>
+
+                        <li>
+                          <h5>DATA PROCESSING MODE:</h5>
+                          <p>The Personal Data provided by you, will be proceeded in compliance with the aforementioned law and the obligations of e-privacy. The data will be treated with informatic tools and paper-based tools and on any other kind of suitable support, in compliance with the appropriate technical measures and security framework provided by the GDPR.</p>
+                        </li>
+
+                        <p>By proceeding to the registration form you declare to have read and understood the “Information on the processing of personal data” above.</p>
+                        
+                      </ul>
+                    </div>
+                    </ModalBody>
+                  </Modal>
+                </FormGroup>
               </CardBody>
               <CardFooter className="text-center" style={{ marginTop: "-5%" }}>
-                  <Link to="/login">
-                    <Button className="btn-neutral btn-round mr-3" outline color="info" size="md">
-                      Back to Login
+                <Link to="/login">
+                  <Button className="btn-neutral btn-round mr-3" outline color="info" size="md">
+                    Back to Login
                     </Button>
-                  </Link>
-                  
-                  <Mutation mutation={SIGNUP} 
-                    variables={{email: this.state.userEmail, password: this.state.userPassword}}
-                    onCompleted={ () => {
-                      console.log("Signed up user!");
-                    }}
-                    onError={(sgError) => {
-                      console.log(localStorage.getItem('token'))
-                      alert("There was a problem with the registration!\nYou might have inserted an email that is already registered.")
-                      // this.props.history.push("/signup")
-                      window.location.reload(false); 
-                    }}
-                  >
-                    {signupAccount => 
-                      <Mutation mutation={USER_AUTH} 
-                        variables={{email: this.state.userEmail, password: this.state.userPassword}}
-                        onCompleted={ (adata) => {
-                          console.log("User authentication was successful");
-                          console.log(adata);
-                          
-                          let token = adata["authenticate"]["token"];
-                          localStorage.setItem('token', token)
-                          this.props.history.push("/internal-registration")
-                        }}
-                        onError={(authError) => {
-                          console.log(authError);
-                          console.log(localStorage.getItem('token'))
-                          alert("There was a problem with the authentication!\nThis is likely to be a server error, please check back later.")
-                          this.props.history.push("/")
-                        }}
-                      >
-                        {authUser => 
-                        <Button type="submit" className="btn btn-round mr-3" size="md" 
-                          onClick={ () => {
-                            signupAccount().then( () => {
-                              authUser();
-                            })
-                          }}
-                        style={{backgroundColor: "white", color: "#4BB5FF"}}>Get started</Button>
-                        }
-                      
-                      </Mutation>
-                    }
-                  </Mutation>
-                  
+                </Link>
 
+                <Mutation mutation={SIGNUP}
+                  variables={{ email: this.state.userEmail, password: this.state.userPassword }}
+                  onCompleted={() => {
+                    console.log("Signed up user!");
+                  }}
+                  onError={(sgError) => {
+                    console.log(localStorage.getItem('token'))
+                    alert("There was a problem with the registration!\nPlease make sure you fill out all the fields.\n\nYou might also have inserted an email that is already registered.")
+                    // this.props.history.push("/signup")
+                    window.location.reload(false);
+                  }}
+                >
+                  {signupAccount =>
+                    <Mutation mutation={USER_AUTH}
+                      variables={{ email: this.state.userEmail, password: this.state.userPassword }}
+                      onCompleted={(adata) => {
+                        console.log("User authentication was successful");
+                        console.log(adata);
+
+                        let token = adata["authenticate"]["token"];
+                        localStorage.setItem('token', token)
+                        this.props.history.push("/internal-registration")
+                      }}
+                      onError={(authError) => {
+                        console.log(authError);
+                        console.log(localStorage.getItem('token'))
+                        alert("There was a problem with the authentication!\nThis is likely to be a server error, please check back later.")
+                        this.props.history.push("/")
+                      }}
+                    >
+                      {authUser =>
+                        <Button type="submit" className="btn btn-round mr-3" size="md"
+                          onClick={() => {
+                            if (!this.state.acceptedPolicy) {
+                              alert("You must first agree to the privacy policy in order to register")
+                            } else {
+                              signupAccount().then(() => {
+                                authUser();
+                              })
+                            } 
+                          }}
+                          style={{ backgroundColor: "white", color: "#4BB5FF" }}>Get started</Button>
+                      }
+
+                    </Mutation>
+                  }
+                </Mutation>
               </CardFooter>
             </Form>
           </Card>
@@ -498,7 +590,7 @@ class SignUp extends React.Component {
       </Container>
     );
   }
-  
+
 }
 
 export default SignUp;
