@@ -452,7 +452,7 @@ class SignUp extends React.Component {
                       console.log("Signed up user!");
                     }}
                     onError={(sgError) => {
-                      console.log(sgError);
+                      console.log(localStorage.getItem('token'))
                       alert("There was a problem with the registration!\nYou might have inserted an email that is already registered.")
                       // this.props.history.push("/signup")
                       window.location.reload(false); 
@@ -471,6 +471,7 @@ class SignUp extends React.Component {
                         }}
                         onError={(authError) => {
                           console.log(authError);
+                          console.log(localStorage.getItem('token'))
                           alert("There was a problem with the authentication!\nThis is likely to be a server error, please check back later.")
                           this.props.history.push("/")
                         }}

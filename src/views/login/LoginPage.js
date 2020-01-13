@@ -373,8 +373,8 @@ class LoginPage extends React.Component {
                         }}
                         onError={(authError) => {
                           console.log(authError);
-                          alert("There was a problem with the authentication!\nMake sure you inserted the correct name and password")
-                          this.props.history.push("/")
+                          alert("There was a problem with the authentication!\nMake sure you inserted the correct name and password.")
+                          window.location.reload()
                         }}
                       >
                         {authUser => <Button className="btn-lg mt-5 mb-2" style={{backgroundColor: "#4BB5FF"}} onClick={authUser}>Log In</Button>}

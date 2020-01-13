@@ -43,20 +43,23 @@ const httpLink = createHttpLink({
 })
 
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('token');  
-  // return the headers to the context so httpLink can read them
+  // get the authentication token from wherever you store it
+  const token = localStorage.getItem('token')  // return the headers to the context so httpLink can read them
   return {
     headers: {
-      authorization: token ? `Bearer ${token}` : "",
-    }
-  }
+      ...headers,
+      authorization: !(token==='undefined') ? `Bearer ${token}` : "",    },
+  };
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
-})
+  link: httpLink,
+  onError: ({ networkError, graphQLErrors }) => {
+    console.log('graphQLErrors', graphQLErrors)
+    console.log('networkError', networkError)
+  },
+  cache: new InMemoryCache(),
+});
 
 ReactDOM.render(
     <BrowserRouter>
