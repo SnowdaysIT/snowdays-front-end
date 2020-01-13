@@ -3,16 +3,23 @@ import { Link } from "react-router-dom";
 
 import { Col, Row, Button, Form, FormGroup, Label, Input, Card, CardBody, CardTitle, Container } from 'reactstrap';
 import "../../assets/css/signup.css"
- 
+
+// Constants for more elegant jsx building and price calculation
+const helper_types = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
+const shoe_sizes = [35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]
+const animal_host = [4,5,6,7,8,9,10,11,12,13,14,15]
+const wg_host = [2,3,4,5,6,7,8,9,10]
+const prices = {
+    base: 120,
+    helper: 90,
+    host: 90,
+    hosthelper: 75,
+    hostMany: 50,
+    partyAnimal: 0
+}
+
 
 class InternalRegistration extends React.Component {
-
-    // constants for more elegant solutions of jsx building
-    helper_types = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
-    shoe_sizes = [35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]
-    dorm_data_dict = {
-
-    }
 
     constructor() {
         super()
@@ -20,16 +27,20 @@ class InternalRegistration extends React.Component {
             name: "",
             surname: "",
             enrollmentNumber: 0,
-            gender: "male",
             phoneNumber: "",
             participationType: "host",
+            gender: "male",
+            personalId: "ci",
+            personalIdNr: 0,
             isHost: true,
             hostType: "studentHall",
-            hostHall: "",
+            hostHall: "rigler",
+            aptType: "single", 
+            roomNr: "",
             wgAddress: "",
             wgZip: 0,
             wgCity: "",
-            nrHosting: 0,
+            nrHosting: 1,
             isHelper: false,
             helperType: "",
             height: 0,
@@ -39,15 +50,22 @@ class InternalRegistration extends React.Component {
             xpLvl: "Beginner",
             lunchTime: "12-13",
             dinnerTime: "18-19",
-            vegSelection: "no",
             isVeg: false,
             secondDaySkiOrSnow: true,
-            thirdDaySkiOrSnow: true,
-            courseType: "Ski",
-            raceType: "Ski",
-            doesJIB: true,
+            secondCourseType: "Ski",
+            doesSnowWalking: true,
             doesSnowVolley: true,
-            doesHTF: true
+            doesHTF: true,
+            secondRentalType: "ski",
+            thirdDaySkiOrSnow: false,
+            thirdCourseType: "Ski",
+            raceType: "Ski",
+            thirdRentalType: "ski",
+            doesBeerPong: false,
+            doesLineDrag: false,
+            doesTwister: false,
+            doesSlackline: false,
+            doesFlunkyBall: false,
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,6 +75,42 @@ class InternalRegistration extends React.Component {
         alert('Welcome to snowdays 2020: ' + this.state.name);        
         console.log(this.state)
         event.preventDefault();
+    }
+
+    calculateFinalPrice() {
+        let finalPrice = prices["base"]
+
+        if (this.state.participationType === "party") {
+            finalPrice = prices["partyAnimal"]
+        } else if (this.state.participationType === "hosthelper") {
+            finalPrice = prices["hosthelper"]
+        } else if (this.state.participationType === "host") {
+            finalPrice = prices["host"]
+        } else {
+            finalPrice += 0
+        }
+
+        if (this.state.nrHosting >= 5) {
+            finalPrice = prices["hostMany"]
+        }
+
+        if (this.state.secondRentalType==="ski" || this.state.secondRentalType==="snow") {
+            finalPrice += 25
+        } else if (this.state.secondRentalType==="premiumski") {
+            finalPrice += 30
+        } else {
+            finalPrice += 0
+        }
+
+        if (this.state.thirdRentalType==="ski" || this.state.thirdRentalType==="snow") {
+            finalPrice += 25
+        } else if (this.state.thirdRentalType==="premiumski") {
+            finalPrice += 30
+        } else {
+            finalPrice += 0
+        }
+
+        return finalPrice
     }
 
     render() {
@@ -151,7 +205,14 @@ class InternalRegistration extends React.Component {
                                                                 isHost: true,
                                                                 isHelper: true
                                                             })
-                                                        } else {
+                                                        } else if (participationInput === "party") {
+                                                            this.setState({
+                                                                isHost: true,
+                                                                isHelper: false,
+                                                                hostType: "wg",
+                                                                nrHosting: 4
+                                                            })
+                                                        }else {
                                                             this.setState({
                                                                 isHost: false,
                                                                 isHelper: false
@@ -160,10 +221,11 @@ class InternalRegistration extends React.Component {
                                                     }
                                                 }
                                         >
-                                            <option id="hostParticipationOption" value="host">Host</option>
-                                            <option id="helperParticipationOption" value="helper">Helper</option>
-                                            <option id="helperhostParticipationOption" value="hosthelper">Host and Helper</option>
-                                            <option id="normalParticipationOption" value="normal" disabled>Normal</option>
+                                            <option value="host">Host</option>
+                                            <option value="helper">Helper</option>
+                                            <option value="hosthelper">Host and Helper</option>
+                                            <option value="party">Party Animal</option>
+                                            <option value="normal" disabled>Normal</option>
                                         </Input>
                                     </FormGroup>
                                 </Col>
@@ -185,9 +247,42 @@ class InternalRegistration extends React.Component {
                                     </FormGroup>
                                 </Col>
                             </Row>
-    
+
                             <Row form className="mt-2">
-                                IMG upload of docs
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="personalDoc">Personal document</Label>
+                                        <Input type="select" name="personalDoc" id="personalDoc" value={this.state.personalId}
+                                           onChange={
+                                            (e) => { 
+                                                this.setState({personalId: e.target.value})
+                                            }
+                                        }
+                                        >
+                                            <option value="ci">ID Card</option>
+                                            <option value="passport">Passport</option>
+                                        </Input>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="phone">Personal document number</Label>
+                                        <Input type="text" name="phone" id="phone" placeholder="111222333444" 
+                                            onChange = { (e) => {
+                                                this.setState({personalIdNr: e.target.value})
+                                            }
+                                        }/>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="uploadCard">Student card picture (front)</Label>
+                                        {/* TODO: ADD UPLOAD BUTTON */}
+                                        <Input type="file" id="uploadCard" name="uploadCard" accept="image/png, image/jpeg"></Input>
+                                    </FormGroup>
+                                </Col>
                             </Row>
 
                         </CardBody>
@@ -208,11 +303,12 @@ class InternalRegistration extends React.Component {
                                             }
                                         }
                                 >
-                                    {this.helper_types.map((helper_type, key) => (
+                                    {helper_types.map((helper_type, key) => (
                                         <option key={key} value={helper_type.toLowerCase()}>{helper_type}</option>
                                     ))}
                                 </Input>
                             </FormGroup>
+                            <span className="details">*Remember that as a helper you will at first have to pay the full price and you will get a refund for your discount at the end of the event.*</span>                                                         
                         </CardBody>
                     </Card>
 
@@ -222,7 +318,7 @@ class InternalRegistration extends React.Component {
                             <Row form>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="hostingType">Helper Preference</Label>
+                                        <Label for="hostingType">Hosting type</Label>
                                         <Input type="select" name="hostingType" id="hostingType" value={this.state.hostType}
                                                 onChange={
                                                     (e) => {
@@ -230,28 +326,65 @@ class InternalRegistration extends React.Component {
                                                     }
                                                 }
                                         >
-                                            <option value="studentHall">Student hall</option>
+                                            <option value="studentHall" disabled={this.state.participationType==="party" ? true:false}>Student hall</option>
                                             <option value="wg">WG</option>
                                         </Input>
                                     </FormGroup>
                                 </Col>
-                                <Col md={4} className={!(this.state.hostType==="studentHall") ? "collapsed" : ""}>
-                                <FormGroup>
-                                    <Label for="hostHall">Student Hall Selection</Label>
-                                    {/* TODO:  Add hosting number limits and autofill number of people field*/}
-                                    <Input type="select" name="hostHall" id="hostHall" value={this.hostHall}
-                                            onChange={
-                                                (e) => {
-                                                    this.setState({hostHall: e.target.value})
+                                <Col className={!(this.state.hostType==="studentHall") ? "collapsed" : ""}>
+                                    <FormGroup>
+                                        <Label for="hostHall">Student hall selection</Label>
+                                        <Input type="select" name="hostHall" id="hostHall" value={this.state.hostHall}
+                                                onChange={
+                                                    (e) => {
+                                                        // TODO: Update state of host nr of selection
+                                                        this.setState({hostHall: e.target.value})
+                                                        if(e.target.value === "rigler") {
+                                                            this.setState({nrHosting: 1})
+                                                        } else {
+                                                            this.setState({
+                                                                nrHosting: 2,
+                                                                aptType: "single"
+                                                            })
+                                                        }
+
+                                                    }
                                                 }
-                                            }
-                                    >
-                                        <option value="rigler">Peter-Rigler</option>
-                                        <option value="univercity">University</option>
-                                        <option value="rainerum">Rainerum</option>
-                                        <option value="dante">Dante appartments</option>
-                                    </Input>
-                                </FormGroup>
+                                        >
+                                            <option value="rigler">Peter-Rigler</option>
+                                            <option value="univercity">Univercity</option>
+                                            <option value="dante">Dante appartments</option>
+                                        </Input>
+                                    </FormGroup>
+                                </Col>
+                                <Col className={this.state.hostHall==="univercity" && this.state.hostType==="studentHall" ? "" : "collapsed"}>
+                                    <FormGroup>
+                                        <Label for="aptType">Appartment type</Label>
+                                        <Input type="select" name="aptType" id="aptType" value={this.state.aptType}
+                                                onChange={
+                                                    (e) => {
+                                                        this.setState({aptType: e.target.value})
+                                                        if(e.target.value === "single") {
+                                                            this.setState({nrHosting: 2})
+                                                        } else {
+                                                            this.setState({nrHosting: 1})
+                                                        }
+                                                    }
+                                                }
+                                        >
+                                            <option value="single">Single</option>
+                                            <option value="double">Double</option>
+                                        </Input>
+                                    </FormGroup>
+                                </Col>
+                                <Col md={2} className={!(this.state.hostType==="studentHall") ? "collapsed" : ""}>
+                                    <FormGroup>
+                                        <Label for="roomNumber">Room Number</Label>
+                                        <Input type={(this.state.hostHall === "univercity") ? "text" : "number"} name="roomNumber" id="roomNumber" placeholder="123"
+                                            onChange={(e)=> {this.setState({roomNr: e.target.value})}}
+                                        >
+                                        </Input>
+                                    </FormGroup>
                                 </Col>
                             </Row>
                         
@@ -281,18 +414,37 @@ class InternalRegistration extends React.Component {
                                 
                             </Row>
                             <FormGroup row>
-                                <Label className="ml-3" for="nrHosted" style={{marginTop: "0.6%"}}>Number of people you plan on hosting</Label> 
+                                <Label className="ml-3" for="nrHosting" style={{marginTop: "0.7%"}}>Number of people you will host</Label> 
                                 <Col sm={2}>
-                                <Input type="number" name="nrHosted" id="nrHosted" placeholder="2" 
-                                    onChange={(e) => {this.setState({nrHosting: e.target.value})}}
-                                />
+                                <Input type="select" name="nrHosting" id="nrHosting" value={this.state.nrHosting}
+                                    onChange={
+                                        (e) => {
+                                            this.setState({nrHosting: e.target.value})
+                                        }
+                                    }
+                                >
+                                    {this.state.participationType==="party" && 
+                                        animal_host.map((host_nr, key) => (<option key={key} value={host_nr}>{host_nr}</option>))
+                                    }
+                                    
+                                    {this.state.hostType==="studentHall" &&
+                                        <>
+                                        <option className={this.state.hostHall==="rigler" || this.state.aptType==="double" ? "" : "collapsed"} value="1">1</option>
+                                        <option className={this.state.hostHall==="rigler" ? "collapsed" : ""} value="2">2</option>
+                                        </>
+                                    }
+
+                                    {(this.state.hostType==="wg" && !(this.state.participationType==="party")) &&
+                                        wg_host.map((host_nr, key) => (<option key={key} value={host_nr}>{host_nr}</option>))
+                                    }
+                                </Input>                                
                                 </Col>
                             </FormGroup>
 
                         </CardBody>
                     </Card>
     
-                    <Card className="p-2 mt-1">
+                    <Card className={this.state.participationType==="party" ? "collapsed" : "p-2 mt-1"}>
                         <CardBody className="p-1">
                             <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Event and Sports Data</CardTitle>
                             
@@ -320,13 +472,16 @@ class InternalRegistration extends React.Component {
                                             onChange={(e) => {this.setState({shoeSize: e.target.value})}}
                                         >
 
-                                                {this.shoe_sizes.map((shoe_size, key) => (
+                                                {shoe_sizes.map((shoe_size, key) => (
                                                 <option key={key} value={shoe_size}>{shoe_size}</option>
                                             ))}
                                            
                                         </Input>
                                     </FormGroup>
                                 </Col>
+                            </Row>
+
+                            <Row form>
                                 <Col>
                                     <FormGroup>
                                         <Label for="tSize">T-Shirt size</Label>
@@ -398,25 +553,35 @@ class InternalRegistration extends React.Component {
                                         </Input>
                                     </FormGroup>
                                 </Col>
+
                             </Row>
+                            <span className="details">*The lunch and dinner timeslots are simply preferences and it is not guaranteed that you will get assigned on the selected option*</span>                                                         
+
 
                             <h5 className="title category">Second day activities</h5>
                             <Row>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="secondskiorsnow">Will you be skiing or snowboarding?</Label>
-                                        <Input type="select" name="secondskiorsnow" id="secondskiorsnow" value={this.state.secondDaySkiOrSnow ? "yes": "no"}
+                                        <Label for="secondskiorsnow">Will you ski/snowboard?</Label>
+                                        <Input type="select" name="secondskiorsnow" id="secondskiorsnow" value={this.state.secondDaySkiOrSnow ? "yes": "no"} 
+                                                disabled={this.state.thirdDaySkiOrSnow}
                                                 onChange={(e) => {
                                                     let userInput = e.target.value
                                                     
                                                     if (userInput === "yes") {
-                                                        this.setState({secondDaySkiOrSnow: true})
+                                                        this.setState({
+                                                            secondDaySkiOrSnow: true,
+                                                            thirdDaySkiOrSnow: false
+                                                        })
+                                                        
                                                     } else {
-                                                        this.setState({secondDaySkiOrSnow: false})
+                                                        this.setState({
+                                                            secondDaySkiOrSnow: false
+                                                        })
                                                     }
                                                 }}
                                         >
-                                        <option value="yes">Yes</option>
+                                        <option value="yes" >Yes</option>
                                         <option value="no">No</option>
                                         </Input>
                                     </FormGroup>                                
@@ -424,11 +589,11 @@ class InternalRegistration extends React.Component {
 
                                 <Col>
                                     <FormGroup>
-                                        <Label for="skicourse">Ski/Snowboard Course</Label>
-                                        <Input type="select" name="skicourse" id="skicourse" value={this.state.courseType}
+                                        <Label for="secondSkiCourse">Ski/Snowboard course</Label>
+                                        <Input type="select" name="secondSkiCourse" id="secondSkiCourse" value={this.state.secondCourseType}
                                                 onChange={
                                                     (e) => {
-                                                        this.setState({courseType: e.target.value})
+                                                        this.setState({secondCourseType: e.target.value})
                                                     }
                                                 }
                                         >
@@ -440,66 +605,6 @@ class InternalRegistration extends React.Component {
                                 </Col>
 
                                 <Col>
-                                    <FormGroup>
-                                        <Label for="skirace">Ski/Snowboard Race</Label>
-                                        <Input type="select" name="skirace" id="skirace" value={this.state.raceType}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({raceType: e.target.value})
-                                                    }
-                                                }
-                                        >
-                                        <option value="Ski">Ski</option>
-                                        <option value="Snowboard">Snowboard</option>
-                                        <option value="None">None</option>
-                                        </Input>
-                                    </FormGroup>                                
-                                </Col>
-
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="jib">JIB Session</Label>
-                                        <Input type="select" name="jib" id="jib" value={this.state.doesJIB ? "yes": "no"}
-                                                onChange={(e) => {
-                                                    let userInput = e.target.value
-                                                    
-                                                    if (userInput === "yes") {
-                                                        this.setState({doesJIB: true})
-                                                    } else {
-                                                        this.setState({doesJIB: false})
-                                                    }
-                                                }}
-                                        >
-                                            <option value="yes">Yes</option>
-                                            <option value="no">No</option>
-                                        </Input>
-                                    </FormGroup>                                
-                                </Col>
-                            </Row>
-
-                            <h5 className="title category">Third day activities</h5>
-                            <Row>
-                                <Col sm={4}>
-                                    <FormGroup>
-                                        <Label for="thirdskiorsnow">Will you be skiing or snowboarding?</Label>
-                                        <Input type="select" name="thirdskiorsnow" id="thirdskiorsnow" value={this.state.thirdDaySkiOrSnow ? "yes": "no"}
-                                                onChange={(e) => {
-                                                    let userInput = e.target.value
-                                                    
-                                                    if (userInput === "yes") {
-                                                        this.setState({secondDaySkiOrSnow: true})
-                                                    } else {
-                                                        this.setState({secondDaySkiOrSnow: false})
-                                                    }
-                                                }}
-                                        >
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                        </Input>
-                                    </FormGroup>                                
-                                </Col>
-
-                                <Col sm={4}>
                                     <FormGroup>
                                         <Label for="snowvolley">Snowvolley tournament</Label>
                                         <Input type="select" name="snowvolley" id="snowvolley" value={this.state.doesSnowVolley ? "yes" : "no"}
@@ -518,12 +623,12 @@ class InternalRegistration extends React.Component {
                                             <option value="yes">Yes</option>
                                             <option value="no">No</option>
                                         </Input>
-                                    </FormGroup>                                
+                                    </FormGroup>
                                 </Col>
 
-                                <Col sm={4}>
+                                <Col>
                                     <FormGroup>
-                                        <Label for="htftournament">Human table football tournament</Label>
+                                        <Label for="htftournament">Human table football</Label>
                                         <Input type="select" name="htftournament" id="htftournament" value={this.state.doesHTF ? "yes" : "no"}
                                                 onChange={
                                                     (e) => {
@@ -540,88 +645,182 @@ class InternalRegistration extends React.Component {
                                             <option value="yes">Yes</option>
                                             <option value="no">No</option>
                                         </Input>
+                                    </FormGroup>    
+                                </Col>
+
+                                <Col>
+                                <FormGroup>
+                                        <Label for="snowwalking">Snowshoes walking</Label>
+                                        <Input type="select" name="snowwalking" id="snowwalking" value={this.state.doesSnowWalking ? "yes" : "no"}
+                                                onChange={
+                                                    (e) => {
+                                                        let userInput = e.target.value
+                                                        if (userInput === "yes") {
+                                                            this.setState({doesSnowWalking: true})
+                                                        } else {
+                                                            this.setState({doesSnowWalking: false})
+                                                        }
+                                                    }
+                                                }
+                                        >
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </Input>
+                                    </FormGroup>                                 
+                                </Col>
+                            </Row>
+                            <h6 className="title category">Rental requests</h6>
+                                <Row form>
+                                <div className="mt-1 container-fluid">
+                                    <FormGroup>
+                                        <Input type="select" name="thirdRental" id="thirdRental" value={this.state.secondRentalType}
+                                                onChange={
+                                                    (e) => {
+                                                        this.setState({secondRentalType: e.target.value})
+                                                    }
+                                                }
+                                        >
+                                        <option value="ski">Ski + Skiboots (€25)</option>
+                                        <option value="premiumski">Premium - Ski + Skiboots (€30)</option>
+                                        <option value="snow">Snowboard + Snowboots (€25)</option>
+                                        <option value="none">None</option>
+                                        </Input>
+                                    </FormGroup>        
+                                </div>
+                                <span className="details">*Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information.*</span>                                                         
+                            </Row>
+
+                            <h5 className="title category">Third day activities</h5>
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="thirdskiorsnow">Will you ski/snowboard?</Label>
+                                        <Input type="select" name="thirdskiorsnow" id="thirdskiorsnow" value={this.state.thirdDaySkiOrSnow ? "yes": "no"}
+                                                disabled={this.state.secondDaySkiOrSnow}
+                                                onChange={(e) => {
+                                                    let userInput = e.target.value
+                                                    
+                                                    if (userInput === "yes") {
+                                                        this.setState({
+                                                            thirdDaySkiOrSnow: true,
+                                                            secondDaySkiOrSnow: false
+                                                        })
+                                                    } else {
+                                                        this.setState({thirdDaySkiOrSnow: false})
+                                                    }
+                                                }}
+                                        >
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                        </Input>
                                     </FormGroup>                                
+                                </Col>
+
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="secondSkiCourse">Ski/Snowboard course</Label>
+                                        <Input type="select" name="secondSkiCourse" id="secondSkiCourse" value={this.state.secondCourseType}
+                                                onChange={
+                                                    (e) => {
+                                                        this.setState({secondCourseType: e.target.value})
+                                                    }
+                                                }
+                                        >
+                                            <option value="Ski">Ski</option>
+                                            <option value="Snowboard">Snowboard</option>
+                                            <option value="None">None</option>
+                                        </Input>
+                                    </FormGroup>                                
+                                </Col>
+
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="skirace">Ski/Snowboard race</Label>
+                                        <Input type="select" name="skirace" id="skirace" value={this.state.raceType}
+                                                onChange={
+                                                    (e) => {
+                                                        this.setState({raceType: e.target.value})
+                                                    }
+                                                }
+                                        >
+                                        <option value="Ski">Ski</option>
+                                        <option value="Snowboard">Snowboard</option>
+                                        <option value="None">None</option>
+                                        </Input>
+                                    </FormGroup>                  
                                 </Col>
                             </Row>
 
-                            <h5 className="title category">Rental needs</h5>
+                            <h6 className="title category">Rental requests</h6>
                             <Row form>
                                 <div className="mt-1 container-fluid">
-                                    <span className="check-separator">
-                                        <label htmlFor="skiRental">Skiis</label>
-                                        <input className="rental-checkbox" type="checkbox" id="skiRental" name="skiRental" value="" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="skiBootRental">Ski boots</label>
-                                        <input className="rental-checkbox" type="checkbox" id="skiBootRental" name="skiBootRental" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="skiStickRental">Ski sticks</label>
-                                        <input className="rental-checkbox" type="checkbox" id="skiStickRental" name="skiStickRental" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="snowRental">Snowboard</label>
-                                        <input className="rental-checkbox" type="checkbox" id="snowRental" name="snowRental" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="snowBootsRental">Snowboard Boots</label>
-                                        <input className="rental-checkbox" type="checkbox" id="snowBootsRental" name="snowBootsRental" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="helmetRental">Helmet</label>
-                                        <input className="rental-checkbox" type="checkbox" id="helmetRental" name="helmetRental" />
-                                    </span>
+                                    <FormGroup>
+                                        <Input type="select" name="thirdRental" id="thirdRental" value={this.state.thidRentalType}
+                                                onChange={
+                                                    (e) => {
+                                                        this.setState({thidRentalType: e.target.value})
+                                                    }
+                                                }
+                                        >
+                                        <option value="ski">Ski + Skiboots (€25)</option>
+                                        <option value="premiumski">Premium - Ski + Skiboots (€30)</option>
+                                        <option value="snow">Snowboard + Snowboots (€25)</option>
+                                        <option value="none">None</option>
+                                        </Input>
+                                    </FormGroup>        
                                 </div>
                                 <span className="details">*Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information.*</span>                                                         
                             </Row>
 
                             <h5 className="title category">Extra basecamp activities</h5>
-                            <span>These are the activities you can do at the basecamp <b>during both days</b> with some exceptions (Check all that apply)</span>
+                            <span>These are the activities you can do at the basecamp <b>during both days</b> (Check all that apply)</span>
                             <Row form>
                                 <div className="mt-2 container">
                                     <span className="check-separator">
-                                        <label htmlFor="thirdbeerpong">Beer pong</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdbeerpong" name="thirdbeerpong" />
+                                        <label htmlFor="beerpong">Beer pong</label>
+                                        <input className="rental-checkbox" type="checkbox" id="beerpong" name="beerpong" onChange={(e)=>{this.setState({doesBeerPong: e.target.checked})}} />
                                     </span>
 
                                     <span className="check-separator">
-                                        <label htmlFor="thirdlinedrag">Line dragging</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdlinedrag" name="thirdlinedrag" />
+                                        <label htmlFor="linedrag">Line dragging</label>
+                                        <input className="rental-checkbox" type="checkbox" id="linedrag" name="linedrag" onChange={(e)=>{this.setState({doesLineDrag: e.target.checked})}} />
                                     </span>
 
                                     <span className="check-separator">
-                                        <label htmlFor="thirdtwister">Twister</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdtwister" name="thirdtwister" />
+                                        <label htmlFor="twister">Twister</label>
+                                        <input className="rental-checkbox" type="checkbox" id="twister" name="twister" onChange={(e)=>{this.setState({doesTwister: e.target.checked})}} />
                                     </span>
 
                                     <span className="check-separator">
-                                        <label htmlFor="thirdslackline">Slackline</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdslackline" name="thirdslackline" />
+                                        <label htmlFor="slackline">Slackline</label>
+                                        <input className="rental-checkbox" type="checkbox" id="slackline" name="slackline" onChange={(e)=>{this.setState({doesSlackline: e.target.checked})}} />
                                     </span>
 
                                     <span className="check-separator">
-                                        <label htmlFor="thirdflunkyball">Flunky ball</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdflunkyball" name="thirdflunkyball" />
+                                        <label htmlFor="flunkyball">Flunky ball</label>
+                                        <input className="rental-checkbox" type="checkbox" id="flunkyball" name="flunkyball" onChange={(e)=>{this.setState({doesFlunkyBall: e.target.checked})}} />
                                     </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="snowwalking">Snowshoes walking <b>(second day only)</b></label>
-                                        <input className="rental-checkbox" type="checkbox" id="snowwalking" name="snowwalking" />
-                                    </span>
-
-                                    {/* <span className="check-separator">
-                                        <label htmlFor="tableboulder">Table boulder contest</label>
-                                        <input className="rental-checkbox" type="checkbox" id="tableboulder" name="tableboulder" />
-                                    </span> */}
 
                                 </div>                                
                             </Row>
                         
+                        </CardBody>
+                    </Card>
+
+                    <Card className="p-2 mt-1">
+                        <CardBody className="p-1">
+                            <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Payment Information</CardTitle>
+                            <p>Based on your information, you will have to pay a total of €{this.calculateFinalPrice()} to attend Snowdays 2020</p>
+                            <span>Please make the payment to SCUB by bank transfer:</span>
+                            <br />
+                            <br />
+                            <span>IBAN: IT32Q 08081 11610 000306004547</span>
+                            <br />
+                            <span>Directed to: SPORTS CLUB UNIVERSITY BOLZANO</span>
+                            <br />
+                            <span>Bank: Cassa Rurale Bolzano</span>
+                            <br />
+                            <span>Payment description: Snowdays fee - Surname - Name</span>                                 
                         </CardBody>
                     </Card>
                    

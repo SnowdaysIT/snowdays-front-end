@@ -373,7 +373,7 @@ class SignUp extends React.Component {
         </div>
         <Row>
           <Card className="card-signup mt-4" data-background-color="" style={{ backgroundColor: "#4bb5ff" }}>
-            <Form onSubmit={this.handleSubmit} noValidate>
+            <Form onSubmit={this.handleSubmit}>
               <CardHeader className="text-center">
                 <CardTitle className="title-up" tag="h3">
                   Sign Up
