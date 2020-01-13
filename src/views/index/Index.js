@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import '../../assets/css/index.css'
+import CookieConsent from "react-cookie-consent";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 // core components
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
@@ -13,9 +14,9 @@ import EventLocation from "./EventLocation.js"
 import EventExplanation from "./EventExplanation.js"
 import Videos from "./Videos.js"
 import StaffCarousel from "./StaffCarousel.js"
-import CookieConsent from "react-cookie-consent";
 
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import '../../assets/css/index.css'
+
 
 function Index() {
 
