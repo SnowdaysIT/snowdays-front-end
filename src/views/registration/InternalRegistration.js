@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import { Mutation } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import { Col, Row, Button, Form, FormGroup, Label, Input, Card, CardBody, CardTitle, Container } from 'reactstrap';
 import PreRegistration from "./PreRegistration.js"
 import "../../assets/css/signup.css"
+
 
 // Constants for more elegant jsx building and price calculation
 const HELPER_TYPES = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
@@ -19,6 +22,16 @@ const PRICES = {
     partyAnimal: 0
 }
 
+// Queries for GraphQL
+const CREATE_PROFILE = gql`
+  mutation CreateProfileMutation($firstName: String!, $lastName: String!, $mobilePhone: String!, $badgeNumber: String!, $gender: Gender!, $isVegetarian: Boolean!, $idNumber: String!) {
+    createProfile(input: {profile: {firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, badgeNumber: $badgeNumber, gender: $gender, isVegetarian: $isVegetarian, idNumber: $idNumber}}){
+        profile {
+            id
+        }
+    }
+  }
+`
 
 class InternalRegistration extends React.Component {
 
@@ -76,25 +89,19 @@ class InternalRegistration extends React.Component {
             busAgree: false,
             allergiesAgree: false,
             paymentAgree: false,
+            agreeAll: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(event) {
-        let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
-        console.log(agreesToAll)
-        if (!agreesToAll) {
-            alert("You must accept all the terms of participation to complete your registration");
-        } else {
-            alert('Welcome to snowdays 2020: ' + this.state.name);
-            console.log(this.state)
-        }
         event.preventDefault();
     }
 
     calculateFinalPrice() {
         let finalPrice = PRICES["base"]
+        let rentalPrice = 0
 
         if (this.state.participationType === "party") {
             finalPrice = PRICES["partyAnimal"]
@@ -111,26 +118,26 @@ class InternalRegistration extends React.Component {
         }
 
         if (this.state.secondRentalType === "ski" || this.state.secondRentalType === "snow") {
-            finalPrice += 25
+            rentalPrice += 25
         } else if (this.state.secondRentalType === "premiumski") {
-            finalPrice += 30
+            rentalPrice += 30
         } else {
-            finalPrice += 0
+            rentalPrice += 0
         }
 
         if (this.state.thirdRentalType === "ski" || this.state.thirdRentalType === "snow") {
-            finalPrice += 25
+            rentalPrice += 25
         } else if (this.state.thirdRentalType === "premiumski") {
-            finalPrice += 30
+            rentalPrice += 30
         } else {
-            finalPrice += 0
+            rentalPrice += 0
         }
 
         if(this.state.wantsHoodie === true) {
             finalPrice += 20
         }
 
-        return finalPrice
+        return [finalPrice, rentalPrice]
     }
 
     render() {
@@ -173,19 +180,20 @@ class InternalRegistration extends React.Component {
                                             <Label for="enrollmentNumber">Enrollment Number</Label>
                                             <Input type="number" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456"
                                                 onChange={(e) => {
-                                                    this.setState({ enrollmentNumber: e.target.value }, () => {
-                                                        if (this.state.enrollmentNumber >= 17573) {
-                                                            document.getElementById('normalParticipationOption').disabled = true;
-                                                            document.getElementById('participationType').selectedIndex = "0"
-                                                            this.setState({
-                                                                participationType: "host",
-                                                                isHost: true,
-                                                                isHelper: false
-                                                            })
-                                                        } else {
-                                                            document.getElementById('normalParticipationOption').disabled = false;
-                                                        }
-                                                    });
+                                                    this.setState({ enrollmentNumber: e.target.value })
+                                                    //     , () => {
+                                                    //     if (this.state.enrollmentNumber >= 17573) {
+                                                    //         document.getElementById('normalParticipationOption').disabled = true;
+                                                    //         document.getElementById('participationType').selectedIndex = "0"
+                                                    //         this.setState({
+                                                    //             participationType: "host",
+                                                    //             isHost: true,
+                                                    //             isHelper: false
+                                                    //         })
+                                                    //     } else {
+                                                    //         document.getElementById('normalParticipationOption').disabled = false;
+                                                    //     }
+                                                    // });
                                                 }
                                                 } />
                                         </FormGroup>
@@ -246,7 +254,7 @@ class InternalRegistration extends React.Component {
                                                 <option value="helper">Helper</option>
                                                 <option value="hosthelper">Host and Helper</option>
                                                 <option value="party">Party Animal</option>
-                                                <option value="normal" disabled>Normal</option>
+                                                <option id="normalParticipationOption" value="normal" disabled>Normal</option>
                                             </Input>
                                         </FormGroup>
                                     </Col>
@@ -900,7 +908,7 @@ class InternalRegistration extends React.Component {
                         <Card className="p-2 mt-1">
                             <CardBody className="p-1">
                                 <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Payment Information</CardTitle>
-                                <p>Based on your information, you will have to pay a total of €{this.calculateFinalPrice()} to attend Snowdays 2020</p>
+                                            <p>Based on your information, you will have to pay a total of €{this.calculateFinalPrice()[0]} to attend Snowdays 2020 plus a total of €{this.calculateFinalPrice()[1]} that you will pay at the check-in (in cash) for rental material</p>
                                 <span>Please make the payment to SCUB by bank transfer:</span>
                                 <br />
                                 <br />
@@ -1020,8 +1028,38 @@ class InternalRegistration extends React.Component {
                                 </Row>
                             </CardBody>
                         </Card>
+                        
+                        <Mutation mutation={CREATE_PROFILE}
+                        variables={{ firstName: this.state.name, lastName: this.state.surname, mobilePhone: this.state.phoneNumber, badgeNumber: this.state.enrollmentNumber, gender: (this.state.gender==="male" ? "MALE":"FEMALE"), isVegetarian: this.state.isVeg, idNumber: this.state.personalIdNr}}
+                        onCompleted={(data) => {
+                            console.log(data)
+                            console.log(data.createProfile.profile.id);
+                            
+                            console.log("Created user profile");
+                        }}
+                        onError={(createError) => {
+                            console.log(createError);
+                            alert("There was a problem with the profile creation!\nMake sure you fill out all the fields!")
+                            window.location.reload()
+                        }}
+                    >
+                      {createProfile =>
+                        <Button  type="submit" className="btn btn-primary pull-right" onClick={ () => {
+                            let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
+                            console.log(agreesToAll);
+                            if(agreesToAll) {
+                                createProfile().then(data => {
+                                    let user_id = data.data.createProfile.profile.id
+                                });
+                                alert('Welcome to snowdays 2020: ' + this.state.name);
+                            } else {
+                                alert("You must accept all the terms of participation to complete your registration");
+                            }
+                        }}>REGISTER</Button>
+                      }
 
-                        <Button className="btn btn-primary pull-right">REGISTER</Button>
+                    </Mutation>
+                        
                     </Form>}
                 {!token &&
                     <Card className="p-2 mt-4">

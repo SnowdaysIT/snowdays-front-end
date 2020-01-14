@@ -23,8 +23,7 @@ import {
   Label,
   Modal, 
   ModalHeader, 
-  ModalBody, 
-  ModalFooter
+  ModalBody
 } from "reactstrap";
 import '../../assets/css/signup.css'
 
@@ -70,8 +69,6 @@ class SignUp extends React.Component {
   }
 
   handlePrivacyToggle() {
-    console.log("toggling...")
-    console.log(this.state.showPrivacyModal)
     this.setState(prevState => ({
       showPrivacyModal: !prevState.showPrivacyModal
     }))
@@ -541,10 +538,9 @@ class SignUp extends React.Component {
                   onCompleted={() => {
                     console.log("Signed up user!");
                   }}
-                  onError={(sgError) => {
+                  onError={() => {
                     console.log(localStorage.getItem('token'))
                     alert("There was a problem with the registration!\nPlease make sure you fill out all the fields.\n\nYou might also have inserted an email that is already registered.")
-                    // this.props.history.push("/signup")
                     window.location.reload(false);
                   }}
                 >
@@ -552,10 +548,7 @@ class SignUp extends React.Component {
                     <Mutation mutation={USER_AUTH}
                       variables={{ email: this.state.userEmail, password: this.state.userPassword }}
                       onCompleted={(adata) => {
-                        console.log("User authentication was successful");
-                        console.log(adata);
-
-                        let token = adata["authenticate"]["token"];
+                        let token = adata.authenticate.jwtToken;
                         localStorage.setItem('token', token)
                         this.props.history.push("/internal-registration")
                       }}
