@@ -39,48 +39,55 @@ import SignUp from "views/registration/SignUp.js";
 // import Sponsors from "views/sponsors/Sponsors.js"
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3000/graphql'
-})
+  uri: 'http://localhost:3000/graphql',
+});
 
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from wherever you store it
-  const token = localStorage.getItem('token')  // return the headers to the context so httpLink can read them
-  console.log(token);
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('token');
+  console.log(token)
+  if (token) {
+    console.log("i'm here");
+    
+  } else {
+    console.log("not here soz");
+
+  }
+  // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: !(token==='undefined') ? `Bearer ${token}` : "",    },
-  };
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
 });
 
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  onError: ({ networkError, graphQLError }) => {
-    console.log('graphQLError', graphQLError)
-    console.log('networkError', networkError)
-  },
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache()
 });
 
 ReactDOM.render(
     <BrowserRouter>
       <ApolloProvider client={client}>
+
       <Switch>
-        <Switch>
-          {/* <Route path="/eg" render={props => <PageFetchingData {...props} />} /> */}
-          <Route path="/index" render={props => <Index {...props} />} />
-          <Route path="/nucleo-icons" render={props => <NucleoIcons {...props} />}/>
-          <Route path="/profile-page" render={props => <ProfilePage {...props} />}/>
-          <Route path="/login" render={props => <LoginPage {...props} />} />
-          <Route path="/internal-registration" render={props => <InternalRegistration {...props} />} />
-          <Route path="/signup" render={props => <SignUp {...props} />} />
-          {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}
+          <Switch>
+            {/* <Route path="/eg" render={props => <PageFetchingData {...props} />} /> */}
+            <Route path="/index" render={props => <Index {...props} />} />
+            <Route path="/nucleo-icons" render={props => <NucleoIcons {...props} />}/>
+            <Route path="/profile-page" render={props => <ProfilePage {...props} />}/>
+            <Route path="/login" render={props => <LoginPage {...props} />} />
+            <Route path="/internal-registration" render={props => <InternalRegistration {...props} />} />
+            <Route path="/signup" render={props => <SignUp {...props} />} />
+            {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}
 
-          <Redirect to="/index" />
-          <Redirect from="/" to="/index" />
+            <Redirect to="/index" />
+            <Redirect from="/" to="/index" />
 
-        </Switch>
+          </Switch>
       </Switch>
+
       </ApolloProvider>
     </BrowserRouter>,
   document.getElementById("root")

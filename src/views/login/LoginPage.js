@@ -377,7 +377,13 @@ class LoginPage extends React.Component {
                           window.location.reload()
                         }}
                       >
-                        {authUser => <Button className="btn-lg mt-5 mb-2" style={{backgroundColor: "#4BB5FF"}} onClick={authUser}>Log In</Button>}
+                        {authUser => <Button type="submit" className="btn-lg mt-5 mb-2" style={{backgroundColor: "#4BB5FF"}} onClick={ () => {
+                          if (localStorage.getItem('token')) {
+                            this.props.history.push("/internal-registration")
+                          } else {
+                            authUser()
+                          }
+                        }}>Log In</Button>}
                       
                       </Mutation>
                     

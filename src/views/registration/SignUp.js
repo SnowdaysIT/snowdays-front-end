@@ -529,8 +529,8 @@ class SignUp extends React.Component {
               <CardFooter className="text-center" style={{ marginTop: "-5%" }}>
                 <Link to="/login">
                   <Button className="btn-neutral btn-round mr-3" outline color="info" size="md">
-                    Back to Login
-                    </Button>
+                    Go to Login
+                  </Button>
                 </Link>
 
                 <Mutation mutation={SIGNUP}

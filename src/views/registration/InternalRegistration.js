@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { Mutation } from 'react-apollo'
+import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag'
+import Composer from 'react-composer';
 
 import { Col, Row, Button, Form, FormGroup, Label, Input, Card, CardBody, CardTitle, Container } from 'reactstrap';
 import PreRegistration from "./PreRegistration.js"
 import "../../assets/css/signup.css"
 
 
-// Constants for more elegant jsx building and price calculation
-const HELPER_TYPES = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
+// Constants for more elegant jsx building and user creation
 const SHOE_SIZES = [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50]
 const ANIMAL_HOST = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 const WG_HOST = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
@@ -21,11 +21,66 @@ const PRICES = {
     hostMany: 50,
     partyAnimal: 0
 }
+const HELPER_TYPES = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
 
-// Queries for GraphQL
+const HELPER_IDS = {
+    "Catering": "4985dffd-21fe-43b5-9cdb-4c6fc2b852be",
+    "Sports": "f75e116a-b2e9-4e65-9513-335d0a178134",
+    "C&A": "fd4c7a79-149b-4962-81de-97919acc8e39",
+    "Logistics": "7d986505-503f-40b4-b4fc-57f82637bd70",
+    "Party": "e8af4c45-6dfe-4d8a-86e8-d80ca61b5bc9",
+    "Spirit": "a69afb18-7939-4b17-88e6-600b22ba3a6b"
+}
+
+const STUDENT_DORM_ADDRESS_IDS = {
+    "rigler": "f59aff58-ec44-4738-bf65-7720d3952299",
+    "university": "9020afc9-b338-4011-8126-77c9fbcf2353",
+    "dante": "8eb601b4-a82a-4c1f-b493-92d65d12dfbf"
+}
+
+// Queries for GraphQL mutation 
 const CREATE_PROFILE = gql`
   mutation CreateProfileMutation($firstName: String!, $lastName: String!, $mobilePhone: String!, $badgeNumber: String!, $gender: Gender!, $isVegetarian: Boolean!, $idNumber: String!) {
     createProfile(input: {profile: {firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, badgeNumber: $badgeNumber, gender: $gender, isVegetarian: $isVegetarian, idNumber: $idNumber}}){
+        profile {
+            id
+        }
+    }
+  }
+`
+
+const MAKE_HELPER = gql`
+  mutation MakeHelperMutation($helper: UUID!, $id: UUID!) {
+    updateProfile(input: {patch: {helper: $helper}, id: $id}) {
+        profile {
+            id
+        }
+    }
+  }
+`
+
+const CREATE_NEW_ADDRESS = gql`
+    mutation CreateAddressMutation($street: String!, $zipCode: String!, $city: String!, $country: String!) {
+        createAddress(input: {address: {street: $street, zipCode: $zipCode, city: $city, country: $country}}) {
+            address {
+                id
+            }
+        }
+    }
+`
+const CREATE_ACCOMMODATION = gql`
+    mutation CreateAccommodationMutation($address: UUID!, $isDormroom: Boolean!, $places: BigFloat!, $hostId: UUID!, $description: String) {
+        createAccommodation(input: {accommodation: {address: $address, isDormroom: $isDormroom, places: $places, hostId: $hostId, description: $description}}) {
+            accommodation {
+                id
+            }
+        }
+    }
+`
+
+const MAKE_HOST = gql`
+  mutation MakeHostMutation($accommodationId: UUID!, $id: UUID!) {
+    updateProfile(input: {patch: {accommodationId: $accommodationId}, id: $id}) {
         profile {
             id
         }
@@ -56,7 +111,7 @@ class InternalRegistration extends React.Component {
             wgCity: "",
             nrHosting: 1,
             isHelper: false,
-            helperType: "",
+            helperType: "Catering",
             height: 0,
             weight: 0,
             shoeSize: 35,
@@ -82,14 +137,16 @@ class InternalRegistration extends React.Component {
             doesTwister: false,
             doesSlackline: false,
             doesFlunkyBall: false,
-            skipassAgree: false,
-            rentalAgree: false,
-            propertyAgree: false,
-            riskAgree: false,
-            busAgree: false,
-            allergiesAgree: false,
-            paymentAgree: false,
-            agreeAll: false
+            skipassAgree: true,
+            rentalAgree: true,
+            propertyAgree: true,
+            riskAgree: true,
+            busAgree: true,
+            allergiesAgree: true,
+            paymentAgree: true,
+            userProfileId: "",
+            addressId: "",
+            accommodationId: ""
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -133,7 +190,7 @@ class InternalRegistration extends React.Component {
             rentalPrice += 0
         }
 
-        if(this.state.wantsHoodie === true) {
+        if (this.state.wantsHoodie === true) {
             finalPrice += 20
         }
 
@@ -864,10 +921,10 @@ class InternalRegistration extends React.Component {
                                     </Col>
                                     <Col>
                                         <h5>SURPRISE!</h5>
-                                        <p>Would you like to live the Snowdays’ spirit to its fullest? 
+                                        <p>Would you like to live the Snowdays’ spirit to its fullest?
                                         For the first time this year you will be able to purchase the first Snowdays official merchandise.
 
-                                        If you pre-order the merch now, you will get a special discount and pay <span style={{color: "#4BB5FF"}}>just 20€</span></p>
+                                        If you pre-order the merch now, you will get a special discount and pay <span style={{ color: "#4BB5FF" }}>just 20€</span></p>
 
                                         <FormGroup>
                                             <Label for="orderHoodie">Do you want your own Snowdays hoodie?</Label>
@@ -908,8 +965,8 @@ class InternalRegistration extends React.Component {
                         <Card className="p-2 mt-1">
                             <CardBody className="p-1">
                                 <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Payment Information</CardTitle>
-                                            <p>Based on your information, you will have to pay a total of €{this.calculateFinalPrice()[0]} to attend Snowdays 2020 plus a total of €{this.calculateFinalPrice()[1]} that you will pay at the check-in (in cash) for rental material</p>
-                                <span>Please make the payment to SCUB by bank transfer:</span>
+                                <p>Based on your information, you will have to pay a total of €{this.calculateFinalPrice()[0]} to attend Snowdays 2020 plus a total of €{this.calculateFinalPrice()[1]} that you will pay at the check-in (in cash) for rental material</p>
+                                <span>Please pay your attendance total to SCUB by bank transfer:</span>
                                 <br />
                                 <br />
                                 <span>IBAN: IT32Q 08081 11610 000306004547</span>
@@ -936,7 +993,7 @@ class InternalRegistration extends React.Component {
                                             From the moment you receive the skipass/es you are fully responsible for them. In
                                         case of loss you will have to buy a new one on your own.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" onChange={(e) => { this.setState({ skipassAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" defaultChecked={this.state.skipassAgree} onChange={(e) => { this.setState({ skipassAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -950,7 +1007,7 @@ class InternalRegistration extends React.Component {
                                             are   required,   you  agree  to   pay   all   labor,   material   and   shipping   charges   to  replace   any
                                         equipment which is lost, stolen or damaged beyond repair.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" onChange={(e) => { this.setState({ rentalAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree"  defaultChecked={this.state.rentalAgree} onChange={(e) => { this.setState({ rentalAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -963,7 +1020,7 @@ class InternalRegistration extends React.Component {
                                             any personal property in whole or in part for any reason whatsoever, even if left in the care of the
                                         staff and/or helpers of the event.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" onChange={(e) => { this.setState({ propertyAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree"  defaultChecked={this.state.propertyAgree} onChange={(e) => { this.setState({ propertyAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -985,7 +1042,7 @@ class InternalRegistration extends React.Component {
                                             You expressly renounce any future claim
                                         or legal action against Snowdays and its staff.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" onChange={(e) => { this.setState({ riskAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree"  defaultChecked={this.state.riskAgree} onChange={(e) => { this.setState({ riskAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -997,7 +1054,7 @@ class InternalRegistration extends React.Component {
                                             you will pay a fee of 100€ or the amount necessary to cover the damages caused, as agreed with
                                         the bus company.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" onChange={(e) => { this.setState({ busAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree"  defaultChecked={this.state.busAgree} onChange={(e) => { this.setState({ busAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -1013,7 +1070,7 @@ class InternalRegistration extends React.Component {
                                             contamination. Participants with concerns need to be aware of these risks. Snowdays will
                                         assume no liability for any adverse reactions that may occur during the event.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" onChange={(e) => { this.setState({ allergiesAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree"  defaultChecked={this.state.allergiesAgree} onChange={(e) => { this.setState({ allergiesAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -1023,44 +1080,141 @@ class InternalRegistration extends React.Component {
                                             <h5>PAYMENT</h5>
                                             <p>You will receive a confirmation email after the enrolment.The participation fee is payable within 5 days.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" onChange={(e) => { this.setState({ paymentAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree"  defaultChecked={this.state.paymentAgree} onChange={(e) => { this.setState({ paymentAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
                             </CardBody>
                         </Card>
-                        
-                        <Mutation mutation={CREATE_PROFILE}
-                        variables={{ firstName: this.state.name, lastName: this.state.surname, mobilePhone: this.state.phoneNumber, badgeNumber: this.state.enrollmentNumber, gender: (this.state.gender==="male" ? "MALE":"FEMALE"), isVegetarian: this.state.isVeg, idNumber: this.state.personalIdNr}}
-                        onCompleted={(data) => {
-                            console.log(data)
-                            console.log(data.createProfile.profile.id);
-                            
-                            console.log("Created user profile");
-                        }}
-                        onError={(createError) => {
-                            console.log(createError);
-                            alert("There was a problem with the profile creation!\nMake sure you fill out all the fields!")
-                            window.location.reload()
-                        }}
-                    >
-                      {createProfile =>
-                        <Button  type="submit" className="btn btn-primary pull-right" onClick={ () => {
-                            let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
-                            console.log(agreesToAll);
-                            if(agreesToAll) {
-                                createProfile().then(data => {
-                                    let user_id = data.data.createProfile.profile.id
-                                });
-                                alert('Welcome to snowdays 2020: ' + this.state.name);
-                            } else {
-                                alert("You must accept all the terms of participation to complete your registration");
-                            }
-                        }}>REGISTER</Button>
-                      }
 
-                    </Mutation>
+                        <Composer components={[
+                            <Mutation mutation={CREATE_PROFILE}
+                            variables={{ firstName: this.state.name, lastName: this.state.surname, mobilePhone: this.state.phoneNumber, badgeNumber: this.state.enrollmentNumber, gender: (this.state.gender === "male" ? "MALE" : "FEMALE"), isVegetarian: this.state.isVeg, idNumber: this.state.personalIdNr }}
+                            onCompleted={(data) => {
+                                this.setState({userProfileId: data.createProfile.profile.id})
+                                console.log(data)
+                                console.log("Created user profile");
+                                console.log(this.state.userProfileId);
+                                
+                            }}
+                            onError={(createError) => {
+                                console.log(createError);
+                                alert("There was a problem with the profile creation!\nMake sure you fill out all the fields!")
+                                window.location.reload()
+                            }}
+                            />,
+                            <Mutation mutation={MAKE_HELPER}
+                                variables={{ helper: HELPER_IDS[this.state.helperType], id:this.state.userProfileId }}
+                                onCompleted={(data) => {
+                                    console.log("Made this user a helper");
+                                    console.log(data)
+                                }}
+                                onError={(createError) => {
+                                    console.log(createError);
+                                    alert("There was a problem with making you a helper!")
+                                    window.location.reload()
+                                }}
+                            />,
+                            // TODO - Create a madafakin host
+                            <Mutation mutation={CREATE_NEW_ADDRESS}
+                                variables={{ street: this.state.wgAddress, zipCode: this.state.wgZip, city: this.state.wgCity, country: 'IT'}}
+                                onCompleted={(data) => {
+                                    this.setState({addressId: data.createAddress.address.id})
+                                    console.log(data)
+                                    console.log("Created new address in DB from WG data");
+                                }}
+                                onError={(createError) => {
+                                    console.log(createError);
+                                    alert("There was a problem with th registration of your address data!")
+                                    window.location.reload()
+                                }}
+                            />,
+                            <Mutation mutation={CREATE_ACCOMMODATION}
+                                variables={{address: this.state.addressId, isDormroom: (this.state.hostType==="studentHall" ? true:false), places: this.state.nrHosting, hostId: this.state.userProfileId, description: (this.state.hostType==="studentHall" ? this.state.roomNr:"")}}
+                                onCompleted={(data) => {
+                                    this.setState({accommodationId: data.createAccommodation.accommodation.id})
+                                    console.log("Created this users' accomodation for hosting");
+                                    console.log(data)
+                                    console.log(this.state)
+                                }}
+                                onError={(createError) => {
+                                    console.log(createError);
+                                    alert("There was a problem with your hosting data!")
+                                    window.location.reload()
+                                }}
+                            />,
+                            <Mutation mutation={MAKE_HOST}
+                            variables={{ accommodationId: this.state.accommodationId, id:this.state.userProfileId }}
+                            onCompleted={(data) => {
+                                console.log("Made this user a host");
+                                console.log(data)
+                            }}
+                            onError={(createError) => {
+                                console.log(createError);
+                                alert("There was a problem with making you a host!")
+                                window.location.reload()
+                            }}
+                        />,
+                        ]}>
+                            {(mutationFunctions)=> (
+                            <Button type="submit" className="btn btn-primary pull-right" 
+                                onClick={() => {
+                                    // console.log(mutationFunctions);
+                                    // console.log(STUDENT_DORM_ADDRESS_IDS[this.state.hostHall]);
+
+                                    let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
+                                    if (agreesToAll) {
+                                        // Part 0: First create a profile with only the required data
+                                        // Then we will update based on our state (form data)
+                                        mutationFunctions[0]().then(data => {
+                                            let userid = data.data.createProfile.profile.id
+                                            console.log(userid)
+
+                                            // Part 1: Will the internal person help or host?
+                                            if (this.state.isHelper) {
+                                                mutationFunctions[1]()
+                                            }
+
+                                            console.log(this.state.nrHosting)
+                                            if (this.state.isHost) {
+                                                if (this.state.hostType==="studentHall") {
+                                                    this.setState({addressId: STUDENT_DORM_ADDRESS_IDS[this.state.hostHall]}, newState => {
+                                                        mutationFunctions[3]().then(makeHost => {
+                                                            console.log(makeHost);
+
+                                                            mutationFunctions[4]()
+                                                        })
+                                                    })
+                                                } else {
+                                                    mutationFunctions[2]().then(newAddressData => {
+                                                        console.log(newAddressData)
+                                                        mutationFunctions[3]().then(makeHost => {
+                                                            mutationFunctions[4]()
+                                                        })
+                                                    })
+                                                }
+                            
+                                            }
+
+                                            // alert('Welcome to snowdays 2020: ' + this.state.name);
+                                        });
+                                    } else {
+                                        alert("You must accept all the terms of participation to complete your registration");
+                                    }
+
+                                }
+                                }>REGISTER</Button>
+                            )}
+                        </Composer>
+
                         
-                    </Form>}
+
+
+
+                        
+
+                    </Form>
+                }
+
                 {!token &&
                     <Card className="p-2 mt-4">
                         <CardBody className="p-1 pull-center text-center">
@@ -1069,6 +1223,7 @@ class InternalRegistration extends React.Component {
                         </CardBody>
                     </Card>
                 }
+
             </Container>
         );
     }
