@@ -31,7 +31,7 @@ import '../../assets/css/signup.css'
 const SIGNUP = gql`
   mutation SignUpMutation($email: String!, $password: String!) {
     signupAccount(input: {email: $email, password: $password}) {
-          clientMutationId
+      clientMutationId
     }
   }
 `
@@ -64,7 +64,6 @@ class SignUp extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state)
     event.preventDefault();
   }
 
@@ -533,28 +532,26 @@ class SignUp extends React.Component {
                   </Button>
                 </Link>
 
-                <Mutation mutation={SIGNUP}
-                  variables={{ email: this.state.userEmail, password: this.state.userPassword }}
-                  onCompleted={() => {
+                <Mutation mutation={SIGNUP} variables={{email: this.state.userEmail, password: this.state.userPassword}}
+                  onCompleted={(data) => {
+                    console.log(data)
                     console.log("Signed up user!");
                   }}
-                  onError={() => {
-                    console.log(localStorage.getItem('token'))
+                  onError={(error) => {
+                    console.log(error)
                     alert("There was a problem with the registration!\nPlease make sure you fill out all the fields.\n\nYou might also have inserted an email that is already registered.")
                     window.location.reload(false);
                   }}
                 >
                   {signupAccount =>
-                    <Mutation mutation={USER_AUTH}
-                      variables={{ email: this.state.userEmail, password: this.state.userPassword }}
+                    <Mutation mutation={USER_AUTH} variables={{email: this.state.userEmail, password: this.state.userPassword}}
                       onCompleted={(adata) => {
                         let token = adata.authenticate.jwtToken;
-                        localStorage.setItem('token', token)
+                        sessionStorage.setItem('token', token)
                         this.props.history.push("/internal-registration")
                       }}
-                      onError={(authError) => {
-                        console.log(authError);
-                        console.log(localStorage.getItem('token'))
+                      onError={(error) => {
+                        console.log(error);
                         alert("There was a problem with the authentication!\nThis is likely to be a server error, please check back later.")
                         this.props.history.push("/")
                       }}
@@ -565,7 +562,12 @@ class SignUp extends React.Component {
                             if (!this.state.acceptedPolicy) {
                               alert("You must first agree to the privacy policy in order to register")
                             } else {
+                              console.log(this.state.userEmail)
+                              console.log(this.state.userPassword)
+
                               signupAccount().then(() => {
+                                console.log("After signup mutation");
+                                
                                 authUser();
                               })
                             } 

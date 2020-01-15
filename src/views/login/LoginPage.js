@@ -368,7 +368,7 @@ class LoginPage extends React.Component {
                           console.log("User authentication was successful");
                           console.log(adata);
                           let token = adata.authenticate.jwtToken;
-                          localStorage.setItem('token', token);
+                          sessionStorage.setItem('token', token);
                           this.props.history.push("/internal-registration")
                         }}
                         onError={(authError) => {
@@ -378,7 +378,7 @@ class LoginPage extends React.Component {
                         }}
                       >
                         {authUser => <Button type="submit" className="btn-lg mt-5 mb-2" style={{backgroundColor: "#4BB5FF"}} onClick={ () => {
-                          if (localStorage.getItem('token')) {
+                          if (sessionStorage.getItem('token')) {
                             this.props.history.push("/internal-registration")
                           } else {
                             authUser()

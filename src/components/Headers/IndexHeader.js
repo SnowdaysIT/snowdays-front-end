@@ -56,7 +56,7 @@ function IndexHeader() {
               />
             </div>
 
-            {localStorage.getItem('token') &&
+            {sessionStorage.getItem('token') &&
               <Link to="/internal-registration">
                 <button type="button" className="btn btn-lg register-button">
                   Register
@@ -65,7 +65,7 @@ function IndexHeader() {
               </Link>
             }
 
-            {!(localStorage.getItem('token')) &&
+            {!(sessionStorage.getItem('token')) &&
               <Link to="/signup">
                 <button type="button" className="btn btn-lg register-button">
                   Register

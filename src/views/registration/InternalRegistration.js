@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag'
 import Composer from 'react-composer';
 
@@ -9,7 +9,7 @@ import PreRegistration from "./PreRegistration.js"
 import "../../assets/css/signup.css"
 
 
-// Constants for more elegant jsx building and user creation
+// Constants for more elegant jsx building
 const SHOE_SIZES = [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50]
 const ANIMAL_HOST = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 const WG_HOST = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
@@ -21,16 +21,11 @@ const PRICES = {
     hostMany: 50,
     partyAnimal: 0
 }
-const HELPER_TYPES = ["Catering", "Sports", "C&A", "Logistics", "Party", "Spirit"]
 
-const HELPER_IDS = {
-    "Catering": "4985dffd-21fe-43b5-9cdb-4c6fc2b852be",
-    "Sports": "f75e116a-b2e9-4e65-9513-335d0a178134",
-    "C&A": "fd4c7a79-149b-4962-81de-97919acc8e39",
-    "Logistics": "7d986505-503f-40b4-b4fc-57f82637bd70",
-    "Party": "e8af4c45-6dfe-4d8a-86e8-d80ca61b5bc9",
-    "Spirit": "a69afb18-7939-4b17-88e6-600b22ba3a6b"
-}
+// Constants that will be filled with IDs from DB data
+const HELPER_IDS = {}
+
+const ACTIVITY_IDS = {}
 
 const STUDENT_DORM_ADDRESS_IDS = {
     "rigler": "f59aff58-ec44-4738-bf65-7720d3952299",
@@ -38,10 +33,66 @@ const STUDENT_DORM_ADDRESS_IDS = {
     "dante": "8eb601b4-a82a-4c1f-b493-92d65d12dfbf"
 }
 
+const RENTAL_MATERIALS = {}
+
+
+// Queries for data extraction
+const GET_ACTIVITIES = gql`
+{
+    activities {
+        edges {
+            node {
+                id
+                name
+            }
+        }
+    }
+}
+`
+
+const GET_HELPER_TYPES = gql`
+{
+    helpers {
+        edges {
+            node {
+                id
+                type
+            }
+        }
+    }
+}
+`
+
+const GET_RENTAL_MATERIALS = gql`
+{
+    materials {
+        edges {
+            node {
+                id
+                name
+            }
+        }
+  }
+}
+`
+
+const GET_SIZES_MATERIALS = gql`
+{
+    materials {
+        edges {
+            node {
+                id
+                name
+            }
+        }
+  }
+}
+`
+
 // Queries for GraphQL mutation 
 const CREATE_PROFILE = gql`
-  mutation CreateProfileMutation($firstName: String!, $lastName: String!, $mobilePhone: String!, $badgeNumber: String!, $gender: Gender!, $isVegetarian: Boolean!, $idNumber: String!) {
-    createProfile(input: {profile: {firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, badgeNumber: $badgeNumber, gender: $gender, isVegetarian: $isVegetarian, idNumber: $idNumber}}){
+  mutation CreateProfileMutation($firstName: String!, $lastName: String!, $mobilePhone: String!, $badgeNumber: String!, $gender: Gender!, $isVegetarian: Boolean!, $idNumber: String!, $universityId: UUID!) {
+    createProfile(input: {profile: {firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, badgeNumber: $badgeNumber, gender: $gender, isVegetarian: $isVegetarian, idNumber: $idNumber, universityId: $universityId}}){
         profile {
             id
         }
@@ -81,6 +132,46 @@ const CREATE_ACCOMMODATION = gql`
 const MAKE_HOST = gql`
   mutation MakeHostMutation($accommodationId: UUID!, $id: UUID!) {
     updateProfile(input: {patch: {accommodationId: $accommodationId}, id: $id}) {
+        profile {
+            id
+        }
+    }
+  }
+`
+
+const ADD_ACTIVITY = gql`
+    mutation AddActivityMutation($profileId: UUID!, $activityId: UUID!) {
+        createProfileActivity(input: {profileActivity: {profileId: $profileId, activityId: $activityId}}) {
+            profile {
+                id
+            }
+        }
+    }
+`
+
+const CREATE_RENTAL = gql`
+    mutation CreateRentalMutation($experience: ExperienceLevel!, $height: Int, $shoeSize: Int, $weight: Int) {
+        createRental(input: {rental: {experience: $experience, height: $height, shoeSize: $shoeSize, weight: $weight}}) {
+            rental {
+                id
+            }
+        }
+    }
+`
+
+const ADD_MATERIALS_TO_RENTAL = gql`
+    mutation AddMaterialsToRentalMutation($rentalId: UUID!, $materialId: UUID!) {
+        createRentalMaterial(input: {rentalMaterial: {rentalId: $rentalId, materialId: $materialId}}) {
+            rental {
+                id
+            }
+        }
+    }
+`
+
+const ADD_RENTAL = gql`
+  mutation AddRentalMutation($rentalId: UUID!, $id: UUID!) {
+    updateProfile(input: {patch: {rentalId: $rentalId}, id: $id}) {
         profile {
             id
         }
@@ -198,12 +289,15 @@ class InternalRegistration extends React.Component {
     }
 
     render() {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         return (
             <Container>
-                <PreRegistration props={true} style={{ width: "1000px" }} />
+                
                 {token &&
-                    <Form onSubmit={this.handleSubmit} noValidate>
+                    <>
+                    <PreRegistration props={true} />
+
+                    <Form onSubmit={this.handleSubmit}>
                         <Card className="p-2 mt-4">
                             <CardBody className="p-1">
                                 <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>General Data</CardTitle>
@@ -393,9 +487,28 @@ class InternalRegistration extends React.Component {
                         </Card>
 
                         <Card className={(this.state.isHelper === true) ? "p-2 mt-1" : "p-2 mt-1 collapsed"}>
+                            {/* Load helper types from DB */}
+                            <Query query={GET_HELPER_TYPES}>
+                                {({ loading, error, data }) => {
+                                    if (loading) return <div></div>
+                                    if (error) return <div></div>
+
+                                    const results = data.helpers.edges
+
+                                    for (let index = 0; index < results.length; index++) {
+                                        let helper_type = results[index].node.type;
+                                        let helper_id = results[index].node.id;
+                                        HELPER_IDS[helper_type] = helper_id
+                                    }
+
+                                    return (
+                                        <div>
+                                        </div>
+                                    )
+                                }}
+                            </Query>
                             <CardBody className="p-1">
                                 <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Helper Data</CardTitle>
-
                                 <FormGroup>
                                     <Label for="helperPreference">Helper Preference</Label>
                                     <Input type="select" name="helperPreference" id="helperPreference" value={this.state.helperType}
@@ -407,7 +520,7 @@ class InternalRegistration extends React.Component {
                                             }
                                         }
                                     >
-                                        {HELPER_TYPES.map((helper_type, key) => (
+                                        {Object.keys(HELPER_IDS).map((helper_type, key) => (
                                             <option key={key} value={helper_type.toLowerCase()}>{helper_type}</option>
                                         ))}
                                     </Input>
@@ -550,41 +663,29 @@ class InternalRegistration extends React.Component {
                         </Card>
 
                         <Card className={this.state.participationType === "party" ? "collapsed" : "p-2 mt-1"}>
+                            {/* Load activity and rental data from DB */}
+                            <Query query={GET_ACTIVITIES}>
+                                {({ loading, error, data }) => {
+                                    if (loading) return <div>Fetching data...</div>
+                                    if (error) return <div>Error!</div>
+
+                                    const results = data.activities.edges
+
+                                    for (let index = 0; index < results.length; index++) {
+                                        let activity_name = results[index].node.name;
+                                        let activity_id = results[index].node.id;
+                                        ACTIVITY_IDS[activity_name] = activity_id
+                                    }
+
+                                    return (
+                                        <div>
+                                        </div>
+                                    )
+                                }}
+                            </Query>
+
                             <CardBody className="p-1">
                                 <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Event and Sports Data</CardTitle>
-
-                                <Row form>
-                                    <Col>
-                                        <FormGroup>
-                                            <Label for="height">Height (cm)</Label>
-                                            <Input type="number" name="height" id="height" placeholder="180"
-                                                onChange={(e) => { this.setState({ height: e.target.value }) }}
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                    <Col>
-                                        <FormGroup>
-                                            <Label for="zip">Weight (kg)</Label>
-                                            <Input type="number" name="weight" id="weight" placeholder="80"
-                                                onChange={(e) => { this.setState({ weight: e.target.value }) }}
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                    <Col>
-                                        <FormGroup>
-                                            <Label for="shoeSize">Shoe size (EU)</Label>
-                                            <Input type="select" name="shoeSize" id="shoeSize" value={this.state.shoeSize}
-                                                onChange={(e) => { this.setState({ shoeSize: e.target.value }) }}
-                                            >
-
-                                                {SHOE_SIZES.map((shoe_size, key) => (
-                                                    <option key={key} value={shoe_size}>{shoe_size}</option>
-                                                ))}
-
-                                            </Input>
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
 
                                 <Row form>
                                     <Col>
@@ -600,21 +701,6 @@ class InternalRegistration extends React.Component {
                                             </Input>
                                         </FormGroup>
                                     </Col>
-                                    <Col>
-                                        <FormGroup>
-                                            <Label for="xpLvl">Ski experience level</Label>
-                                            <Input type="select" name="xpLvl" id="xpLvl" value={this.state.xpLvl}
-                                                onChange={(e) => { this.setState({ xpLvl: e.target.value }) }}
-                                            >
-                                                <option value="Beginner">Beginner</option>
-                                                <option value="Intermediate">Intermediate</option>
-                                                <option value="Expert">Expert</option>
-                                            </Input>
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
-
-                                <Row form>
                                     <Col>
                                         <FormGroup>
                                             <Label for="lunchTime">Preferred lunch timeslot</Label>
@@ -774,26 +860,6 @@ class InternalRegistration extends React.Component {
                                         </FormGroup>
                                     </Col>
                                 </Row>
-                                <h6 className="title category">Rental requests</h6>
-                                <Row form>
-                                    <div className="mt-1 container-fluid">
-                                        <FormGroup>
-                                            <Input type="select" name="thirdRental" id="thirdRental" value={this.state.secondRentalType}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ secondRentalType: e.target.value })
-                                                    }
-                                                }
-                                            >
-                                                <option value="ski">Ski + Skiboots (€25)</option>
-                                                <option value="premiumski">Premium - Ski + Skiboots (€30)</option>
-                                                <option value="snow">Snowboard + Snowboots (€25)</option>
-                                                <option value="none">None</option>
-                                            </Input>
-                                        </FormGroup>
-                                    </div>
-                                    <span className="details">*Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information.*</span>
-                                </Row>
 
                                 <h5 className="title category">Third day activities</h5>
                                 <Row>
@@ -823,11 +889,11 @@ class InternalRegistration extends React.Component {
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="secondSkiCourse">Ski/Snowboard course</Label>
-                                            <Input type="select" name="secondSkiCourse" id="secondSkiCourse" value={this.state.secondCourseType}
+                                            <Label for="thirdSkiCourse">Ski/Snowboard course</Label>
+                                            <Input type="select" name="thirdSkiCourse" id="thirdSkiCourse" value={this.state.thirdCourseType}
                                                 onChange={
                                                     (e) => {
-                                                        this.setState({ secondCourseType: e.target.value })
+                                                        this.setState({ thirdCourseType: e.target.value })
                                                     }
                                                 }
                                             >
@@ -856,26 +922,7 @@ class InternalRegistration extends React.Component {
                                     </Col>
                                 </Row>
 
-                                <h6 className="title category">Rental requests</h6>
-                                <Row form>
-                                    <div className="mt-1 container-fluid">
-                                        <FormGroup>
-                                            <Input type="select" name="thirdRental" id="thirdRental" value={this.state.thirdRentalType}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ thirdRentalType: e.target.value })
-                                                    }
-                                                }
-                                            >
-                                                <option value="ski">Ski + Skiboots (€25)</option>
-                                                <option value="premiumski">Premium - Ski + Skiboots (€30)</option>
-                                                <option value="snow">Snowboard + Snowboots (€25)</option>
-                                                <option value="none">None</option>
-                                            </Input>
-                                        </FormGroup>
-                                    </div>
-                                    <span className="details">*Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information.*</span>
-                                </Row>
+
 
                                 <h5 className="title category">Extra basecamp activities</h5>
                                 <span>These are the activities you can do at the basecamp <b>during both days</b> (Check all that apply)</span>
@@ -908,7 +955,112 @@ class InternalRegistration extends React.Component {
 
                                     </div>
                                 </Row>
+                                
 
+                                {/* Load rental material from DB */}
+                                <Query query={GET_RENTAL_MATERIALS}>
+                                    {({ loading, error, data }) => {
+                                        if (loading) return <div></div>
+                                        if (error) return <div></div>
+
+                                        const results = data.materials.edges
+
+                                        for (let index = 0; index < results.length; index++) {
+                                            let material_name = results[index].node.name;
+                                            let material_id = results[index].node.id;
+                                            RENTAL_MATERIALS[material_name] = material_id
+                                        }
+
+                                        return (
+                                            <div>
+                                            </div>
+                                        )
+                                    }}
+                                </Query>
+
+                                <h5 className="title category">Rental information</h5>
+                                <Row form>
+                                    <Col>
+                                        <FormGroup>
+                                            <Label for="height">Height (cm)</Label>
+                                            <Input type="number" name="height" id="height" placeholder="180"
+                                                onChange={(e) => { this.setState({ height: e.target.value }) }}
+                                            />
+                                        </FormGroup>
+                                    </Col>
+                                    <Col>
+                                        <FormGroup>
+                                            <Label for="zip">Weight (kg)</Label>
+                                            <Input type="number" name="weight" id="weight" placeholder="80"
+                                                onChange={(e) => { this.setState({ weight: e.target.value }) }}
+                                            />
+                                        </FormGroup>
+                                    </Col>
+                                    <Col>
+                                        <FormGroup>
+                                            <Label for="shoeSize">Shoe size</Label>
+                                            <Input type="select" name="shoeSize" id="shoeSize" value={this.state.shoeSize}
+                                                onChange={(e) => { this.setState({ shoeSize: e.target.value }) }}
+                                            >
+
+                                                {SHOE_SIZES.map((shoe_size, key) => (
+                                                    <option key={key} value={shoe_size}>{shoe_size}</option>
+                                                ))}
+
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                    <Col>
+                                        <FormGroup>
+                                            <Label for="xpLvl">Ski experience level</Label>
+                                            <Input type="select" name="xpLvl" id="xpLvl" value={this.state.xpLvl}
+                                                onChange={(e) => { this.setState({ xpLvl: e.target.value }) }}
+                                            >
+                                                <option value="Beginner">Beginner</option>
+                                                <option value="Intermediate">Intermediate</option>
+                                                <option value="Expert">Expert</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
+
+                                <Row form>
+                                    <Col>
+                                        <h6 className="title category">Second day rental requests</h6>
+                                        <FormGroup>
+                                            <Input type="select" name="secondRental" id="secondRental" value={this.state.secondRentalType}
+                                                onChange={
+                                                    (e) => {
+                                                        this.setState({ secondRentalType: e.target.value })
+                                                    }
+                                                }
+                                            >
+                                                <option value="ski">Ski + Skiboots (€25)</option>
+                                                <option value="premiumski">Premium - Ski + Skiboots (€30)</option>
+                                                <option value="snow">Snowboard + Snowboots (€25)</option>
+                                                <option value="none">None</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                    <Col>
+                                        <h6 className="title category">Third day rental requests</h6>
+                                        <FormGroup>
+                                            <Input type="select" name="thirdRental" id="thirdRental" value={this.state.thirdRentalType}
+                                                onChange={
+                                                    (e) => {
+                                                        this.setState({ thirdRentalType: e.target.value })
+                                                    }
+                                                }
+                                            >
+                                                <option value="ski">Ski + Skiboots (€25)</option>
+                                                <option value="premiumski">Premium - Ski + Skiboots (€30)</option>
+                                                <option value="snow">Snowboard + Snowboots (€25)</option>
+                                                <option value="none">None</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
+                                <span className="details">*Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information.*</span>
                             </CardBody>
                         </Card>
 
@@ -917,16 +1069,19 @@ class InternalRegistration extends React.Component {
                                 <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Official Merchandise</CardTitle>
                                 <Row>
                                     <Col sm={4}>
-                                        <img src={require("assets/img/demo_hoodie.jpg")} alt="snowdays hoodie" />
+                                        <img src={require("assets/img/hoodie_front.png")} alt="snowdays hoodie front" />
+                                    </Col>
+                                    <Col sm={4}>
+                                        <img src={require("assets/img/hoodie_back.png")} alt="snowdays hoodie back" />
                                     </Col>
                                     <Col>
                                         <h5>SURPRISE!</h5>
-                                        <p>Would you like to live the Snowdays’ spirit to its fullest?
+                                        <span>Would you like to live the Snowdays’ spirit to its fullest?
                                         For the first time this year you will be able to purchase the first Snowdays official merchandise.
 
-                                        If you pre-order the merch now, you will get a special discount and pay <span style={{ color: "#4BB5FF" }}>just 20€</span></p>
+                                        If you pre-order the merch now, you will get a special discount and pay <span style={{ color: "#4BB5FF" }}>just 20€</span></span>
 
-                                        <FormGroup>
+                                        <FormGroup className="mt-3">
                                             <Label for="orderHoodie">Do you want your own Snowdays hoodie?</Label>
                                             <Input type="select" name="orderHoodie" id="orderHoodie" value={this.state.wantsHoodie ? "yes" : "no"}
                                                 onChange={(e) => {
@@ -1007,7 +1162,7 @@ class InternalRegistration extends React.Component {
                                             are   required,   you  agree  to   pay   all   labor,   material   and   shipping   charges   to  replace   any
                                         equipment which is lost, stolen or damaged beyond repair.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree"  defaultChecked={this.state.rentalAgree} onChange={(e) => { this.setState({ rentalAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" defaultChecked={this.state.rentalAgree} onChange={(e) => { this.setState({ rentalAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -1020,7 +1175,7 @@ class InternalRegistration extends React.Component {
                                             any personal property in whole or in part for any reason whatsoever, even if left in the care of the
                                         staff and/or helpers of the event.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree"  defaultChecked={this.state.propertyAgree} onChange={(e) => { this.setState({ propertyAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" defaultChecked={this.state.propertyAgree} onChange={(e) => { this.setState({ propertyAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -1042,7 +1197,7 @@ class InternalRegistration extends React.Component {
                                             You expressly renounce any future claim
                                         or legal action against Snowdays and its staff.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree"  defaultChecked={this.state.riskAgree} onChange={(e) => { this.setState({ riskAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" defaultChecked={this.state.riskAgree} onChange={(e) => { this.setState({ riskAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -1054,7 +1209,7 @@ class InternalRegistration extends React.Component {
                                             you will pay a fee of 100€ or the amount necessary to cover the damages caused, as agreed with
                                         the bus company.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree"  defaultChecked={this.state.busAgree} onChange={(e) => { this.setState({ busAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" defaultChecked={this.state.busAgree} onChange={(e) => { this.setState({ busAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -1070,7 +1225,7 @@ class InternalRegistration extends React.Component {
                                             contamination. Participants with concerns need to be aware of these risks. Snowdays will
                                         assume no liability for any adverse reactions that may occur during the event.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree"  defaultChecked={this.state.allergiesAgree} onChange={(e) => { this.setState({ allergiesAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" defaultChecked={this.state.allergiesAgree} onChange={(e) => { this.setState({ allergiesAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
 
@@ -1080,7 +1235,7 @@ class InternalRegistration extends React.Component {
                                             <h5>PAYMENT</h5>
                                             <p>You will receive a confirmation email after the enrolment.The participation fee is payable within 5 days.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree"  defaultChecked={this.state.paymentAgree} onChange={(e) => { this.setState({ paymentAgree: e.target.checked }) }} />
+                                        <input className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" defaultChecked={this.state.paymentAgree} onChange={(e) => { this.setState({ paymentAgree: e.target.checked }) }} />
                                     </span>
                                 </Row>
                             </CardBody>
@@ -1088,25 +1243,22 @@ class InternalRegistration extends React.Component {
 
                         <Composer components={[
                             <Mutation mutation={CREATE_PROFILE}
-                            variables={{ firstName: this.state.name, lastName: this.state.surname, mobilePhone: this.state.phoneNumber, badgeNumber: this.state.enrollmentNumber, gender: (this.state.gender === "male" ? "MALE" : "FEMALE"), isVegetarian: this.state.isVeg, idNumber: this.state.personalIdNr }}
-                            onCompleted={(data) => {
-                                this.setState({userProfileId: data.createProfile.profile.id})
-                                console.log(data)
-                                console.log("Created user profile");
-                                console.log(this.state.userProfileId);
-                                
-                            }}
-                            onError={(createError) => {
-                                console.log(createError);
-                                alert("There was a problem with the profile creation!\nMake sure you fill out all the fields!")
-                                window.location.reload()
-                            }}
+                                variables={{ firstName: this.state.name, lastName: this.state.surname, mobilePhone: this.state.phoneNumber, badgeNumber: this.state.enrollmentNumber, gender: (this.state.gender === "male" ? "MALE" : "FEMALE"), isVegetarian: this.state.isVeg, idNumber: this.state.personalIdNr, universityId: '0ba4238b-e490-47a2-be84-cae47f4ea5cb' }}
+                                onCompleted={(data) => {
+                                    this.setState({ userProfileId: data.createProfile.profile.id })
+                                    console.log("Created user profile");
+
+                                }}
+                                onError={(createError) => {
+                                    console.log(createError);
+                                    alert("There was a problem with the profile creation!\nMake sure you fill out all the fields!")
+                                    window.location.reload()
+                                }}
                             />,
                             <Mutation mutation={MAKE_HELPER}
-                                variables={{ helper: HELPER_IDS[this.state.helperType], id:this.state.userProfileId }}
+                                variables={{ helper: HELPER_IDS[this.state.helperType], id: this.state.userProfileId }}
                                 onCompleted={(data) => {
                                     console.log("Made this user a helper");
-                                    console.log(data)
                                 }}
                                 onError={(createError) => {
                                     console.log(createError);
@@ -1114,12 +1266,10 @@ class InternalRegistration extends React.Component {
                                     window.location.reload()
                                 }}
                             />,
-                            // TODO - Create a madafakin host
                             <Mutation mutation={CREATE_NEW_ADDRESS}
-                                variables={{ street: this.state.wgAddress, zipCode: this.state.wgZip, city: this.state.wgCity, country: 'IT'}}
+                                variables={{ street: this.state.wgAddress, zipCode: this.state.wgZip, city: this.state.wgCity, country: 'IT' }}
                                 onCompleted={(data) => {
-                                    this.setState({addressId: data.createAddress.address.id})
-                                    console.log(data)
+                                    this.setState({ addressId: data.createAddress.address.id })
                                     console.log("Created new address in DB from WG data");
                                 }}
                                 onError={(createError) => {
@@ -1129,11 +1279,11 @@ class InternalRegistration extends React.Component {
                                 }}
                             />,
                             <Mutation mutation={CREATE_ACCOMMODATION}
-                                variables={{address: this.state.addressId, isDormroom: (this.state.hostType==="studentHall" ? true:false), places: this.state.nrHosting, hostId: this.state.userProfileId, description: (this.state.hostType==="studentHall" ? this.state.roomNr:"")}}
+
+                                variables={{ address: this.state.addressId, isDormroom: (this.state.hostType === "studentHall" ? true : false), places: this.state.nrHosting, hostId: this.state.userProfileId, description: (this.state.hostType === "studentHall" ? this.state.roomNr : "") }}
                                 onCompleted={(data) => {
-                                    this.setState({accommodationId: data.createAccommodation.accommodation.id})
+                                    this.setState({ accommodationId: data.createAccommodation.accommodation.id })
                                     console.log("Created this users' accomodation for hosting");
-                                    console.log(data)
                                     console.log(this.state)
                                 }}
                                 onError={(createError) => {
@@ -1143,76 +1293,204 @@ class InternalRegistration extends React.Component {
                                 }}
                             />,
                             <Mutation mutation={MAKE_HOST}
-                            variables={{ accommodationId: this.state.accommodationId, id:this.state.userProfileId }}
-                            onCompleted={(data) => {
-                                console.log("Made this user a host");
-                                console.log(data)
-                            }}
-                            onError={(createError) => {
-                                console.log(createError);
-                                alert("There was a problem with making you a host!")
-                                window.location.reload()
-                            }}
-                        />,
+                                variables={{ accommodationId: this.state.accommodationId, id: this.state.userProfileId }}
+                                onCompleted={(data) => {
+                                    console.log("Made this user a host");
+                                    console.log(data)
+                                }}
+                                onError={(createError) => {
+                                    console.log(createError);
+                                    alert("There was a problem with making you a host!")
+                                    window.location.reload()
+                                }}
+                            />,
+                            <Mutation mutation={ADD_ACTIVITY}
+                                onCompleted={(data) => {
+                                    console.log("Added activity for this user");
+                                    console.log(data)
+                                }}
+                                onError={(createError) => {
+                                    console.log(createError);
+                                    alert("There was a problem with your activity selection")
+                                    window.location.reload()
+                                }}
+                            />,
+                            <Mutation mutation={CREATE_RENTAL}
+                                variables={{experience: (this.state.xpLvl==="Beginner" ? "BEGINNER" : "INTERMEDIATE"), height: this.state.height, shoeSize: this.state.shoeSize, weight: this.state.weight}}
+                                onCompleted={(data) => {
+                                    console.log("Created a rental entry for this user");
+                                    console.log(data)
+                                }}
+                                onError={(error) => {
+                                    console.log(error);
+                                    alert("There was a problem with the rental creation!")
+                                    window.location.reload()
+                                }}
+                            />,
+                            <Mutation mutation={ADD_MATERIALS_TO_RENTAL}
+                                onCompleted={(data) => {
+                                    console.log("Adding materials to rentals entry for this user");
+                                    console.log(data)
+                                }}
+                                onError={(error) => {
+                                    console.log(error);
+                                    alert("There was a problem with adding the request materials in the rental!")
+                                    window.location.reload()
+                                }}
+                            />,
+                            <Mutation mutation={ADD_RENTAL}
+                                onCompleted={(data) => {
+                                    console.log("Added rental entry to the user");
+                                }}
+                                onError={(error) => {
+                                    console.log(error);
+                                    alert("There was a problem with linking the rental to  your user data!")
+                                    window.location.reload()
+                                }}
+                            />,
                         ]}>
-                            {(mutationFunctions)=> (
-                            <Button type="submit" className="btn btn-primary pull-right" 
-                                onClick={() => {
-                                    // console.log(mutationFunctions);
-                                    // console.log(STUDENT_DORM_ADDRESS_IDS[this.state.hostHall]);
+                            {(mutationFunctions) => (
+                                <Button type="submit" className="btn btn-primary pull-right"
+                                    onClick={() => {
+                                        console.log(mutationFunctions)
+                                        // console.log(mutationFunctions);
+                                        // console.log(STUDENT_DORM_ADDRESS_IDS[this.state.hostHall]);
 
-                                    let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
-                                    if (agreesToAll) {
-                                        // Part 0: First create a profile with only the required data
-                                        // Then we will update based on our state (form data)
-                                        mutationFunctions[0]().then(data => {
-                                            let userid = data.data.createProfile.profile.id
-                                            console.log(userid)
+                                        let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
+                                        if (agreesToAll) {
+                                            // Part 0: First create a profile only with the required data
+                                            // Then we will update based on our state (form data)
+                                            mutationFunctions[0]().then(data => {
+                                                let userid = data.data.createProfile.profile.id
+                                                
 
-                                            // Part 1: Will the internal person help or host?
-                                            if (this.state.isHelper) {
-                                                mutationFunctions[1]()
-                                            }
+                                    //             // // Part 1: Will the person help?
+                                    //             // if (this.state.isHelper) {
+                                    //             //     mutationFunctions[1]()
+                                    //             // }
 
-                                            console.log(this.state.nrHosting)
-                                            if (this.state.isHost) {
-                                                if (this.state.hostType==="studentHall") {
-                                                    this.setState({addressId: STUDENT_DORM_ADDRESS_IDS[this.state.hostHall]}, newState => {
-                                                        mutationFunctions[3]().then(makeHost => {
-                                                            console.log(makeHost);
+                                    //             // // Part2: Will the person host?
+                                    //             // if (this.state.isHost) {
+                                    //             //     if (this.state.hostType === "studentHall") {
+                                    //             //         this.setState({ addressId: STUDENT_DORM_ADDRESS_IDS[this.state.hostHall] }, newState => {
+                                    //             //             mutationFunctions[3]().then(makeHost => {
+                                    //             //                 mutationFunctions[4]()
+                                    //             //             })
+                                    //             //         })
+                                    //             //     } else {
+                                    //             //         mutationFunctions[2]().then(newAddressData => {
+                                    //             //             console.log(newAddressData)
+                                    //             //             mutationFunctions[3]().then(makeHost => {
+                                    //             //                 mutationFunctions[4]()
+                                    //             //             })
+                                    //             //         })
+                                    //             //     }
+                                    //             // }
 
-                                                            mutationFunctions[4]()
+
+                                    //             // // Part3: what activities will the person do
+
+                                    //             // // DAY 2
+                                    //             // mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.userProfileId } })
+                                    //             // mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day dinner"], profileId: this.state.userProfileId } })
+
+                                    //             // if (this.state.secondDaySkiOrSnow) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski"], profileId: this.state.userProfileId } })
+
+                                    //             // if (this.state.secondCourseType === "Ski") {
+                                    //             //     mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski course"], profileId: this.state.userProfileId } })
+                                    //             // } else if (this.state.secondCourseType === "Snowboard") {
+                                    //             //     mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day snow course"], profileId: this.state.userProfileId } })
+                                    //             // }
+
+                                    //             // if (this.state.doesSnowWalking) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowwalking"], profileId: this.state.userProfileId } })
+
+
+                                    //             // if (this.state.doesSnowVolley) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowvolley"], profileId: this.state.userProfileId } })
+
+
+                                    //             // if (this.state.doesHTF) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Human table football"], profileId: this.state.userProfileId } })
+
+
+                                    //             // // DAY 3
+                                    //             // mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.userProfileId } })
+                                    //             // mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.userProfileId } })
+
+                                    //             // if (this.state.thirdCourseType === "Ski") {
+                                    //             //     mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.userProfileId } })
+                                    //             // } else if (this.state.thirdCourseType === "Snowboard") {
+                                    //             //     mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day snow course"], profileId: this.state.userProfileId } })
+                                    //             // }
+
+                                    //             // if (this.state.raceType === "Ski") {
+                                    //             //     mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Ski race"], profileId: this.state.userProfileId } })
+                                    //             // } else if (this.state.secondCourseType === "Snowboard") {
+                                    //             //     mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowboard race"], profileId: this.state.userProfileId } })
+                                    //             // }
+
+                                    //             // // Extra activities happening during both days
+                                    //             // if (this.state.doesBeerPong) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Beer pong"], profileId: this.state.userProfileId } })
+                                    //             // if (this.state.doesLineDrag) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Line dragging"], profileId: this.state.userProfileId } })
+                                    //             // if (this.state.doesTwister) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Twister"], profileId: this.state.userProfileId } })
+                                    //             // if (this.state.doesSlackline) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.userProfileId } })
+                                    //             // if (this.state.doesFlunkyBall) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.userProfileId } })
+
+                                    //             // Part 4: Rental
+                                                if (this.state.secondRentalType !== "None") {
+                                                    mutationFunctions[6]().then(newRental => {
+                                                        const rental_id = newRental.data.createRental.rental.id
+                                                        
+                                                        let rental_item = ""
+                                                        if (this.state.secondRentalType === "ski") {
+                                                            rental_item = "Second ski and skiboots"
+                                                        } else if (this.state.secondRentalType === "premiumski") {
+                                                            rental_item = "Second premium ski and skiboots"   
+                                                        } else if (this.state.secondRentalType === "snow") {
+                                                            rental_item = "Second snowboard and snowboots"  
+                                                        }
+
+                                                        mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
+                                                            mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
                                                         })
-                                                    })
-                                                } else {
-                                                    mutationFunctions[2]().then(newAddressData => {
-                                                        console.log(newAddressData)
-                                                        mutationFunctions[3]().then(makeHost => {
-                                                            mutationFunctions[4]()
-                                                        })
+
+                                                        console.log("added rental connection to the user")
                                                     })
                                                 }
-                            
-                                            }
 
-                                            // alert('Welcome to snowdays 2020: ' + this.state.name);
-                                        });
-                                    } else {
-                                        alert("You must accept all the terms of participation to complete your registration");
-                                    }
+                                                if(this.state.thirdRentalType !== "None") {
+                                                    mutationFunctions[6]().then(newRental => {
+                                                        const rental_id = newRental.data.createRental.rental.id
+                                                        
+                                                        let rental_item = ""
+                                                    
+                                                        if (this.state.thirdRentalType === "ski") {
+                                                            rental_item = "Third ski and skiboots"
+                                                        } else if (this.state.thirdRentalType === "premiumski") {
+                                                            rental_item = "Third premium ski and skiboots"   
+                                                        } else if (this.state.thirdRentalType === "snow") {
+                                                            rental_item = "Third snowboard and snowboots"    
+                                                        }
 
-                                }
-                                }>REGISTER</Button>
+                                                        mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
+                                                            mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
+                                                        })
+
+                                                        console.log("added rental connection to the user")
+                                                    })
+                                                }
+
+                                                // alert('Welcome to snowdays 2020: ' + this.state.name);
+                                            });
+                                        } else {
+                                            alert("You must accept all the terms of participation to complete your registration");
+                                        }
+
+                                        }
+                                    }>REGISTER</Button>
                             )}
                         </Composer>
 
-                        
-
-
-
-                        
-
                     </Form>
+                    </>
                 }
 
                 {!token &&
