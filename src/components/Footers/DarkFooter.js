@@ -9,7 +9,7 @@ function DarkFooter() {
     <footer className="footer" data-background-color="black">
       <Container>
         <div className="copyright" id="copyright">
-          © {new Date().getFullYear()}, Made by the great guys at the IT team
+          © {new Date().getFullYear()}, Developed by the <a href="https://github.com/orgs/SnowdaysIT/teams/it">great guys of the IT team</a>
         </div>
       </Container>
     </footer>

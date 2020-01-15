@@ -1,5 +1,5 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+
 // reactstrap components
 import {
   Collapse,
@@ -72,43 +72,36 @@ function IndexNavbar() {
           >
             <Nav navbar>
               <NavItem>
-                <NavLink
+                <NavLink 
                   href="#event"
                   onClick={e => {
-                    
+                    e.preventDefault();
+                    document.getElementById("eventSection").scrollIntoView({behavior: "smooth"});
                   }}
                 >
                   <p>Event</p>
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink
-                  href="#what"
+                <NavLink href="#crew"
                   onClick={e => {
-                    
-                  }}
-                >
-                  <p>Staff</p>
+                    e.preventDefault();
+                    document.getElementById("staffSection").scrollIntoView({behavior: "smooth", block: "end"});
+                  }}>
+                  <p>Crew</p>
                 </NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink
-                  href="#contacts"
-                  onClick={e => {
-                    
-                  }}
-                >
+              {/* <NavItem>
+                <NavLink href="#sponsors">
                   <p>Sponsors</p>
                 </NavLink>
-              </NavItem>
+              </NavItem> */}
               <NavItem>
                 <NavLink
-                  href="#contacts"
+                  href="#contactSection"
                   onClick={e => {
-                    // e.preventDefault();
-                    // document
-                    //   .getElementById("download-section")
-                    //   .scrollIntoView();
+                    e.preventDefault();
+                    document.getElementById("contactSection").scrollIntoView({behavior: "smooth"});
                   }}
                 >
                   <p>Contact Us</p>

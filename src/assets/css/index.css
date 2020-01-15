@@ -1,3 +1,27 @@
+@font-face {
+    font-family: 'Circular';
+    src: url("../fonts/Circular-Book.eot");
+    src: url("../fonts/Circular-Book.eot") format("embedded-opentype"), url("../fonts/Circular-Book.woff2") format("woff2"), url("../fonts/Circular-Book.woff") format("woff"), url("../fonts/Circular-Book.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Jaapoki';
+    src: url("../fonts/jaapokki-regular-webfont.eot");
+    src: url("../fonts/jaapokki-regular-webfont.eot") format("embedded-opentype"), url("../fonts/jaapokki-regular-webfont.woff2") format("woff2"), url("../fonts/jaapokki-regular-webfont.woff") format("woff"), url("../fonts/jaapokki-regular-webfont.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal; 
+}
+
+* {
+    font-family: 'Circular';
+}
+
+@media (max-width: 500px) {
+    h3 {
+        font-size: 5vw;
+    }
+}
+
 .info-icon {
     padding-left: 5px;
     padding-right: 5px;
@@ -6,4 +30,74 @@
 
 .category {
     color: #4BB5FF;
+}
+
+.explanationList {
+    list-style-type: none;
+    font-size: medium;
+    font-weight: 200;
+    margin-top: 10px;
+}
+
+.explanationListItem:before {
+    content: '\2744';
+    margin-left: -20px;
+    margin-right: 10px;
+    margin-top: 100px;
+    font-size: 18px;
+    color: #4BB5FF;
+}
+
+.main-header-div {
+    margin-top: -4vw;
+}
+
+.main-header-text {
+    font-size: 10vw;
+    font-family: 'Jaapoki';
+}
+@media (max-width: 500px) {
+    .main-header-text {
+        font-size: 14vw;
+        font-family: 'Jaapoki';
+    }
+}
+
+.yt-video-container {
+    background-color: white;
+}
+    
+.type1-card {
+    border-radius: 2%;
+}
+
+.register-button {
+    border-color: #4BB5FF;
+    background-color: white;
+    color: #4BB5FF;
+}
+
+.register-button:hover, .register-button:focus, .register-button:active, .register-button.active, .open>.dropdown-toggle.register-button {
+    color: #fff;
+    background-color: #4BB5FF;
+    border-color: #285e8e; /*set the color you want here*/
+}
+
+.staff-carousel .carousel-item {
+    height: 100vh;
+}
+@media (max-width: 500px) {
+    .staff-carousel .carousel-item {
+        height: 230px;
+    }
+}
+
+.explanation-carousel .carousel-inner{
+    display: table-cell;
+    vertical-align: middle
+}
+
+.explanation-carousel .carousel-item {
+    height: 490px;
+    width: 100%;
 }

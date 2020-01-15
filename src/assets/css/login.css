@@ -1,0 +1,85 @@
+/* colors */
+@font-face {
+    font-family: 'Circular';
+    src: url("../fonts/Circular-Book.eot");
+    src: url("../fonts/Circular-Book.eot") format("embedded-opentype"), url("../fonts/Circular-Book.woff2") format("woff2"), url("../fonts/Circular-Book.woff") format("woff"), url("../fonts/Circular-Book.ttf") format("truetype");
+}
+@font-face {
+    font-family: 'Jaapoki';
+    src: url("../fonts/jaapokki-regular-webfont.eot");
+    src: url("../fonts/jaapokki-regular-webfont.eot") format("embedded-opentype"), url("../fonts/jaapokki-regular-webfont.woff2") format("woff2"), url("../fonts/jaapokki-regular-webfont.woff") format("woff"), url("../fonts/jaapokki-regular-webfont.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+* {
+    font-family: 'Circular';
+}
+
+.login-title {
+    font-family: 'Jaapoki';
+}
+.svgContainer {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1em;
+    border-radius: 50%;
+    pointer-events: none;
+}
+.svgContainer div {
+    position: relative;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 50%;
+    padding-bottom: 100%;
+}
+.svgContainer .mySVG {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+.svgContainer:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: inherit;
+    height: inherit;
+    box-sizing: border-box;
+    border: solid 2.5px #217093;
+    border-radius: 50%;
+}
+
+.form-control:focus {
+    border-color: #4BB5FF;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(75, 181, 255, 0.6);
+}
+.login-form input {
+    width: 100%;
+    height: 50px;
+    font-size: 1.1em;
+    background-color: #ffffffe3;
+}
+
+.login-form button {
+    display: block;
+    margin: 0;
+    padding: 0.65em 1em 1em;
+    background-color: #4bb5ff;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: none;
+    width: 100%;
+    height: 55px;
+    font-size: 1.55em;
+    color: #fff;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.2s ease-out;
+}

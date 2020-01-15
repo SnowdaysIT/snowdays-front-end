@@ -1,0 +1,6 @@
+{
+    "video": false,
+    "env": {
+        "HOST": "http://localhost:3000"
+    }
+}
