@@ -2,7 +2,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Mutation } from 'react-apollo'
-import gql from 'graphql-tag'
+import { ApolloClient } from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
+// Import GraphQL queries from the query constants file
+import { SIGNUP, USER_AUTH} from './RegistrationQueries.js';
 
 // Styling imports
 import {
@@ -27,23 +32,18 @@ import {
 } from "reactstrap";
 import '../../assets/css/signup.css'
 
-// GraphQL query for user sign-up
-const SIGNUP = gql`
-  mutation SignUpMutation($email: String!, $password: String!) {
-    signupAccount(input: {email: $email, password: $password}) {
-      clientMutationId
-    }
-  }
-`
 
-// GraphQL query for user auth
-const USER_AUTH = gql`
-  mutation AuthNewUser($email: String!, $password: String!) {
-    authenticate(input: {email: $email, password: $password}) {
-      jwtToken
-    }
-  }
-`
+// Apollo Client set-up for sign-up since the person visiting this page should not have a token
+const httpLink = createHttpLink({
+  // TODO: Add process.env variable reference
+  uri: 'http://localhost:3000/graphql',
+});
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+});
+
 
 class SignUp extends React.Component {
 
@@ -532,28 +532,31 @@ class SignUp extends React.Component {
                   </Button>
                 </Link>
 
-                <Mutation mutation={SIGNUP} variables={{email: this.state.userEmail, password: this.state.userPassword}}
+                <Mutation mutation={SIGNUP} variables={{email: this.state.userEmail, password: this.state.userPassword}} client={client}
                   onCompleted={(data) => {
-                    console.log(data)
                     console.log("Signed up user!");
                   }}
                   onError={(error) => {
                     console.log(error)
                     alert("There was a problem with the registration!\nPlease make sure you fill out all the fields.\n\nYou might also have inserted an email that is already registered.")
-                    window.location.reload(false);
+                    window.location.reload(true);
                   }}
                 >
                   {signupAccount =>
-                    <Mutation mutation={USER_AUTH} variables={{email: this.state.userEmail, password: this.state.userPassword}}
+                    <Mutation mutation={USER_AUTH} variables={{email: this.state.userEmail, password: this.state.userPassword}} client={client}
                       onCompleted={(adata) => {
                         let token = adata.authenticate.jwtToken;
                         sessionStorage.setItem('token', token)
-                        this.props.history.push("/internal-registration")
+                        // this.props.history.push("/internal-registration")
+                        this.props.history.push({
+                          pathname: '/internal-registration',
+                          state: { accountEmail: this.state.userEmail }
+                        })
                       }}
                       onError={(error) => {
                         console.log(error);
                         alert("There was a problem with the authentication!\nThis is likely to be a server error, please check back later.")
-                        this.props.history.push("/")
+                        window.location.reload(true);
                       }}
                     >
                       {authUser =>
@@ -562,12 +565,7 @@ class SignUp extends React.Component {
                             if (!this.state.acceptedPolicy) {
                               alert("You must first agree to the privacy policy in order to register")
                             } else {
-                              console.log(this.state.userEmail)
-                              console.log(this.state.userPassword)
-
-                              signupAccount().then(() => {
-                                console.log("After signup mutation");
-                                
+                              signupAccount().then(() => {                                
                                 authUser();
                               })
                             } 
