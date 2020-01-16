@@ -56,8 +56,8 @@ function IndexHeader() {
               />
             </div>
             {/*<Link to="https://forms.gle/Ez6n1ByWfrzfQGKXA">*/}
-            <a href="#">
-            <button type="button" className="btn btn-lg register-button" disabled>
+            <a href="https://forms.gle/RF279RAuMyvf94Wx5">
+            <button type="button" className="btn btn-lg register-button">
               Register
               <i className="fas fa-sign-in-alt ml-2 mt-1"></i>
             </button>
