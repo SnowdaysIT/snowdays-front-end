@@ -547,11 +547,7 @@ class SignUp extends React.Component {
                       onCompleted={(adata) => {
                         let token = adata.authenticate.jwtToken;
                         sessionStorage.setItem('token', token)
-                        // this.props.history.push("/internal-registration")
-                        this.props.history.push({
-                          pathname: '/internal-registration',
-                          state: { accountEmail: this.state.userEmail }
-                        })
+                        this.props.history.push("/internal-registration")
                       }}
                       onError={(error) => {
                         console.log(error);

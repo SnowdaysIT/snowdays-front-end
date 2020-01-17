@@ -78,7 +78,12 @@ export const GET_STUDENT_DORM_ADDRESSES = gql`
   }
 }
 `
-
+  
+export const GET_CURRENT_ACCOUNT_ID = gql`
+{
+    currentAccountId
+}
+`
 
 
 // MUTATIONS
