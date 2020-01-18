@@ -62,6 +62,12 @@ const items = [
     caption: '',
     key: '10'
   },
+  {
+    src: require("assets/img/staff/sports.jpg"),
+    header: 'Sports',
+    caption: '',
+    key: '11'
+  },
 ];
 
 const StaffCarousel = () => {

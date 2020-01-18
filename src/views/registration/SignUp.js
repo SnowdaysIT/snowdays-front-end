@@ -526,11 +526,11 @@ class SignUp extends React.Component {
                 </FormGroup>
               </CardBody>
               <CardFooter className="text-center" style={{ marginTop: "-5%" }}>
-                <Link to="/login">
+                {/* <Link to="/login">
                   <Button className="btn-neutral btn-round mr-3" outline color="info" size="md">
                     Go to Login
                   </Button>
-                </Link>
+                </Link> */}
 
                 <Mutation mutation={SIGNUP} variables={{email: this.state.userEmail, password: this.state.userPassword}} client={client}
                   onCompleted={(data) => {
@@ -556,7 +556,7 @@ class SignUp extends React.Component {
                       }}
                     >
                       {authUser =>
-                        <Button type="submit" className="btn btn-round mr-3" size="md"
+                        <Button type="submit" className="btn btn-round mr-3" size="lg"
                           onClick={() => {
                             if (!this.state.acceptedPolicy) {
                               alert("You must first agree to the privacy policy in order to register")

@@ -84,12 +84,9 @@
 }
 
 .staff-carousel .carousel-item {
-    height: 100vh;
+    height: 90vh;
 }
 
-.staff-carousel .carousel-caption {
-    font-size: large;
-}
 .staff-carousel .carousel-caption h3 {
     font-weight: bold;
     background-color: #0C4996;
@@ -108,6 +105,6 @@
 }
 
 .explanation-carousel .carousel-item {
-    height: 490px;
+    height: 66vh;
     width: 100%;
 }

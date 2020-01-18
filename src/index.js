@@ -30,11 +30,10 @@ import "assets/scss/now-ui-kit.scss";
 
 // pages
 import Index from "views/index/Index.js";
-import LoginPage from "views/login/LoginPage.js";
+// import LoginPage from "views/login/LoginPage.js";
 import InternalRegistration from "views/registration/InternalRegistration.js";
 import SignUp from "views/registration/SignUp.js";
-import ProfilePage from "views/profile/ProfilePage.js";
-// import PageFetchingData from 'views/examples/PageFetchingData';
+// import ProfilePage from "views/profile/ProfilePage.js";
 // import Sponsors from "views/sponsors/Sponsors.js"
 
 const httpLink = createHttpLink({
@@ -64,13 +63,13 @@ ReactDOM.render(
     <BrowserRouter>
       <Switch>
           <Switch>
-            {/* <Route path="/eg" render={props => <PageFetchingData {...props} />} /> */}
             <Route path="/index" render={props => <Index {...props} />} />
-            <Route path="/profile-page" render={props => <ProfilePage {...props} />}/>
-            <Route path="/login" render={props => <LoginPage {...props} />} />
             <Route path="/internal-registration" render={props => <InternalRegistration {...props} client={client} />} />
             <Route path="/signup" render={props => <SignUp {...props} />} />
+            {/* <Route path="/profile-page" render={props => <ProfilePage {...props} />}/> */}
+            {/* <Route path="/login" render={props => <LoginPage {...props} />} /> */}
             {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}
+            {/* <Route path="/eg" render={props => <PageFetchingData {...props} />} /> */}
 
             <Redirect to="/index" />
             <Redirect from="/" to="/index" />
