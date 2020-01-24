@@ -19,6 +19,10 @@ import { Col, Row, Button,
     Input, Card, CardBody, 
     CardTitle, Container } from 'reactstrap'
 
+import { AvForm, AvField, AvGroup, 
+    AvInput, AvFeedback, AvRadioGroup, 
+    AvRadio, AvCheckboxGroup, AvCheckbox } from 'availity-reactstrap-validation';
+
 import PreRegistration from "./PreRegistration.js"
 import "../../assets/css/signup.css"
 
@@ -46,7 +50,6 @@ class ExternalRegistration extends React.Component {
         this.state = {
             name: "",
             surname: "",
-            enrollmentNumber: 0,
             phoneNumber: "",
             participationType: "External",
             gender: "male",
@@ -91,10 +94,19 @@ class ExternalRegistration extends React.Component {
             accountId: ""
         }
 
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleValidSubmit = this.handleValidSubmit.bind(this);
+        this.handleInalidSubmit = this.handleInalidSubmit.bind(this);
+
     }
 
-    handleSubmit(event) {
+    handleValidSubmit(event) {
+        alert("Input is valid you may proceed")
+        event.preventDefault();
+    }
+
+    
+    handleInalidSubmit(event) {
+        alert("The input you have entered is not correct, please check and try again")
         event.preventDefault();
     }
 
@@ -142,31 +154,42 @@ class ExternalRegistration extends React.Component {
                     <>
                     <PreRegistration props={true} /> */}
 
-                    <Form onSubmit={this.handleSubmit}>
+                    <AvForm onValidSubmit={this.handleValidSubmit} onInvalidSubmit={this.handleInvalidSubmit}>
                         <Card className="p-2 mt-4">
                             <CardBody className="p-1">
                                 <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>General Data</CardTitle>
                                 <Row form className="mt-1">
                                     <Col>
-                                        <FormGroup>
+                                        <AvGroup>
                                             <Label for="firstName">Name</Label>
-                                            <Input type="text" name="firstName" id="firstName" placeholder="Mario"
+                                            <AvInput type="text" name="firstName" id="firstName" placeholder="Mario"
                                                 onChange={(e) => {
                                                     this.setState({ name: e.target.value })
                                                 }
                                                 }
+                                                validate ={{
+                                                    required: {value: true},
+                                                    pattern: {value: '^[^0-9]+$'},
+                                                }}
                                             />
-                                        </FormGroup>
+                                            <AvFeedback>Please insert your name correctly!</AvFeedback>
+                                        </AvGroup>
                                     </Col>
                                     <Col>
-                                        <FormGroup>
+                                        <AvGroup>
                                             <Label for="lastName">Surname</Label>
-                                            <Input type="text" name="lastName" id="lastName" placeholder="Pizza"
+                                            <AvInput type="text" name="lastName" id="lastName" placeholder="Pizza" 
                                                 onChange={(e) => {
                                                     this.setState({ surname: e.target.value })
                                                 }
-                                                } />
-                                        </FormGroup>
+                                                }
+                                                validate ={{
+                                                    required: {value: true},
+                                                    pattern: {value: '^[^0-9]+$'},
+                                                }}
+                                            />
+                                            <AvFeedback>Please insert your surname correctly!</AvFeedback>
+                                        </AvGroup>
                                     </Col>
                                 </Row>
 
@@ -1158,7 +1181,7 @@ class ExternalRegistration extends React.Component {
                             )}
                         </Composer>
 
-                    </Form>
+                    </AvForm>
                     {/* </> */}
                 {/* } */}
 
