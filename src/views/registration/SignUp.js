@@ -407,6 +407,8 @@ class SignUp extends React.Component {
                       placeholder="mario@unibz.it"
                       id="userEmail"
                       type="text"
+                      required="required"
+                      pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/"
                       onFocus={() => { this.setState({ emailFocus: true }) }}
                       onBlur={() => { this.setState({ emailFocus: false }) }}
                       onChange={(e) => { this.setState({ userEmail: e.target.value }) }}
@@ -429,6 +431,8 @@ class SignUp extends React.Component {
                       placeholder="......"
                       id="userPassword"
                       type="password"
+                      required="required"
+                      minLength="6"
                       onFocus={() => { this.setState({ passwordFocus: true }) }}
                       onBlur={() => { this.setState({ passwordFocus: true }) }}
                       onChange={(e) => { this.setState({ userPassword: e.target.value }) }}
