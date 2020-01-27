@@ -15,13 +15,11 @@ import { CREATE_PROFILE, ADD_ACTIVITY,
     LINK_PROFILE_TO_ACCOUNT } from './RegistrationQueries.js'
 
 import { Col, Row, Button, 
-    Form, FormGroup, Label, 
-    Input, Card, CardBody, 
-    CardTitle, Container } from 'reactstrap'
+    FormGroup, Label, Input, 
+    Card, CardBody, CardTitle, Container } from 'reactstrap'
 
-import { AvForm, AvField, AvGroup, 
-    AvInput, AvFeedback, AvRadioGroup, 
-    AvRadio, AvCheckboxGroup, AvCheckbox } from 'availity-reactstrap-validation';
+import { AvForm, AvGroup, AvInput, 
+    AvFeedback, AvCheckboxGroup, AvCheckbox } from 'availity-reactstrap-validation';
 
 import PreRegistration from "./PreRegistration.js"
 import "../../assets/css/signup.css"
@@ -58,6 +56,7 @@ class ExternalRegistration extends React.Component {
             personalId: "ci",
             personalIdNr: 0,
             isAlumni: false,
+            needsAccomodation: true,
             height: 0,
             weight: 0,
             shoeSize: 35,
@@ -91,22 +90,153 @@ class ExternalRegistration extends React.Component {
             allergiesAgree: true,
             paymentAgree: true,
             userProfileId: "",
-            accountId: ""
+            accountId: "",
+            mutationFunctions: []
         }
 
         this.handleValidSubmit = this.handleValidSubmit.bind(this);
-        this.handleInalidSubmit = this.handleInalidSubmit.bind(this);
+        this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this);
 
     }
 
     handleValidSubmit(event) {
-        alert("Input is valid you may proceed")
+        let mutationFunctions = this.state.mutationFunctions
+        console.log("Mutation functions from state");
+        console.log(mutationFunctions);
+        
+        let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
+        if (agreesToAll) {
+            // Part 0: First create a profile only with the required data
+            // Then we will update based on our state (form data)
+            mutationFunctions[0]().then(data => {
+                let userid = data.data.createProfile.profile.id
+
+                // Part 1: What activities will the person do?
+
+                // DAY 2
+                mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.userProfileId } })
+                mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day dinner"], profileId: this.state.userProfileId } })
+
+                if (this.state.secondDaySkiOrSnow) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski"], profileId: this.state.userProfileId } })
+
+                if (this.state.secondCourseType === "Ski") {
+                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski course"], profileId: this.state.userProfileId } })
+                } else if (this.state.secondCourseType === "Snowboard") {
+                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day snow course"], profileId: this.state.userProfileId } })
+                }
+
+                if (this.state.doesSnowWalking) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowwalking"], profileId: this.state.userProfileId } })
+
+
+                if (this.state.doesSnowVolley) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowvolley"], profileId: this.state.userProfileId } })
+
+
+                if (this.state.doesHTF) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Human table football"], profileId: this.state.userProfileId } })
+
+
+                // DAY 3
+                mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.userProfileId } })
+                mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.userProfileId } })
+
+                if (this.state.thirdCourseType === "Ski") {
+                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.userProfileId } })
+                } else if (this.state.thirdCourseType === "Snowboard") {
+                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day snow course"], profileId: this.state.userProfileId } })
+                }
+
+                if (this.state.raceType === "Ski") {
+                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Ski race"], profileId: this.state.userProfileId } })
+                } else if (this.state.secondCourseType === "Snowboard") {
+                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowboard race"], profileId: this.state.userProfileId } })
+                }
+
+                // Extra activities happening during both days
+                if (this.state.doesBeerPong) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Beer pong"], profileId: this.state.userProfileId } })
+                if (this.state.doesLineDrag) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Line dragging"], profileId: this.state.userProfileId } })
+                if (this.state.doesTwister) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Twister"], profileId: this.state.userProfileId } })
+                if (this.state.doesSlackline) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.userProfileId } })
+                if (this.state.doesFlunkyBall) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.userProfileId } })
+
+                // Part 2: Rental
+                if (this.state.secondRentalType !== "None") {
+                    mutationFunctions[6]().then(newRental => {
+                        const rental_id = newRental.data.createRental.rental.id
+                        
+                        let rental_item = ""
+                        if (this.state.secondRentalType === "ski") {
+                            rental_item = "Second ski and skiboots"
+                        } else if (this.state.secondRentalType === "premiumski") {
+                            rental_item = "Second premium ski and skiboots"   
+                        } else if (this.state.secondRentalType === "snow") {
+                            rental_item = "Second snowboard and snowboots"  
+                        }
+
+                        mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
+                            mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
+                        })
+
+                        console.log("added rental connection to the user")
+                    })
+                }
+
+                if(this.state.thirdRentalType !== "None") {
+                    mutationFunctions[6]().then(newRental => {
+                        const rental_id = newRental.data.createRental.rental.id
+                        
+                        let rental_item = ""
+                    
+                        if (this.state.thirdRentalType === "ski") {
+                            rental_item = "Third ski and skiboots"
+                        } else if (this.state.thirdRentalType === "premiumski") {
+                            rental_item = "Third premium ski and skiboots"   
+                        } else if (this.state.thirdRentalType === "snow") {
+                            rental_item = "Third snowboard and snowboots"    
+                        }
+
+                        mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
+                            mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
+                        })
+
+                        console.log("added rental connection to the user")
+                    })
+                }
+
+                // Part 3: Merch (T-Shirt and Hoodie)
+                mutationFunctions[9]().then(purchaseData => {
+                    
+                    const purchaseid = purchaseData.data.createPurchase.purchase.id
+
+                    // 3.1 T-Shirt (All participants have it)
+                    console.log(MERCH_ITEMS["T-Shirt"+this.state.teeSize]);
+                    console.log(MERCH_ITEMS["Hoodie"+this.state.teeSize]);
+
+                    
+                    mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["T-Shirt"+this.state.teeSize], availableNo: 1}}).then(addTee => {
+                        mutationFunctions[11]({variables: {purchaseId: purchaseid, id: userid}})
+                    })
+                    
+                    // 3.2 Hoodie (Participants need to choose if they want it or not)
+                    if (this.state.wantsHoodie) {
+                        mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["Hoodie"+this.state.hoodieSize], availableNo: 1}})
+                    }
+
+                })
+
+                mutationFunctions[12]({variables: {profileId: userid, id: this.state.accountId}}).then(data => {
+                    alert("Congratulations, " + this.state.firstName +"! Welcome to Snowdays 2020: ");
+                })
+                
+            });
+        } else {
+            alert("You must accept all the terms of participation to complete your registration");
+        }
+
         event.preventDefault();
     }
 
     
-    handleInalidSubmit(event) {
-        alert("The input you have entered is not correct, please check and try again")
+    handleInvalidSubmit(event) {
+        alert("The input you have entered is not valid or incorrect.\nPlease check your data and try again!")
         event.preventDefault();
     }
 
@@ -163,48 +293,36 @@ class ExternalRegistration extends React.Component {
                                         <AvGroup>
                                             <Label for="firstName">Name</Label>
                                             <AvInput type="text" name="firstName" id="firstName" placeholder="Mario"
-                                                onChange={(e) => {
-                                                    this.setState({ name: e.target.value })
-                                                }
+                                                onChange={
+                                                    (e) => {
+                                                        this.setState({ name: e.target.value })
+                                                    }
                                                 }
                                                 validate ={{
                                                     required: {value: true},
                                                     pattern: {value: '^[^0-9]+$'},
                                                 }}
                                             />
-                                            <AvFeedback>Please insert your name correctly!</AvFeedback>
+                                            <AvFeedback>Please insert a valid name!</AvFeedback>
                                         </AvGroup>
                                     </Col>
                                     <Col>
                                         <AvGroup>
                                             <Label for="lastName">Surname</Label>
                                             <AvInput type="text" name="lastName" id="lastName" placeholder="Pizza" 
-                                                onChange={(e) => {
-                                                    this.setState({ surname: e.target.value })
-                                                }
+                                                onChange={
+                                                    (e) => {
+                                                        this.setState({ surname: e.target.value })
+                                                    }
                                                 }
                                                 validate ={{
                                                     required: {value: true},
                                                     pattern: {value: '^[^0-9]+$'},
                                                 }}
                                             />
-                                            <AvFeedback>Please insert your surname correctly!</AvFeedback>
+                                            <AvFeedback>Please insert a valid surname</AvFeedback>
                                         </AvGroup>
                                     </Col>
-                                </Row>
-
-                                <Row form className="mt-2">
-                                    <Col>
-                                        <FormGroup>
-                                            <Label for="phone">Phone Number</Label>
-                                            <Input type="text" name="phone" id="phone" placeholder="+39 111 22 33 456"
-                                                onChange={(e) => {
-                                                    this.setState({ phoneNumber: e.target.value })
-                                                }
-                                                } />
-                                        </FormGroup>
-                                    </Col>
-
                                     <Col>
                                         <FormGroup>
                                             <Label for="participationType">Participation Type</Label>
@@ -223,11 +341,26 @@ class ExternalRegistration extends React.Component {
                                                 }
                                             >
                                                 <option value="External">External</option>
-                                                <option value="Alumni">Helper</option>
+                                                <option value="Alumni">UniBZ Alumni</option>
                                             </Input>
                                         </FormGroup>
                                     </Col>
+                                </Row>
 
+                                <Row form className="mt-2">
+                                    <Col>
+                                        <AvGroup>
+                                            <Label for="phone">Phone Number</Label>
+                                            <AvInput type="text" name="phone" id="phone" placeholder="+39 111 22 33 456"
+                                                onChange={(e) => { this.setState({ phoneNumber: e.target.value }) } } 
+                                                validate ={{
+                                                    required: {value: true},
+                                                    pattern: {value: '/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im'},
+                                                }}
+                                            />
+                                            <AvFeedback>Please insert a valid phone number!</AvFeedback>
+                                        </AvGroup>
+                                    </Col>
                                     <Col>
                                         <FormGroup>
                                             <Label for="gender">Gender</Label>
@@ -244,6 +377,28 @@ class ExternalRegistration extends React.Component {
                                             </Input>
                                         </FormGroup>
                                     </Col>
+                                    <Col>
+                                        <FormGroup>
+                                            <Label for="participationType">Do you need accomodation?</Label>
+                                            <Input type="select" name="participationType" id="participationType" 
+                                                value={this.state.needsAccomodation ? "yes":"no"}
+                                                onChange={
+                                                    (e) => {
+                                                        let userInput = e.target.value
+
+                                                        if (userInput === "no") {
+                                                            this.setState({needsAccomodation: false})
+                                                        } else {
+                                                            this.setState({needsAccomodation: true})
+                                                        }
+                                                    }
+                                                }
+                                            >
+                                                <option value="yes">Yes</option>
+                                                <option value="no">No</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
                                 </Row>
 
                                 <Row form className="mt-2">
@@ -251,11 +406,7 @@ class ExternalRegistration extends React.Component {
                                         <FormGroup>
                                             <Label for="universityName">University Name</Label>
                                             <Input type="select" name="universityName" id="universityName" value={this.state.universityName}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ universityName: e.target.value })
-                                                    }
-                                                }
+                                                onChange={ (e) => { this.setState({ universityName: e.target.value }) } }
                                             >
                                                 <option value="uni1">External uni 1</option>
                                                 <option value="uni2">External uni 2</option>
@@ -264,25 +415,24 @@ class ExternalRegistration extends React.Component {
                                     </Col>
 
                                     <Col>
-                                        <FormGroup>
+                                        <AvGroup>
                                             <Label for="enrollmentNumber">Enrollment Number</Label>
-                                            <Input type="number" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456"
-                                                onChange={(e) => {
-                                                    this.setState({ enrollmentNumber: e.target.value })
-                                                }
-                                                } />
-                                        </FormGroup>
+                                            <AvInput type="number" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456"
+                                                onChange={ (e) => { this.setState({ enrollmentNumber: e.target.value }) } }
+                                                validate ={{
+                                                    required: {value: true},
+                                                    pattern: {value: '^[0-9]+$'},
+                                                }}
+                                            />
+                                            <AvFeedback>Please insert a valid enrollment number!</AvFeedback>
+                                        </AvGroup>
                                     </Col>
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="personalDoc">Personal document</Label>
+                                            <Label for="personalDoc">Personal document type</Label>
                                             <Input type="select" name="personalDoc" id="personalDoc" value={this.state.personalId}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ personalId: e.target.value })
-                                                    }
-                                                }
+                                                onChange={ (e) => { this.setState({ personalId: e.target.value }) } }
                                             >
                                                 <option value="ci">ID Card</option>
                                                 <option value="passport">Passport</option>
@@ -291,16 +441,18 @@ class ExternalRegistration extends React.Component {
                                     </Col>
 
                                     <Col>
-                                        <FormGroup>
+                                        <AvGroup>
                                             <Label for="phone">Personal document number</Label>
-                                            <Input type="text" name="phone" id="phone" placeholder="111222333444"
-                                                onChange={(e) => {
-                                                    this.setState({ personalIdNr: e.target.value })
-                                                }
-                                                } />
-                                        </FormGroup>
+                                            <AvInput type="text" name="phone" id="phone" placeholder="111222333444"
+                                                onChange={ (e) => { this.setState({ personalIdNr: e.target.value }) } } 
+                                                validate = {{
+                                                    required: {value: true},
+                                                    pattern: {value: '^[A-Za-z0-9]+$'}
+                                                }}
+                                            />
+                                            <AvFeedback>Please insert a valid document number number</AvFeedback>
+                                        </AvGroup>
                                     </Col>
-
                                 </Row>
 
                             </CardBody>
@@ -392,7 +544,12 @@ class ExternalRegistration extends React.Component {
                                 </Row>
                                 <span className="details">*The lunch and dinner timeslots are simply preferences and it is not guaranteed that you will get assigned on the selected option*</span>
 
-
+                                <h5 className="title category">First day activities</h5>
+                                <Row>
+                                    <Col>
+                                        <p>We'll take care of it all, it'll be fun! 😎</p>
+                                    </Col>
+                                </Row>
                                 <h5 className="title category">Second day activities</h5>
                                 <Row>
                                     <Col>
@@ -704,7 +861,12 @@ class ExternalRegistration extends React.Component {
                                         </FormGroup>
                                     </Col>
                                 </Row>
-                                <span className="details">*Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information.*</span>
+                                <span className="details">
+                                    *Rental material will be prepared before the event based on the requests.
+                                    We will collect the cash at the check-in (DAY 1).
+                                    If you choose one of the rental options and, during the event, decide not to ski, you will have to pay for it anyway, otherwise you will not be able to check-in and enjoy the event. (you will not receive a refund).
+                                    If you do not need the rental equipment, choose "None".*
+                                </span>
                             </CardBody>
                         </Card>
 
@@ -784,17 +946,8 @@ class ExternalRegistration extends React.Component {
                         <Card className="p-2 mt-1">
                             <CardBody className="p-1">
                                 <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Payment Information</CardTitle>
-                                <p>Based on your information, you will have to pay a total of €{this.calculateFinalPrice()[0]} to attend Snowdays 2020 plus a total of €{this.calculateFinalPrice()[1]} that you will pay at the check-in (in cash) for rental material</p>
-                                <span>Please pay your attendance total to SCUB by bank transfer:</span>
-                                <br />
-                                <br />
-                                <span>IBAN: IT32Q 08081 11610 000306004547</span>
-                                <br />
-                                <span>Directed to: SPORTS CLUB UNIVERSITY BOLZANO</span>
-                                <br />
-                                <span>Bank: Cassa Rurale Bolzano</span>
-                                <br />
-                                <span>Payment description: Snowdays fee - Surname - Name</span>
+                                <p>Based on your information, you will have to pay a total of €{this.calculateFinalPrice()[0]} to attend Snowdays 2020 plus a total of €{this.calculateFinalPrice()[1]} that you will pay at the check-in (in cash) for rental material.</p>
+                                <span>For payment details please contact your university's contact person.</span>
                             </CardBody>
                         </Card>
 
@@ -802,8 +955,8 @@ class ExternalRegistration extends React.Component {
                             <CardBody className="p-1">
                                 <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Terms of partecipation</CardTitle>
                                 <Row form>
-                                    <span className="check-separator ml-2" >
-                                        <label htmlFor="skipassAgree" style={{ width: "95%" }}>
+                                    <Col>
+                                        <label htmlFor="skipassAgree">
                                             <h5>SKIPASSES</h5>
                                             <p>When you arrive in Bolzano and do the check-in you will receive the skipasses for
                                             the following days.
@@ -812,40 +965,43 @@ class ExternalRegistration extends React.Component {
                                             From the moment you receive the skipass/es you are fully responsible for them. In
                                         case of loss you will have to buy a new one on your own.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" defaultChecked={this.state.skipassAgree} onChange={(e) => { this.setState({ skipassAgree: e.target.checked }) }} />
-                                    </span>
+                                    </Col>
+                                    <Col className="col-1 col-md-1 mt-5">
+                                        <input required className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" defaultChecked={this.state.skipassAgree} onChange={(e) => { this.setState({ skipassAgree: e.target.checked }) }} />
+                                    </Col>
                                 </Row>
-
                                 <Row form>
-                                    <span className="check-separator ml-2" >
-                                        <label htmlFor="rentalAgree" style={{ width: "95%" }}>
+                                    <Col>
+                                        <label htmlFor="rentalAgree">
                                             <h5>RENTAL MATERIAL</h5>
                                             <p>If you are renting any material or equipment, you agree to return all
                                             equipment in the same condition as received, reasonable wear and tear excepted. If the
                                             equipment is not returned in good condition at the end of the event or if repairs or replacements
                                             are   required,   you  agree  to   pay   all   labor,   material   and   shipping   charges   to  replace   any
-                                        equipment which is lost, stolen or damaged beyond repair.</p>
+                                            equipment which is lost, stolen or damaged beyond repair.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" defaultChecked={this.state.rentalAgree} onChange={(e) => { this.setState({ rentalAgree: e.target.checked }) }} />
-                                    </span>
+                                    </Col>
+                                    <Col className="col-1 col-md-1 mt-5">
+                                        <input required className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" defaultChecked={this.state.rentalAgree} onChange={(e) => { this.setState({ rentalAgree: e.target.checked }) }} />
+                                    </Col>
                                 </Row>
-
                                 <Row form>
-                                    <span className="check-separator ml-2" >
-                                        <label htmlFor="propertyAgree" style={{ width: "95%" }}>
+                                    <Col>
+                                        <label htmlFor="propertyAgree">
                                             <h5>LOSS OR DAMAGE TO PROPERTY</h5>
                                             <p>Snowdays does not accept responsibility and expressly
                                             excludes liability to the fullest extent permitted by law for any loss, theft, damage or destruction to
                                             any personal property in whole or in part for any reason whatsoever, even if left in the care of the
-                                        staff and/or helpers of the event.</p>
+                                            staff and/or helpers of the event.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" defaultChecked={this.state.propertyAgree} onChange={(e) => { this.setState({ propertyAgree: e.target.checked }) }} />
-                                    </span>
+                                    </Col>
+                                    <Col className="col-1 col-md-1 mt-5">
+                                        <input required className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" defaultChecked={this.state.propertyAgree} onChange={(e) => { this.setState({ propertyAgree: e.target.checked }) }} />
+                                    </Col>
                                 </Row>
-
                                 <Row form>
-                                    <span className="check-separator ml-2" >
-                                        <label htmlFor="riskAgree" style={{ width: "95%" }}>
+                                    <Col>
+                                        <label htmlFor="riskAgree">
                                             <h5>ASSUMPTION OF RISKS</h5>
                                             <p>In consideration of your participation at Snowdays, you acknowledge
                                             that you are aware of the possible risks, dangers and hazards associated with your participation
@@ -859,27 +1015,29 @@ class ExternalRegistration extends React.Component {
                                             accept and assume all of the risks existing the event. Your participation to the event is purely
                                             voluntary, and you elect to participate despite the risks.
                                             You expressly renounce any future claim
-                                        or legal action against Snowdays and its staff.</p>
+                                            or legal action against Snowdays and its staff.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" defaultChecked={this.state.riskAgree} onChange={(e) => { this.setState({ riskAgree: e.target.checked }) }} />
-                                    </span>
+                                    </Col>
+                                    <Col className="col-1 col-md-1 mt-5">
+                                        <input required className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" defaultChecked={this.state.riskAgree} onChange={(e) => { this.setState({ riskAgree: e.target.checked }) }} />
+                                    </Col>
                                 </Row>
-
                                 <Row form>
-                                    <span className="check-separator ml-2" >
-                                        <label htmlFor="busAgree" style={{ width: "95%" }}>
+                                    <Col>
+                                        <label htmlFor="busAgree">
                                             <h5>BUS DAMAGES</h5>
                                             <p>For every damage (including vomit) that occurs to the buses caused by yourself,
                                             you will pay a fee of 100€ or the amount necessary to cover the damages caused, as agreed with
-                                        the bus company.</p>
+                                            the bus company.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" defaultChecked={this.state.busAgree} onChange={(e) => { this.setState({ busAgree: e.target.checked }) }} />
-                                    </span>
+                                    </Col>
+                                    <Col className="col-1 col-md-1 mt-5">
+                                        <input required className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" defaultChecked={this.state.busAgree} onChange={(e) => { this.setState({ busAgree: e.target.checked }) }} />
+                                    </Col>
                                 </Row>
-
                                 <Row form>
-                                    <span className="check-separator ml-2" >
-                                        <label htmlFor="allergiesAgree" style={{ width: "95%" }}>
+                                    <Col>
+                                        <label htmlFor="allergiesAgree">
                                             <h5>ALLERGIES</h5>
                                             <p>Snowdays makes every effort to accommodate the various dietary requirements of
                                             the participants and handles food allergies seriously. Every effort is made to instruct our staff
@@ -887,20 +1045,23 @@ class ExternalRegistration extends React.Component {
                                             advised that every effort will be made to have no allergic reactions, food may come in contact
                                             with   items   containing   allergens,   and   there   is   always   a   risk   of   contamination   or   cross
                                             contamination. Participants with concerns need to be aware of these risks. Snowdays will
-                                        assume no liability for any adverse reactions that may occur during the event.</p>
+                                            assume no liability for any adverse reactions that may occur during the event.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" defaultChecked={this.state.allergiesAgree} onChange={(e) => { this.setState({ allergiesAgree: e.target.checked }) }} />
-                                    </span>
+                                    </Col>
+                                    <Col className="col-1 col-md-1 mt-5">
+                                        <input required className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" defaultChecked={this.state.allergiesAgree} onChange={(e) => { this.setState({ allergiesAgree: e.target.checked }) }} />
+                                    </Col>
                                 </Row>
-
                                 <Row form>
-                                    <span className="check-separator ml-2" >
+                                    <Col>
                                         <label htmlFor="paymentAgree">
                                             <h5>PAYMENT</h5>
-                                            <p>You will receive a confirmation email after the enrolment.The participation fee is payable within 5 days.</p>
+                                            <p>You will receive a confirmation email after the enrolment. The participation fee is payable within 5 days.</p>
                                         </label>
-                                        <input className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" defaultChecked={this.state.paymentAgree} onChange={(e) => { this.setState({ paymentAgree: e.target.checked }) }} />
-                                    </span>
+                                    </Col>
+                                    <Col className="col-1 col-md-1 mt-5">
+                                        <input required className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" defaultChecked={this.state.paymentAgree} onChange={(e) => { this.setState({ paymentAgree: e.target.checked }) }} />
+                                    </Col>
                                 </Row>
                             </CardBody>
                         </Card>
@@ -1017,167 +1178,16 @@ class ExternalRegistration extends React.Component {
                             {(mutationFunctions) => (
                                 <Button type="submit" className="btn btn-primary pull-right"
                                     onClick={() => {
-                                        console.log(ACTIVITY_IDS);
-                                        console.log(RENTAL_MATERIALS);
-                                        console.log(MERCH_ITEMS);
-                                        console.log(this.state.accountId);
-                                        console.log(mutationFunctions);
-                                        
-
-                                        // let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
-                                        // if (agreesToAll) {
-                                        //     // Part 0: First create a profile only with the required data
-                                        //     // Then we will update based on our state (form data)
-                                        //     mutationFunctions[0]().then(data => {
-                                        //         let userid = data.data.createProfile.profile.id
-                                                
-
-                                        //         // Part 1: Will the person help?
-                                        //         if (this.state.isHelper) {
-                                        //             mutationFunctions[1]()
-                                        //         }
-
-                                        //         // Part2: Will the person host?
-                                        //         if (this.state.isHost) {
-                                        //             if (this.state.hostType === "studentHall") {
-                                        //                 this.setState({ addressId: STUDENT_DORM_ADDRESS_IDS[this.state.hostHall] }, newState => {
-                                        //                     mutationFunctions[3]().then(makeHost => {
-                                        //                         mutationFunctions[4]()
-                                        //                     })
-                                        //                 })
-                                        //             } else {
-                                        //                 mutationFunctions[2]().then(newAddressData => {
-                                        //                     console.log(newAddressData)
-                                        //                     mutationFunctions[3]().then(makeHost => {
-                                        //                         mutationFunctions[4]()
-                                        //                     })
-                                        //                 })
-                                        //             }
-                                        //         }
-
-
-                                        //         // Part3: what activities will the person do
-
-                                        //         // DAY 2
-                                        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.userProfileId } })
-                                        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day dinner"], profileId: this.state.userProfileId } })
-
-                                        //         if (this.state.secondDaySkiOrSnow) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski"], profileId: this.state.userProfileId } })
-
-                                        //         if (this.state.secondCourseType === "Ski") {
-                                        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski course"], profileId: this.state.userProfileId } })
-                                        //         } else if (this.state.secondCourseType === "Snowboard") {
-                                        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day snow course"], profileId: this.state.userProfileId } })
-                                        //         }
-
-                                        //         if (this.state.doesSnowWalking) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowwalking"], profileId: this.state.userProfileId } })
-
-
-                                        //         if (this.state.doesSnowVolley) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowvolley"], profileId: this.state.userProfileId } })
-
-
-                                        //         if (this.state.doesHTF) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Human table football"], profileId: this.state.userProfileId } })
-
-
-                                        //         // DAY 3
-                                        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.userProfileId } })
-                                        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.userProfileId } })
-
-                                        //         if (this.state.thirdCourseType === "Ski") {
-                                        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.userProfileId } })
-                                        //         } else if (this.state.thirdCourseType === "Snowboard") {
-                                        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day snow course"], profileId: this.state.userProfileId } })
-                                        //         }
-
-                                        //         if (this.state.raceType === "Ski") {
-                                        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Ski race"], profileId: this.state.userProfileId } })
-                                        //         } else if (this.state.secondCourseType === "Snowboard") {
-                                        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowboard race"], profileId: this.state.userProfileId } })
-                                        //         }
-
-                                        //         // Extra activities happening during both days
-                                        //         if (this.state.doesBeerPong) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Beer pong"], profileId: this.state.userProfileId } })
-                                        //         if (this.state.doesLineDrag) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Line dragging"], profileId: this.state.userProfileId } })
-                                        //         if (this.state.doesTwister) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Twister"], profileId: this.state.userProfileId } })
-                                        //         if (this.state.doesSlackline) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.userProfileId } })
-                                        //         if (this.state.doesFlunkyBall) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.userProfileId } })
-
-                                        //         // Part 4: Rental
-                                        //         if (this.state.secondRentalType !== "None") {
-                                        //             mutationFunctions[6]().then(newRental => {
-                                        //                 const rental_id = newRental.data.createRental.rental.id
-                                                        
-                                        //                 let rental_item = ""
-                                        //                 if (this.state.secondRentalType === "ski") {
-                                        //                     rental_item = "Second ski and skiboots"
-                                        //                 } else if (this.state.secondRentalType === "premiumski") {
-                                        //                     rental_item = "Second premium ski and skiboots"   
-                                        //                 } else if (this.state.secondRentalType === "snow") {
-                                        //                     rental_item = "Second snowboard and snowboots"  
-                                        //                 }
-
-                                        //                 mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
-                                        //                     mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
-                                        //                 })
-
-                                        //                 console.log("added rental connection to the user")
-                                        //             })
-                                        //         }
-
-                                        //         if(this.state.thirdRentalType !== "None") {
-                                        //             mutationFunctions[6]().then(newRental => {
-                                        //                 const rental_id = newRental.data.createRental.rental.id
-                                                        
-                                        //                 let rental_item = ""
-                                                    
-                                        //                 if (this.state.thirdRentalType === "ski") {
-                                        //                     rental_item = "Third ski and skiboots"
-                                        //                 } else if (this.state.thirdRentalType === "premiumski") {
-                                        //                     rental_item = "Third premium ski and skiboots"   
-                                        //                 } else if (this.state.thirdRentalType === "snow") {
-                                        //                     rental_item = "Third snowboard and snowboots"    
-                                        //                 }
-
-                                        //                 mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
-                                        //                     mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
-                                        //                 })
-
-                                        //                 console.log("added rental connection to the user")
-                                        //             })
-                                        //         }
-
-                                        //         // Part 5: Merch (T-Shirt and Hoodie)
-                                        //         mutationFunctions[9]().then(purchaseData => {
-                                                    
-                                        //             const purchaseid = purchaseData.data.createPurchase.purchase.id
-
-                                        //             // 5.1 T-Shirt (All participants have it)
-                                        //             console.log(MERCH_ITEMS["T-Shirt"+this.state.teeSize]);
-                                        //             console.log(MERCH_ITEMS["Hoodie"+this.state.teeSize]);
-
-                                                    
-                                        //             mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["T-Shirt"+this.state.teeSize], availableNo: 1}}).then(addTee => {
-                                        //                 mutationFunctions[11]({variables: {purchaseId: purchaseid, id: userid}})
-                                        //             })
-                                                    
-                                        //             // 5.2 Hoodie (Participants need to choose if they want it or not)
-                                        //             if (this.state.wantsHoodie) {
-                                        //                 mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["Hoodie"+this.state.hoodieSize], availableNo: 1}})
-                                        //             }
-
-                                        //         })
-
-                                        //         mutationFunctions[12]({variables: {profileId: userid, id: this.state.accountId}}).then(data => {
-                                        //             alert("Congratulations, " + this.state.firstName +"! Welcome to snowdays 2020: ");
-                                        //         })
-                                                
-                                        //     });
-                                        // } else {
-                                        //     alert("You must accept all the terms of participation to complete your registration");
-                                        // }
-
+                                            this.setState({mutationFunctions: mutationFunctions})
+                                            console.log("Form submitted:");
+                                            // console.log(ACTIVITY_IDS);
+                                            // console.log(RENTAL_MATERIALS);
+                                            // console.log(MERCH_ITEMS);
+                                            // console.log(this.state.accountId);
+                                            // console.log(mutationFunctions);                                        
                                         }
-                                    }>REGISTER</Button>
+                                    }
+                                    >REGISTER</Button>
                             )}
                         </Composer>
 
