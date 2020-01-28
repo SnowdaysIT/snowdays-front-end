@@ -1,0 +1,29 @@
+.dropdownToggle, .dropdownToggle:hover {
+    background-color: transparent !important;
+    border-radius: 30px;
+    border: 1px solid #E3E3E3 !important;
+    color: #2c2c2c !important;
+}
+
+.dropdownMenu {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    max-height: 10rem;
+    overflow-y: auto;
+}
+
+.dropdownMenu > label {
+    justify-content: left !important;
+    margin-bottom: .5rem;
+    display: flex;
+    align-items: center;
+}
+
+.dropdownMenu > label > input {
+    position: relative;
+    flex-shrink: 0;
+    margin-top: 0;
+    margin-right: .25rem;
+    margin-left: 0;
+}

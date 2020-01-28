@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Row, Button, Form, FormGroup, Label, Input, Card, CardBody, CardTitle, Container } from 'reactstrap';
 import "../../assets/css/signup.css"
+import FormGroupMultiple from '../../components/form/FormGroupMultiple';
 
 class InternalRegistration extends React.Component {
 
@@ -16,52 +17,70 @@ class InternalRegistration extends React.Component {
     render() {
         return (
             <Container>
-                <Form>
+                <Form inline>
                     <Card className="p-2 mt-4">
                         <CardBody className="p-1">
                             <CardTitle tag="h3" style={{ color: "#4BB5FF" }}>General Data</CardTitle>
                             <Row form className="mt-1">
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="firstName">Name</Label>
                                         <Input type="text" name="firstName" id="firstName" placeholder="Mario" />
                                     </FormGroup>
                                 </Col>
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="lastName">Surname</Label>
                                         <Input type="text" name="lastName" id="lastName" placeholder="Pizza" />
                                     </FormGroup>
                                 </Col>
-                            </Row>
-    
-                            <Row form className="mt-2">
-                                <Col>
+                                <Col xs="auto">
+                                    <FormGroup>
+                                        <Label for="gender">Gender</Label>
+                                        <Input type="select" name="gender" id="gender">
+                                            <option onClick={ (e) => {
+                                                this.setState({
+                                                    gender: 'm',
+                                                });
+                                            }
+                                            }>Male</option>
+                                            <option onClick={ (e) => {
+                                                this.setState({
+                                                    gender: 'f',
+                                                });
+                                            }
+                                            }>Female</option>
+                                            <option onClick={ (e) => {
+                                                this.setState({
+                                                    gender: 'o',
+                                                });
+                                            }
+                                            }>Other</option>
+                                        </Input>
+                                    </FormGroup>
+                                </Col>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="userEmail">Email</Label>
                                         <Input type="email" name="email" id="userEmail" placeholder="mario@unibz.it" />
                                     </FormGroup>
                                 </Col>
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="phone">Phone Number</Label>
                                         <Input type="text" name="phone" id="phone" placeholder="+39 111 22 33 456" />
                                     </FormGroup>
                                 </Col>
-                            </Row>
-    
-    
-                            <Row form className="mt-2">
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
-                                        <Label for="enrollmentNumber">Enrollment Number (Matrikelnummer)</Label>
+                                        <Label for="enrollmentNumber">Student number</Label>
                                         <Input type="text" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456" />
                                     </FormGroup>
                                 </Col>
     
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
-                                        <Label for="participationType">Participation Type</Label>
+                                        <Label for="participationType">Participation type</Label>
                                         <Input type="select" name="participationType" id="participationType">
                                             <option onClick={ (e) => {
                                                 this.setState({
@@ -87,27 +106,6 @@ class InternalRegistration extends React.Component {
                                         </Input>
                                     </FormGroup>
                                 </Col>
-    
-                                <Col md={3}>
-                                    <FormGroup>
-                                        <Label for="gender">Gender</Label>
-                                        <FormGroup check>
-                                            <Label check>
-                                                <Input type="radio" name="gender" />{' '}
-                                                Male
-                                            </Label>
-                                            <Label check>
-                                                <Input type="radio" name="gender" />{' '}
-                                                Female
-                                            </Label>
-                                            <Label check >
-                                                <Input type="radio" name="gender" />{' '}
-                                                Other
-                                            </Label>
-                                        </FormGroup>
-                                    </FormGroup>
-                                </Col>
-    
                             </Row>
                         </CardBody>
                     </Card>
@@ -133,9 +131,15 @@ class InternalRegistration extends React.Component {
                         <CardBody className="p-1">
                             <CardTitle tag="h3" style={{ color: "#4BB5FF" }}>Hosting Data</CardTitle>
                             <Row form>
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
-                                        <Label for="hostingType">Helper Preference</Label>
+                                        <Label for="nrHosted">Guests</Label> 
+                                        <Input type="number" name="nrHosted" id="nrHosted" placeholder="3"/>
+                                    </FormGroup>
+                                </Col>
+                                <Col xs="auto">
+                                    <FormGroup>
+                                        <Label for="hostingType">Accommodation</Label>
                                         <Input type="select" name="hostingType" id="hostingType">
                                             <option onClick={ (e) => {
                                                 this.setState({showAddressFields: false});
@@ -148,12 +152,15 @@ class InternalRegistration extends React.Component {
                                         </Input>
                                     </FormGroup>
                                 </Col>
-                                <Col md={4} className={this.state.showAddressFields ? "collapsed" : ""}>
+                            </Row>
+                            <h5 className="title category">Details</h5>
+                            <Row form>
+                                <Col xs="auto" className={this.state.showAddressFields ? "collapsed" : ""}>
                                 <FormGroup>
-                                    <Label for="hostHall">Student Hall Selection</Label>
+                                    <Label for="hostHall">Student Hall</Label>
                                     <Input type="select" name="hostHall" id="hostHall">
                                         <option>Peter-Rigler</option>
-                                        <option>University</option>
+                                        <option>Univercity</option>
                                         <option>Rainerum</option>
                                         <option>Dante appartments</option>
                                     </Input>
@@ -162,34 +169,26 @@ class InternalRegistration extends React.Component {
                             </Row>
                         
                             <Row form className={this.state.showAddressFields ? "" : "collapsed"}>
-                                <Col md={6}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="address">Address</Label>
                                         <Input type="text" name="address" id="address" placeholder="Piazza Università 1" />
                                     </FormGroup>
                                 </Col>
                                
-                                <Col md={2}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="zip">Zip</Label>
                                         <Input type="number" name="zip" id="zip" placeholder="39100"/>
                                     </FormGroup>
                                 </Col>
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="city">City</Label>
                                         <Input type="text" name="city" id="city" placeholder="Bolzano"/>
                                     </FormGroup>
                                 </Col>
-                                
                             </Row>
-                            <FormGroup row>
-                                <Label className="ml-3 mt-1" for="nrHosted">Number of people you plan on hosting</Label> 
-                                <Col sm={2}>
-                                <Input type="number" name="nrHosted" id="nrHosted" placeholder="3"/>
-                                </Col>
-                            </FormGroup>
-
                         </CardBody>
                     </Card>
     
@@ -198,22 +197,22 @@ class InternalRegistration extends React.Component {
                             <CardTitle tag="h3" style={{ color: "#4BB5FF" }}>Event and Sports Data</CardTitle>
                             
                             <Row form>
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="city">Height (cm)</Label>
-                                        <Input type="number" name="height" id="height" placeholder="180"/>
+                                        <Input type="number" name="height" id="height" placeholder="180" min="120" max="230"/>
                                     </FormGroup>
                                 </Col>
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="zip">Weight (kg)</Label>
-                                        <Input type="number" name="weight" id="weight" placeholder="80"/>
+                                        <Input type="number" name="weight" id="weight" placeholder="80" min="40" max="400"/>
                                     </FormGroup>
                                 </Col>
                             </Row>
 
                             <Row form>
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="lunchTime">Lunch Timeslot</Label>
                                         <Input type="select" name="lunchTime" id="lunchTime">
@@ -223,7 +222,7 @@ class InternalRegistration extends React.Component {
                                         </Input>
                                     </FormGroup>
                                 </Col>
-                                <Col>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="dinnerTime">Dinner Timeslot</Label>
                                         <Input type="select" name="dinnerTime" id="dinnerTime">
@@ -233,7 +232,7 @@ class InternalRegistration extends React.Component {
                                         </Input>
                                     </FormGroup>
                                 </Col>
-                                <Col md={2}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="vegetarian">Are you vegetarian?</Label>
                                         <Input type="select" name="vegetarian" id="vegetarian">
@@ -243,7 +242,7 @@ class InternalRegistration extends React.Component {
                                     </FormGroup>
                                 </Col>
 
-                                <Col md={2}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="tSize">T-Shirt Size</Label>
                                         <Input type="select" name="tSize" id="tSize">
@@ -258,7 +257,7 @@ class InternalRegistration extends React.Component {
 
                             <h5 className="title category">Second day activities</h5>
                             <Row>
-                                <Col sm={3}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="secondskiorsnow">Will you be skiing or snowboarding?</Label>
                                         <Input type="select" name="secondskiorsnow" id="secondskiorsnow">
@@ -268,7 +267,7 @@ class InternalRegistration extends React.Component {
                                     </FormGroup>                                
                                 </Col>
 
-                                <Col sm={3}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="skicourse">Ski/Snowboard Course</Label>
                                         <Input type="select" name="skicourse" id="skicourse">
@@ -281,7 +280,7 @@ class InternalRegistration extends React.Component {
                                     </FormGroup>                                
                                 </Col>
 
-                                <Col sm={3}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="skirace">Ski/Snowboard Race</Label>
                                         <Input type="select" name="skirace" id="skirace">
@@ -292,7 +291,7 @@ class InternalRegistration extends React.Component {
                                     </FormGroup>                                
                                 </Col>
 
-                                <Col sm={3}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="jib">JIB Session</Label>
                                         <Input type="select" name="jib" id="jib">
@@ -303,79 +302,35 @@ class InternalRegistration extends React.Component {
                                 </Col>
                             </Row>
                             <Row form>
-                                <label className="ml-1 mt-3">Other activities(Check all that apply)</label>
-                                <div className="mt-1 container">
-                                    <span className="check-separator">
-                                        <label htmlFor="secondbeerpong">Beer pong</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondbeerpong" name="secondbeerpong" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="snowwalking">Snowshoes walking</label>
-                                        <input className="rental-checkbox" type="checkbox" id="snowwalking" name="snowwalking" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="secondlinedrag">Line dragging</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondlinedrag" name="secondlinedrag" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="secondtwister">Twister</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondtwister" name="secondtwister" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="secondslackline">Slackline</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondslackline" name="secondslackline" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="secondflunkyball">Flunky ball</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondflunkyball" name="secondflunkyball" />
-                                    </span>
-                                </div>                                
+                                <FormGroupMultiple label="Other activities" inputName="secondDayActivities" elements={
+                                    [
+                                        "Beer pong",
+                                        "Snowshoes walking motherfuckers",
+                                        "Line dragging",
+                                        "Twister",
+                                        "Slackline",
+                                        "Flunky ball"
+                                    ]
+                                }></FormGroupMultiple>
                             </Row>
 
                             <Row form>
-                                <h6 tag="h5" className="ml-1 mt-3">Second day rental material (check all that apply)</h6>
-                                <div className="mt-1 container-fluid">
-                                    <span className="check-separator">
-                                        <label htmlFor="secondski">Skiis</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondski" name="secondski" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="secondskiboots">Ski boots</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondskiboots" name="secondskiboots" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="secondskisticks">Ski sticks</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondskisticks" name="secondskisticks" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="secondsnowboard">Snowboard</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondsnowboard" name="secondsnowboard" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="secondsnowboots">Snowboard Boots</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondsnowboots" name="secondsnowboots" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="secondhelmet">Helmet</label>
-                                        <input className="rental-checkbox" type="checkbox" id="secondhelmet" name="secondhelmet" />
-                                    </span>
-                                </div>
-                                <span className="details">*Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information</span>                             
+                                <FormGroupMultiple label="Rental material *" inputName="secondDayRental" elements={
+                                    [
+                                        "Skiis",
+                                        "Ski boots",
+                                        "Ski sticks",
+                                        "Snowboard",
+                                        "Snowboard Boots",
+                                        "Helmet"
+                                    ]
+                                }></FormGroupMultiple>
+                                <span className="details">* Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information</span>                             
                             </Row>
 
                             <h5 className="title category">Third day activities</h5>
                             <Row>
-                                <Col sm={4}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="thirdskiorsnow">Will you be skiing or snowboarding?</Label>
                                         <Input type="select" name="thirdskiorsnow" id="thirdskiorsnow">
@@ -385,7 +340,7 @@ class InternalRegistration extends React.Component {
                                     </FormGroup>                                
                                 </Col>
 
-                                <Col sm={4}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="snowvolley">Snowvolley tournament</Label>
                                         <Input type="select" name="snowvolley" id="snowvolley" disabled>
@@ -395,7 +350,7 @@ class InternalRegistration extends React.Component {
                                     </FormGroup>                                
                                 </Col>
 
-                                <Col sm={4}>
+                                <Col xs="auto">
                                     <FormGroup>
                                         <Label for="htftournament">Human table football tournament</Label>
                                         <Input type="select" name="htftournament" id="htftournament" disabled>
@@ -406,73 +361,29 @@ class InternalRegistration extends React.Component {
                                 </Col>
                             </Row>
                             <Row form>
-                                <label className="ml-1 mt-3">Other activities(Check all that apply)</label>
-                                <div className="mt-1 container">
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdbeerpong">Beer pong</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdbeerpong" name="thirdbeerpong" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="tableboulder">Table boulder contest</label>
-                                        <input className="rental-checkbox" type="checkbox" id="tableboulder" name="tableboulder" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdlinedrag">Line dragging</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdlinedrag" name="thirdlinedrag" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdtwister">Twister</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdtwister" name="thirdtwister" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdslackline">Slackline</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdslackline" name="thirdslackline" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdflunkyball">Flunky ball</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdflunkyball" name="thirdflunkyball" />
-                                    </span>
-                                </div>                                
+                                <FormGroupMultiple label="Other activities" inputName="thirdDayActivities" elements={
+                                    [
+                                        "Beer pong",
+                                        "Table boulder contest",
+                                        "Line dragging",
+                                        "Twister",
+                                        "Slackline",
+                                        "Flunky ball"
+                                    ]
+                                }></FormGroupMultiple>                              
                             </Row>
 
                             <Row form>
-                                <h6 tag="h5" className="ml-1 mt-3">Third day rental needs (check all that apply)</h6>
-                                <div className="mt-1 container-fluid">
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdski">Skiis</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdski" name="thirdski" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdskiboots">Ski boots</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdskiboots" name="thirdskiboots" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdskisticks">Ski sticks</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdskisticks" name="thirdskisticks" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdsnowboard">Snowboard</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdsnowboard" name="thirdsnowboard" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdsnowboots">Snowboard Boots</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdsnowboots" name="thirdsnowboots" />
-                                    </span>
-
-                                    <span className="check-separator">
-                                        <label htmlFor="thirdhelmet">Helmet</label>
-                                        <input className="rental-checkbox" type="checkbox" id="thirdhelmet" name="thirdhelmet" />
-                                    </span>
-                                </div>                                
+                                <FormGroupMultiple label="Rental material *" inputName="thirdDayRental" elements={
+                                    [
+                                        "Skiis",
+                                        "Ski boots",
+                                        "Ski sticks",
+                                        "Snowboard",
+                                        "Snowboard Boots",
+                                        "Helmet"
+                                    ]
+                                }></FormGroupMultiple>                                                              
                             </Row>
                         
                         </CardBody>
