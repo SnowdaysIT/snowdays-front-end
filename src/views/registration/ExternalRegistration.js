@@ -18,8 +18,7 @@ import { Col, Row, Button,
     FormGroup, Label, Input, 
     Card, CardBody, CardTitle, Container } from 'reactstrap'
 
-import { AvForm, AvGroup, AvInput, 
-    AvFeedback, AvCheckboxGroup, AvCheckbox } from 'availity-reactstrap-validation';
+import { AvForm, AvGroup, AvInput, AvFeedback} from 'availity-reactstrap-validation';
 
 import PreRegistration from "./PreRegistration.js"
 import "../../assets/css/signup.css"
@@ -70,11 +69,11 @@ class ExternalRegistration extends React.Component {
             doesSnowWalking: true,
             doesSnowVolley: true,
             doesHTF: true,
-            secondRentalType: "ski",
+            secondRentalType: "none",
             thirdDaySkiOrSnow: false,
             thirdCourseType: "Ski",
             raceType: "Ski",
-            thirdRentalType: "ski",
+            thirdRentalType: "none",
             wantsHoodie: false,
             hoodieSize: "S",
             doesBeerPong: false,
@@ -94,142 +93,145 @@ class ExternalRegistration extends React.Component {
             mutationFunctions: []
         }
 
-        this.handleValidSubmit = this.handleValidSubmit.bind(this);
-        this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this);
-
+        this.handleValidSubmit = this.handleValidSubmit.bind(this)
+        this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
+        this.handleInputChange = this.handleInputChange.bind(this)
+        this.handleYesNoSelectInput = this.handleYesNoSelectInput.bind(this)
     }
 
     handleValidSubmit(event) {
         let mutationFunctions = this.state.mutationFunctions
+        console.log("Form submitted with state:");
+        console.log(this.state)
         console.log("Mutation functions from state");
         console.log(mutationFunctions);
         
-        let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
-        if (agreesToAll) {
-            // Part 0: First create a profile only with the required data
-            // Then we will update based on our state (form data)
-            mutationFunctions[0]().then(data => {
-                let userid = data.data.createProfile.profile.id
+        // let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
+        // if (agreesToAll) {
+        //     // Part 0: First create a profile only with the required data
+        //     // Then we will update based on our state (form data)
+        //     mutationFunctions[0]().then(data => {
+        //         let userid = data.data.createProfile.profile.id
 
-                // Part 1: What activities will the person do?
+        //         // Part 1: What activities will the person do?
 
-                // DAY 2
-                mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.userProfileId } })
-                mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day dinner"], profileId: this.state.userProfileId } })
+        //         // DAY 2
+        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.userProfileId } })
+        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day dinner"], profileId: this.state.userProfileId } })
 
-                if (this.state.secondDaySkiOrSnow) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski"], profileId: this.state.userProfileId } })
+        //         if (this.state.secondDaySkiOrSnow) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski"], profileId: this.state.userProfileId } })
 
-                if (this.state.secondCourseType === "Ski") {
-                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski course"], profileId: this.state.userProfileId } })
-                } else if (this.state.secondCourseType === "Snowboard") {
-                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day snow course"], profileId: this.state.userProfileId } })
-                }
+        //         if (this.state.secondCourseType === "Ski") {
+        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski course"], profileId: this.state.userProfileId } })
+        //         } else if (this.state.secondCourseType === "Snowboard") {
+        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day snow course"], profileId: this.state.userProfileId } })
+        //         }
 
-                if (this.state.doesSnowWalking) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowwalking"], profileId: this.state.userProfileId } })
-
-
-                if (this.state.doesSnowVolley) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowvolley"], profileId: this.state.userProfileId } })
+        //         if (this.state.doesSnowWalking) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowwalking"], profileId: this.state.userProfileId } })
 
 
-                if (this.state.doesHTF) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Human table football"], profileId: this.state.userProfileId } })
+        //         if (this.state.doesSnowVolley) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowvolley"], profileId: this.state.userProfileId } })
 
 
-                // DAY 3
-                mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.userProfileId } })
-                mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.userProfileId } })
+        //         if (this.state.doesHTF) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Human table football"], profileId: this.state.userProfileId } })
 
-                if (this.state.thirdCourseType === "Ski") {
-                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.userProfileId } })
-                } else if (this.state.thirdCourseType === "Snowboard") {
-                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day snow course"], profileId: this.state.userProfileId } })
-                }
 
-                if (this.state.raceType === "Ski") {
-                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Ski race"], profileId: this.state.userProfileId } })
-                } else if (this.state.secondCourseType === "Snowboard") {
-                    mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowboard race"], profileId: this.state.userProfileId } })
-                }
+        //         // DAY 3
+        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.userProfileId } })
+        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.userProfileId } })
 
-                // Extra activities happening during both days
-                if (this.state.doesBeerPong) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Beer pong"], profileId: this.state.userProfileId } })
-                if (this.state.doesLineDrag) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Line dragging"], profileId: this.state.userProfileId } })
-                if (this.state.doesTwister) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Twister"], profileId: this.state.userProfileId } })
-                if (this.state.doesSlackline) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.userProfileId } })
-                if (this.state.doesFlunkyBall) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.userProfileId } })
+        //         if (this.state.thirdCourseType === "Ski") {
+        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.userProfileId } })
+        //         } else if (this.state.thirdCourseType === "Snowboard") {
+        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day snow course"], profileId: this.state.userProfileId } })
+        //         }
 
-                // Part 2: Rental
-                if (this.state.secondRentalType !== "None") {
-                    mutationFunctions[6]().then(newRental => {
-                        const rental_id = newRental.data.createRental.rental.id
+        //         if (this.state.raceType === "Ski") {
+        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Ski race"], profileId: this.state.userProfileId } })
+        //         } else if (this.state.secondCourseType === "Snowboard") {
+        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowboard race"], profileId: this.state.userProfileId } })
+        //         }
+
+        //         // Extra activities happening during both days
+        //         if (this.state.doesBeerPong) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Beer pong"], profileId: this.state.userProfileId } })
+        //         if (this.state.doesLineDrag) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Line dragging"], profileId: this.state.userProfileId } })
+        //         if (this.state.doesTwister) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Twister"], profileId: this.state.userProfileId } })
+        //         if (this.state.doesSlackline) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.userProfileId } })
+        //         if (this.state.doesFlunkyBall) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.userProfileId } })
+
+        //         // Part 2: Rental
+        //         if (this.state.secondRentalType !== "None") {
+        //             mutationFunctions[6]().then(newRental => {
+        //                 const rental_id = newRental.data.createRental.rental.id
                         
-                        let rental_item = ""
-                        if (this.state.secondRentalType === "ski") {
-                            rental_item = "Second ski and skiboots"
-                        } else if (this.state.secondRentalType === "premiumski") {
-                            rental_item = "Second premium ski and skiboots"   
-                        } else if (this.state.secondRentalType === "snow") {
-                            rental_item = "Second snowboard and snowboots"  
-                        }
+        //                 let rental_item = ""
+        //                 if (this.state.secondRentalType === "ski") {
+        //                     rental_item = "Second ski and skiboots"
+        //                 } else if (this.state.secondRentalType === "premiumski") {
+        //                     rental_item = "Second premium ski and skiboots"   
+        //                 } else if (this.state.secondRentalType === "snow") {
+        //                     rental_item = "Second snowboard and snowboots"  
+        //                 }
 
-                        mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
-                            mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
-                        })
+        //                 mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
+        //                     mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
+        //                 })
 
-                        console.log("added rental connection to the user")
-                    })
-                }
+        //                 console.log("added rental connection to the user")
+        //             })
+        //         }
 
-                if(this.state.thirdRentalType !== "None") {
-                    mutationFunctions[6]().then(newRental => {
-                        const rental_id = newRental.data.createRental.rental.id
+        //         if(this.state.thirdRentalType !== "None") {
+        //             mutationFunctions[6]().then(newRental => {
+        //                 const rental_id = newRental.data.createRental.rental.id
                         
-                        let rental_item = ""
+        //                 let rental_item = ""
                     
-                        if (this.state.thirdRentalType === "ski") {
-                            rental_item = "Third ski and skiboots"
-                        } else if (this.state.thirdRentalType === "premiumski") {
-                            rental_item = "Third premium ski and skiboots"   
-                        } else if (this.state.thirdRentalType === "snow") {
-                            rental_item = "Third snowboard and snowboots"    
-                        }
+        //                 if (this.state.thirdRentalType === "ski") {
+        //                     rental_item = "Third ski and skiboots"
+        //                 } else if (this.state.thirdRentalType === "premiumski") {
+        //                     rental_item = "Third premium ski and skiboots"   
+        //                 } else if (this.state.thirdRentalType === "snow") {
+        //                     rental_item = "Third snowboard and snowboots"    
+        //                 }
 
-                        mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
-                            mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
-                        })
+        //                 mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
+        //                     mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
+        //                 })
 
-                        console.log("added rental connection to the user")
-                    })
-                }
+        //                 console.log("added rental connection to the user")
+        //             })
+        //         }
 
-                // Part 3: Merch (T-Shirt and Hoodie)
-                mutationFunctions[9]().then(purchaseData => {
+        //         // Part 3: Merch (T-Shirt and Hoodie)
+        //         mutationFunctions[9]().then(purchaseData => {
                     
-                    const purchaseid = purchaseData.data.createPurchase.purchase.id
+        //             const purchaseid = purchaseData.data.createPurchase.purchase.id
 
-                    // 3.1 T-Shirt (All participants have it)
-                    console.log(MERCH_ITEMS["T-Shirt"+this.state.teeSize]);
-                    console.log(MERCH_ITEMS["Hoodie"+this.state.teeSize]);
+        //             // 3.1 T-Shirt (All participants have it)
+        //             console.log(MERCH_ITEMS["T-Shirt"+this.state.teeSize]);
+        //             console.log(MERCH_ITEMS["Hoodie"+this.state.teeSize]);
 
                     
-                    mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["T-Shirt"+this.state.teeSize], availableNo: 1}}).then(addTee => {
-                        mutationFunctions[11]({variables: {purchaseId: purchaseid, id: userid}})
-                    })
+        //             mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["T-Shirt"+this.state.teeSize], availableNo: 1}}).then(addTee => {
+        //                 mutationFunctions[11]({variables: {purchaseId: purchaseid, id: userid}})
+        //             })
                     
-                    // 3.2 Hoodie (Participants need to choose if they want it or not)
-                    if (this.state.wantsHoodie) {
-                        mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["Hoodie"+this.state.hoodieSize], availableNo: 1}})
-                    }
+        //             // 3.2 Hoodie (Participants need to choose if they want it or not)
+        //             if (this.state.wantsHoodie) {
+        //                 mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["Hoodie"+this.state.hoodieSize], availableNo: 1}})
+        //             }
 
-                })
+        //         })
 
-                mutationFunctions[12]({variables: {profileId: userid, id: this.state.accountId}}).then(data => {
-                    alert("Congratulations, " + this.state.firstName +"! Welcome to Snowdays 2020: ");
-                })
+        //         mutationFunctions[12]({variables: {profileId: userid, id: this.state.accountId}}).then(data => {
+        //             alert("Congratulations, " + this.state.firstName +"! Welcome to Snowdays 2020: ");
+        //         })
                 
-            });
-        } else {
-            alert("You must accept all the terms of participation to complete your registration");
-        }
+        //     });
+        // } else {
+        //     alert("You must accept all the terms of participation to complete your registration");
+        // }
 
         event.preventDefault();
     }
@@ -238,6 +240,22 @@ class ExternalRegistration extends React.Component {
     handleInvalidSubmit(event) {
         alert("The input you have entered is not valid or incorrect.\nPlease check your data and try again!")
         event.preventDefault();
+    }
+
+    handleInputChange(event) {
+        let stateName = event.target.name
+        let eventVal = event.target.value
+        this.setState({[stateName]: eventVal})
+    }
+
+    handleYesNoSelectInput(event) {
+        let stateName = event.target.name
+        let eventVal = event.target.value
+        if (eventVal === "yes") {
+            this.setState({[stateName]: true })
+        } else {
+            this.setState({[stateName]: false })
+        }
     }
 
     calculateFinalPrice() {
@@ -291,13 +309,8 @@ class ExternalRegistration extends React.Component {
                                 <Row form className="mt-1">
                                     <Col>
                                         <AvGroup>
-                                            <Label for="firstName">Name</Label>
-                                            <AvInput type="text" name="firstName" id="firstName" placeholder="Mario"
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ name: e.target.value })
-                                                    }
-                                                }
+                                            <Label for="name">Name</Label>
+                                            <AvInput type="text" name="name" id="name" placeholder="Mario" onChange={this.handleInputChange}
                                                 validate ={{
                                                     required: {value: true},
                                                     pattern: {value: '^[^0-9]+$'},
@@ -308,13 +321,8 @@ class ExternalRegistration extends React.Component {
                                     </Col>
                                     <Col>
                                         <AvGroup>
-                                            <Label for="lastName">Surname</Label>
-                                            <AvInput type="text" name="lastName" id="lastName" placeholder="Pizza" 
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ surname: e.target.value })
-                                                    }
-                                                }
+                                            <Label for="surname">Surname</Label>
+                                            <AvInput type="text" name="surname" id="surname" placeholder="Pizza" onChange={this.handleInputChange}
                                                 validate ={{
                                                     required: {value: true},
                                                     pattern: {value: '^[^0-9]+$'},
@@ -350,9 +358,8 @@ class ExternalRegistration extends React.Component {
                                 <Row form className="mt-2">
                                     <Col>
                                         <AvGroup>
-                                            <Label for="phone">Phone Number</Label>
-                                            <AvInput type="text" name="phone" id="phone" placeholder="+39 111 22 33 456"
-                                                onChange={(e) => { this.setState({ phoneNumber: e.target.value }) } } 
+                                            <Label for="phoneNumber">Phone Number</Label>
+                                            <AvInput type="text" name="phoneNumber" id="phoneNumber" placeholder="+39 111 22 33 456" onChange={this.handleInputChange} 
                                                 validate ={{
                                                     required: {value: true},
                                                     pattern: {value: '/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im'},
@@ -364,13 +371,7 @@ class ExternalRegistration extends React.Component {
                                     <Col>
                                         <FormGroup>
                                             <Label for="gender">Gender</Label>
-                                            <Input type="select" name="gender" id="gender" value={this.state.gender}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ gender: e.target.value })
-                                                    }
-                                                }
-                                            >
+                                            <Input type="select" name="gender" id="gender" value={this.state.gender} onChange={this.handleInputChange}>
                                                 <option value="male">Male</option>
                                                 <option value="female">Female</option>
                                                 <option value="other">Other</option>
@@ -379,20 +380,9 @@ class ExternalRegistration extends React.Component {
                                     </Col>
                                     <Col>
                                         <FormGroup>
-                                            <Label for="participationType">Do you need accomodation?</Label>
-                                            <Input type="select" name="participationType" id="participationType" 
-                                                value={this.state.needsAccomodation ? "yes":"no"}
-                                                onChange={
-                                                    (e) => {
-                                                        let userInput = e.target.value
-
-                                                        if (userInput === "no") {
-                                                            this.setState({needsAccomodation: false})
-                                                        } else {
-                                                            this.setState({needsAccomodation: true})
-                                                        }
-                                                    }
-                                                }
+                                            <Label for="needsAccomodation">Do you need accomodation?</Label>
+                                            <Input type="select" name="needsAccomodation" id="needsAccomodation" value={this.state.needsAccomodation ? "yes":"no"}
+                                                onChange={this.handleYesNoSelectInput}
                                             >
                                                 <option value="yes">Yes</option>
                                                 <option value="no">No</option>
@@ -405,9 +395,7 @@ class ExternalRegistration extends React.Component {
                                 <Col>
                                         <FormGroup>
                                             <Label for="universityName">University Name</Label>
-                                            <Input type="select" name="universityName" id="universityName" value={this.state.universityName}
-                                                onChange={ (e) => { this.setState({ universityName: e.target.value }) } }
-                                            >
+                                            <Input type="select" name="universityName" id="universityName" value={this.state.universityName} onChange={this.handleInputChange}>
                                                 <option value="uni1">External uni 1</option>
                                                 <option value="uni2">External uni 2</option>
                                             </Input>
@@ -417,8 +405,7 @@ class ExternalRegistration extends React.Component {
                                     <Col>
                                         <AvGroup>
                                             <Label for="enrollmentNumber">Enrollment Number</Label>
-                                            <AvInput type="number" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456"
-                                                onChange={ (e) => { this.setState({ enrollmentNumber: e.target.value }) } }
+                                            <AvInput type="number" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456" onChange={this.handleInputChange}
                                                 validate ={{
                                                     required: {value: true},
                                                     pattern: {value: '^[0-9]+$'},
@@ -430,10 +417,8 @@ class ExternalRegistration extends React.Component {
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="personalDoc">Personal document type</Label>
-                                            <Input type="select" name="personalDoc" id="personalDoc" value={this.state.personalId}
-                                                onChange={ (e) => { this.setState({ personalId: e.target.value }) } }
-                                            >
+                                            <Label for="personalId">Personal document type</Label>
+                                            <Input type="select" name="personalId" id="personalId" value={this.state.personalId} onChange={this.handleInputChange}>
                                                 <option value="ci">ID Card</option>
                                                 <option value="passport">Passport</option>
                                             </Input>
@@ -442,9 +427,8 @@ class ExternalRegistration extends React.Component {
 
                                     <Col>
                                         <AvGroup>
-                                            <Label for="phone">Personal document number</Label>
-                                            <AvInput type="text" name="phone" id="phone" placeholder="111222333444"
-                                                onChange={ (e) => { this.setState({ personalIdNr: e.target.value }) } } 
+                                            <Label for="personalIdNr">Personal document number</Label>
+                                            <AvInput type="text" name="personalIdNr" id="personalIdNr" placeholder="111222333444" onChange={this.handleInputChange} 
                                                 validate = {{
                                                     required: {value: true},
                                                     pattern: {value: '^[A-Za-z0-9]+$'}
@@ -486,10 +470,8 @@ class ExternalRegistration extends React.Component {
                                 <Row form>
                                     <Col>
                                         <FormGroup>
-                                            <Label for="tSize">T-Shirt size</Label>
-                                            <Input type="select" name="tSize" id="tSize" value={this.state.teeSize}
-                                                onChange={(e) => { this.setState({ teeSize: e.target.value }) }}
-                                            >
+                                            <Label for="teeSize">T-Shirt size</Label>
+                                            <Input type="select" name="teeSize" id="teeSize" value={this.state.teeSize} onChange={this.handleInputChange}>
                                                 <option value="S">S</option>
                                                 <option value="M">M</option>
                                                 <option value="L">L</option>
@@ -500,9 +482,7 @@ class ExternalRegistration extends React.Component {
                                     <Col>
                                         <FormGroup>
                                             <Label for="lunchTime">Preferred lunch timeslot</Label>
-                                            <Input type="select" name="lunchTime" id="lunchTime" value={this.state.lunchTime}
-                                                onChange={(e) => { this.setState({ lunchTime: e.target.value }) }}
-                                            >
+                                            <Input type="select" name="lunchTime" id="lunchTime" value={this.state.lunchTime} onChange={this.handleInputChange}>
                                                 <option value="12-13">12-13</option>
                                                 <option value="13-14">13-14</option>
                                                 <option value="14-15">14-15</option>
@@ -512,9 +492,7 @@ class ExternalRegistration extends React.Component {
                                     <Col>
                                         <FormGroup>
                                             <Label for="dinnerTime">Preferred dinner timeslot</Label>
-                                            <Input type="select" name="dinnerTime" id="dinnerTime" value={this.state.dinnerTime}
-                                                onChange={(e) => { this.setState({ dinnerTime: e.target.value }) }}
-                                            >
+                                            <Input type="select" name="dinnerTime" id="dinnerTime" value={this.state.dinnerTime} onChange={this.handleInputChange}>
                                                 <option value="18-19">18-19</option>
                                                 <option value="19-20">19-20</option>
                                                 <option value="20-21">20-21</option>
@@ -523,24 +501,13 @@ class ExternalRegistration extends React.Component {
                                     </Col>
                                     <Col>
                                         <FormGroup>
-                                            <Label for="vegetarian">Are you vegetarian?</Label>
-                                            <Input type="select" name="vegetarian" id="vegetarian" value={this.state.isVeg ? "yes" : "no"}
-                                                onChange={(e) => {
-                                                    const userInput = e.target.value
-
-                                                    if (userInput === "yes") {
-                                                        this.setState({ isVeg: true })
-                                                    } else {
-                                                        this.setState({ isVeg: false })
-                                                    }
-                                                }}
-                                            >
+                                            <Label for="isVeg">Are you vegetarian?</Label>
+                                            <Input type="select" name="isVeg" id="isVeg" value={this.state.isVeg ? "yes" : "no"} onChange={this.handleYesNoSelectInput}>
                                                 <option value="no">No</option>
                                                 <option value="yes">Yes</option>
                                             </Input>
                                         </FormGroup>
                                     </Col>
-
                                 </Row>
                                 <span className="details">*The lunch and dinner timeslots are simply preferences and it is not guaranteed that you will get assigned on the selected option*</span>
 
@@ -554,24 +521,9 @@ class ExternalRegistration extends React.Component {
                                 <Row>
                                     <Col>
                                         <FormGroup>
-                                            <Label for="secondskiorsnow">Will you ski/snowboard?</Label>
-                                            <Input type="select" name="secondskiorsnow" id="secondskiorsnow" value={this.state.secondDaySkiOrSnow ? "yes" : "no"}
-                                                disabled={this.state.thirdDaySkiOrSnow}
-                                                onChange={(e) => {
-                                                    const userInput = e.target.value
-
-                                                    if (userInput === "yes") {
-                                                        this.setState({
-                                                            secondDaySkiOrSnow: true,
-                                                            thirdDaySkiOrSnow: false
-                                                        })
-
-                                                    } else {
-                                                        this.setState({
-                                                            secondDaySkiOrSnow: false
-                                                        })
-                                                    }
-                                                }}
+                                            <Label for="secondDaySkiOrSnow">Will you ski/snowboard?</Label>
+                                            <Input type="select" name="secondDaySkiOrSnow" id="secondDaySkiOrSnow" value={this.state.secondDaySkiOrSnow ? "yes" : "no"}
+                                                onChange={this.handleYesNoSelectInput}
                                             >
                                                 <option value="yes" >Yes</option>
                                                 <option value="no">No</option>
@@ -581,13 +533,9 @@ class ExternalRegistration extends React.Component {
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="secondSkiCourse">Ski/Snowboard course</Label>
-                                            <Input type="select" name="secondSkiCourse" id="secondSkiCourse" value={this.state.secondCourseType}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ secondCourseType: e.target.value })
-                                                    }
-                                                }
+                                            <Label for="secondCourseType">Ski/Snowboard course</Label>
+                                            <Input type="select" name="secondCourseType" id="secondCourseType" value={this.state.secondCourseType} 
+                                                onChange={this.handleInputChange}
                                             >
                                                 <option value="Ski">Ski</option>
                                                 <option value="Snowboard">Snowboard</option>
@@ -598,19 +546,9 @@ class ExternalRegistration extends React.Component {
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="snowvolley">Snowvolley tournament</Label>
-                                            <Input type="select" name="snowvolley" id="snowvolley" value={this.state.doesSnowVolley ? "yes" : "no"}
-                                                onChange={
-                                                    (e) => {
-                                                        const userInput = e.target.value
-                                                        console.log(userInput);
-                                                        if (userInput === "yes") {
-                                                            this.setState({ doesSnowVolley: true })
-                                                        } else {
-                                                            this.setState({ doesSnowVolley: false })
-                                                        }
-                                                    }
-                                                }
+                                            <Label for="doesSnowVolley">Snowvolley tournament</Label>
+                                            <Input type="select" name="doesSnowVolley" id="doesSnowVolley" value={this.state.doesSnowVolley ? "yes" : "no"}
+                                                onChange={this.handleYesNoSelectInput}
                                             >
                                                 <option value="yes">Yes</option>
                                                 <option value="no">No</option>
@@ -620,19 +558,9 @@ class ExternalRegistration extends React.Component {
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="htftournament">Human table football</Label>
-                                            <Input type="select" name="htftournament" id="htftournament" value={this.state.doesHTF ? "yes" : "no"}
-                                                onChange={
-                                                    (e) => {
-                                                        const userInput = e.target.value
-                                                        console.log(userInput);
-                                                        if (userInput === "yes") {
-                                                            this.setState({ doesSnowVolley: true })
-                                                        } else {
-                                                            this.setState({ doesSnowVolley: false })
-                                                        }
-                                                    }
-                                                }
+                                            <Label for="doesHTF">Human table football</Label>
+                                            <Input type="select" name="doesHTF" id="doesHTF" value={this.state.doesHTF ? "yes" : "no"}
+                                                onChange={this.handleYesNoSelectInput}
                                             >
                                                 <option value="yes">Yes</option>
                                                 <option value="no">No</option>
@@ -642,18 +570,9 @@ class ExternalRegistration extends React.Component {
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="snowwalking">Snowshoes walking</Label>
-                                            <Input type="select" name="snowwalking" id="snowwalking" value={this.state.doesSnowWalking ? "yes" : "no"}
-                                                onChange={
-                                                    (e) => {
-                                                        const userInput = e.target.value
-                                                        if (userInput === "yes") {
-                                                            this.setState({ doesSnowWalking: true })
-                                                        } else {
-                                                            this.setState({ doesSnowWalking: false })
-                                                        }
-                                                    }
-                                                }
+                                            <Label for="doesSnowWalking">Snowshoes walking</Label>
+                                            <Input type="select" name="doesSnowWalking" id="doesSnowWalking" value={this.state.doesSnowWalking ? "yes" : "no"}
+                                                onChange={this.handleYesNoSelectInput}
                                             >
                                                 <option value="yes">Yes</option>
                                                 <option value="no">No</option>
@@ -666,21 +585,9 @@ class ExternalRegistration extends React.Component {
                                 <Row>
                                     <Col>
                                         <FormGroup>
-                                            <Label for="thirdskiorsnow">Will you ski/snowboard?</Label>
-                                            <Input type="select" name="thirdskiorsnow" id="thirdskiorsnow" value={this.state.thirdDaySkiOrSnow ? "yes" : "no"}
-                                                disabled={this.state.secondDaySkiOrSnow}
-                                                onChange={(e) => {
-                                                    const userInput = e.target.value
-
-                                                    if (userInput === "yes") {
-                                                        this.setState({
-                                                            thirdDaySkiOrSnow: true,
-                                                            secondDaySkiOrSnow: false
-                                                        })
-                                                    } else {
-                                                        this.setState({ thirdDaySkiOrSnow: false })
-                                                    }
-                                                }}
+                                            <Label for="thirdDaySkiOrSnow">Will you ski/snowboard?</Label>
+                                            <Input type="select" name="thirdDaySkiOrSnow" id="thirdDaySkiOrSnow" value={this.state.thirdDaySkiOrSnow ? "yes" : "no"}
+                                                onChange={this.handleYesNoSelectInput}
                                             >
                                                 <option value="yes">Yes</option>
                                                 <option value="no">No</option>
@@ -690,14 +597,8 @@ class ExternalRegistration extends React.Component {
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="thirdSkiCourse">Ski/Snowboard course</Label>
-                                            <Input type="select" name="thirdSkiCourse" id="thirdSkiCourse" value={this.state.thirdCourseType}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ thirdCourseType: e.target.value })
-                                                    }
-                                                }
-                                            >
+                                            <Label for="thirdCourseType">Ski/Snowboard course</Label>
+                                            <Input type="select" name="thirdCourseType" id="thirdCourseType" value={this.state.thirdCourseType} onChange={this.handleInputChange}>
                                                 <option value="Ski">Ski</option>
                                                 <option value="Snowboard">Snowboard</option>
                                                 <option value="None">None</option>
@@ -707,14 +608,8 @@ class ExternalRegistration extends React.Component {
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="skirace">Ski/Snowboard race</Label>
-                                            <Input type="select" name="skirace" id="skirace" value={this.state.raceType}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ raceType: e.target.value })
-                                                    }
-                                                }
-                                            >
+                                            <Label for="raceType">Ski/Snowboard race</Label>
+                                            <Input type="select" name="raceType" id="raceType" value={this.state.raceType} onChange={this.handleInputChange}>
                                                 <option value="Ski">Ski</option>
                                                 <option value="Snowboard">Snowboard</option>
                                                 <option value="None">None</option>
@@ -730,28 +625,28 @@ class ExternalRegistration extends React.Component {
                                 <Row form>
                                     <div className="mt-2 container">
                                         <span className="check-separator">
-                                            <label htmlFor="beerpong">Beer pong</label>
-                                            <input className="rental-checkbox" type="checkbox" id="beerpong" name="beerpong" onChange={(e) => { this.setState({ doesBeerPong: e.target.checked }) }} />
+                                            <label htmlFor="doesBeerPong">Beer pong</label>
+                                            <input className="rental-checkbox" type="checkbox" id="doesBeerPong" name="doesBeerPong" onChange={this.handleInputChange} />
                                         </span>
 
                                         <span className="check-separator">
-                                            <label htmlFor="linedrag">Line dragging</label>
-                                            <input className="rental-checkbox" type="checkbox" id="linedrag" name="linedrag" onChange={(e) => { this.setState({ doesLineDrag: e.target.checked }) }} />
+                                            <label htmlFor="doesLineDrag">Line dragging</label>
+                                            <input className="rental-checkbox" type="checkbox" id="doesLineDrag" name="doesLineDrag" onChange={this.handleInputChange} />
                                         </span>
 
                                         <span className="check-separator">
-                                            <label htmlFor="twister">Twister</label>
-                                            <input className="rental-checkbox" type="checkbox" id="twister" name="twister" onChange={(e) => { this.setState({ doesTwister: e.target.checked }) }} />
+                                            <label htmlFor="doesTwister">Twister</label>
+                                            <input className="rental-checkbox" type="checkbox" id="doesTwister" name="doesTwister" onChange={this.handleInputChange} />
                                         </span>
 
                                         <span className="check-separator">
-                                            <label htmlFor="slackline">Slackline</label>
-                                            <input className="rental-checkbox" type="checkbox" id="slackline" name="slackline" onChange={(e) => { this.setState({ doesSlackline: e.target.checked }) }} />
+                                            <label htmlFor="doesSlackline">Slackline</label>
+                                            <input className="rental-checkbox" type="checkbox" id="doesSlackline" name="doesSlackline" onChange={this.handleInputChange} />
                                         </span>
 
                                         <span className="check-separator">
-                                            <label htmlFor="flunkyball">Flunky ball</label>
-                                            <input className="rental-checkbox" type="checkbox" id="flunkyball" name="flunkyball" onChange={(e) => { this.setState({ doesFlunkyBall: e.target.checked }) }} />
+                                            <label htmlFor="doesFlunkyBall">Flunky ball</label>
+                                            <input className="rental-checkbox" type="checkbox" id="doesFlunkyBall" name="doesFlunkyBall" onChange={this.handleInputChange} />
                                         </span>
 
                                     </div>
@@ -784,39 +679,32 @@ class ExternalRegistration extends React.Component {
                                     <Col>
                                         <FormGroup>
                                             <Label for="height">Height (cm)</Label>
-                                            <Input type="number" name="height" id="height" placeholder="180"
-                                                onChange={(e) => { this.setState({ height: e.target.value }) }}
-                                            />
+                                            <Input type="number" name="height" id="height" placeholder="180" onChange={this.handleInputChange}/>
                                         </FormGroup>
                                     </Col>
                                     <Col>
                                         <FormGroup>
                                             <Label for="zip">Weight (kg)</Label>
-                                            <Input type="number" name="weight" id="weight" placeholder="80"
-                                                onChange={(e) => { this.setState({ weight: e.target.value }) }}
-                                            />
+                                            <Input type="number" name="weight" id="weight" placeholder="80" onChange={this.handleInputChange}/>
                                         </FormGroup>
                                     </Col>
                                     <Col>
                                         <FormGroup>
                                             <Label for="shoeSize">Shoe size</Label>
-                                            <Input type="select" name="shoeSize" id="shoeSize" value={this.state.shoeSize}
-                                                onChange={(e) => { this.setState({ shoeSize: e.target.value }) }}
-                                            >
-
-                                                {SHOE_SIZES.map((shoe_size, key) => (
-                                                    <option key={key} value={shoe_size}>{shoe_size}</option>
-                                                ))}
-
+                                            <Input type="select" name="shoeSize" id="shoeSize" value={this.state.shoeSize} onChange={this.handleInputChange}>
+                                                {SHOE_SIZES.map(
+                                                        (shoe_size, key) => (
+                                                            <option key={key} value={shoe_size}>{shoe_size}</option>
+                                                        )
+                                                    )
+                                                }
                                             </Input>
                                         </FormGroup>
                                     </Col>
                                     <Col>
                                         <FormGroup>
                                             <Label for="xpLvl">Ski experience level</Label>
-                                            <Input type="select" name="xpLvl" id="xpLvl" value={this.state.xpLvl}
-                                                onChange={(e) => { this.setState({ xpLvl: e.target.value }) }}
-                                            >
+                                            <Input type="select" name="xpLvl" id="xpLvl" value={this.state.xpLvl} onChange={this.handleInputChange}>
                                                 <option value="Beginner">Beginner</option>
                                                 <option value="Intermediate">Intermediate</option>
                                                 <option value="Expert">Expert</option>
@@ -829,12 +717,8 @@ class ExternalRegistration extends React.Component {
                                     <Col>
                                         <h6 className="title category">Second day rental requests</h6>
                                         <FormGroup>
-                                            <Input type="select" name="secondRental" id="secondRental" value={this.state.secondRentalType}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ secondRentalType: e.target.value })
-                                                    }
-                                                }
+                                            <Input type="select" name="secondRentalType" id="secondRentalType" value={this.state.secondRentalType}
+                                                onChange={this.handleInputChange}
                                             >
                                                 <option value="ski">Ski + Skiboots (€25)</option>
                                                 <option value="premiumski">Premium - Ski + Skiboots (€30)</option>
@@ -846,12 +730,8 @@ class ExternalRegistration extends React.Component {
                                     <Col>
                                         <h6 className="title category">Third day rental requests</h6>
                                         <FormGroup>
-                                            <Input type="select" name="thirdRental" id="thirdRental" value={this.state.thirdRentalType}
-                                                onChange={
-                                                    (e) => {
-                                                        this.setState({ thirdRentalType: e.target.value })
-                                                    }
-                                                }
+                                            <Input type="select" name="thirdRentalType" id="thirdRentalType" value={this.state.thirdRentalType}
+                                                onChange={this.handleInputChange}
                                             >
                                                 <option value="ski">Ski + Skiboots (€25)</option>
                                                 <option value="premiumski">Premium - Ski + Skiboots (€30)</option>
@@ -908,17 +788,9 @@ class ExternalRegistration extends React.Component {
                                         If you pre-order the merch now, you will get a special discount and pay <span style={{ color: "#4BB5FF" }}>just 20€</span></span>
 
                                         <FormGroup className="mt-3">
-                                            <Label for="orderHoodie">Do you want your own Snowdays hoodie?</Label>
-                                            <Input type="select" name="orderHoodie" id="orderHoodie" value={this.state.wantsHoodie ? "yes" : "no"}
-                                                onChange={(e) => {
-                                                    const userInput = e.target.value
-
-                                                    if (userInput === "yes") {
-                                                        this.setState({ wantsHoodie: true })
-                                                    } else {
-                                                        this.setState({ wantsHoodie: false })
-                                                    }
-                                                }}
+                                            <Label for="wantsHoodie">Do you want your own Snowdays hoodie?</Label>
+                                            <Input type="select" name="wantsHoodie" id="wantsHoodie" value={this.state.wantsHoodie ? "yes" : "no"}
+                                                onChange={this.handleYesNoSelectInput}
                                             >
                                                 <option value="yes">Yes</option>
                                                 <option value="no">No</option>
@@ -928,7 +800,7 @@ class ExternalRegistration extends React.Component {
                                         <FormGroup className={this.state.wantsHoodie ? "" : "collapsed"}>
                                             <Label for="hoodieSize">Pick a size</Label>
                                             <Input type="select" name="hoodieSize" id="hoodieSize" value={this.state.hoodieSize}
-                                                onChange={(e) => { this.setState({ hoodieSize: e.target.value }) }}
+                                                onChange={this.handleInputChange}
                                             >
                                                 <option value="S">S</option>
                                                 <option value="M">M</option>
@@ -967,7 +839,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" defaultChecked={this.state.skipassAgree} onChange={(e) => { this.setState({ skipassAgree: e.target.checked }) }} />
+                                        <input required className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" defaultChecked={this.state.skipassAgree} onChange={this.handleInputChange} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -982,7 +854,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" defaultChecked={this.state.rentalAgree} onChange={(e) => { this.setState({ rentalAgree: e.target.checked }) }} />
+                                        <input required className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" defaultChecked={this.state.rentalAgree} onChange={this.handleInputChange} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -996,7 +868,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" defaultChecked={this.state.propertyAgree} onChange={(e) => { this.setState({ propertyAgree: e.target.checked }) }} />
+                                        <input required className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" defaultChecked={this.state.propertyAgree} onChange={this.handleInputChange} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -1019,7 +891,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" defaultChecked={this.state.riskAgree} onChange={(e) => { this.setState({ riskAgree: e.target.checked }) }} />
+                                        <input required className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" defaultChecked={this.state.riskAgree} onChange={this.handleInputChange} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -1032,7 +904,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" defaultChecked={this.state.busAgree} onChange={(e) => { this.setState({ busAgree: e.target.checked }) }} />
+                                        <input required className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" defaultChecked={this.state.busAgree} onChange={this.handleInputChange} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -1049,7 +921,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" defaultChecked={this.state.allergiesAgree} onChange={(e) => { this.setState({ allergiesAgree: e.target.checked }) }} />
+                                        <input required className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" defaultChecked={this.state.allergiesAgree} onChange={this.handleInputChange} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -1060,7 +932,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" defaultChecked={this.state.paymentAgree} onChange={(e) => { this.setState({ paymentAgree: e.target.checked }) }} />
+                                        <input required className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" defaultChecked={this.state.paymentAgree} onChange={this.handleInputChange} />
                                     </Col>
                                 </Row>
                             </CardBody>
@@ -1179,7 +1051,6 @@ class ExternalRegistration extends React.Component {
                                 <Button type="submit" className="btn btn-primary pull-right"
                                     onClick={() => {
                                             this.setState({mutationFunctions: mutationFunctions})
-                                            console.log("Form submitted:");
                                             // console.log(ACTIVITY_IDS);
                                             // console.log(RENTAL_MATERIALS);
                                             // console.log(MERCH_ITEMS);

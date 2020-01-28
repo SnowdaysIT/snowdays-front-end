@@ -10,26 +10,14 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { SIGNUP, USER_AUTH} from './RegistrationQueries.js';
 
 // Styling imports
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardTitle,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
-  Container,
-  Row,
-  FormGroup,
-  Label,
-  Modal, 
-  ModalHeader, 
-  ModalBody
-} from "reactstrap";
+import { Button, Card, CardHeader, CardBody, 
+  CardFooter, CardTitle, Form, Input, 
+  InputGroupAddon, InputGroupText, InputGroup, Container,
+  Row, FormGroup, Label, Modal, 
+  ModalHeader, ModalBody} from "reactstrap";
+
+import { AvForm, AvGroup, AvInput, AvFeedback} from 'availity-reactstrap-validation';
+
 import '../../assets/css/signup.css'
 
 
@@ -449,8 +437,7 @@ class SignUp extends React.Component {
                     }}
                   >
                     <option value="Internal">Internal</option>
-                    <option disabled>External</option>
-                    <option disabled>Contact person</option>
+                    <option value="External">External</option>
                   </Input>
                 </FormGroup>
                 <FormGroup inline className="mt-3 ml-1">
