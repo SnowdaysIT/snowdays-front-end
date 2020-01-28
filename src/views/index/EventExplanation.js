@@ -88,7 +88,7 @@ function Event() {
                 <Container>
                     <Row> 
                         <h3 className="h3-seo category ml-3">THERE ARE NO DAYS LIKE SNOWDAYS</h3>
-                        <Col className="ml-auto mr-auto" md="11" xl="7">
+                        <Col className="ml-auto mr-auto" md="12" xl="7">
                             <Card>
                                 <CardHeader>
                                     <Nav
@@ -126,7 +126,7 @@ function Event() {
                                                 onClick={e => {
                                                     e.preventDefault();
                                                     setIconPills("2");
-                                                    changeIndex(6);
+                                                    changeIndex(5);
                                                 }}
                                                 style={{marginTop: "7%"}}
                                             >
@@ -191,7 +191,7 @@ function Event() {
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col className="ml-auto mr-auto">
+                        <Col className="ml-auto mr-auto" md="12" xl="5">
                         <Carousel
                             activeIndex={activeIndex}
                             next={next}

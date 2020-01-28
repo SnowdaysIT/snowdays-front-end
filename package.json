@@ -27,7 +27,8 @@
     "react-router-dom": "5.0.1",
     "react-scripts": "^3.3.0",
     "reactstrap": "8.0.1",
-    "serve": "^11.2.0"
+    "serve": "^11.2.0",
+    "sizeof-loader": "^1.1.1"
   },
   "scripts": {
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",

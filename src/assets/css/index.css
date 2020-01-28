@@ -22,6 +22,16 @@
     }
 }
 
+@media (min-width: 1100px){
+    html {
+        font-size:1.1vw !important;
+    }
+}
+
+html {
+    font-size: 1.5vw;
+}
+
 .info-icon {
     padding-left: 5px;
     padding-right: 5px;
@@ -53,7 +63,7 @@
 }
 
 .main-header-text {
-    font-size: 10vw;
+    font-size: 8rem;
     font-family: 'Jaapoki';
 }
 @media (max-width: 500px) {
@@ -84,12 +94,7 @@
 }
 
 .staff-carousel .carousel-item {
-    height: 100vh;
-}
-@media (max-width: 500px) {
-    .staff-carousel .carousel-item {
-        height: 230px;
-    }
+    height: auto;
 }
 
 .explanation-carousel .carousel-inner{
