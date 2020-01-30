@@ -36,6 +36,8 @@ function Index() {
 
   const toggle = () => setModal(!modal);
 
+  sessionStorage.removeItem('token')
+  
   return (
     <>
       <IndexNavbar />

@@ -106,133 +106,133 @@ class ExternalRegistration extends React.Component {
         console.log("Mutation functions from state");
         console.log(mutationFunctions);
         
-        // let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
-        // if (agreesToAll) {
-        //     // Part 0: First create a profile only with the required data
-        //     // Then we will update based on our state (form data)
-        //     mutationFunctions[0]().then(data => {
-        //         let userid = data.data.createProfile.profile.id
+        let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
+        if (agreesToAll) {
+            // Part 0: First create a profile only with the required data
+            // Then we will update based on our state (form data)
+            mutationFunctions[0]().then(data => {
+                let userid = data.data.createProfile.profile.id
 
-        //         // Part 1: What activities will the person do?
+                // Part 1: What activities will the person do?
 
-        //         // DAY 2
-        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.userProfileId } })
-        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day dinner"], profileId: this.state.userProfileId } })
+                // DAY 2
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.userProfileId } })
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day dinner"], profileId: this.state.userProfileId } })
 
-        //         if (this.state.secondDaySkiOrSnow) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski"], profileId: this.state.userProfileId } })
+                if (this.state.secondDaySkiOrSnow) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day ski"], profileId: this.state.userProfileId } })
 
-        //         if (this.state.secondCourseType === "Ski") {
-        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day ski course"], profileId: this.state.userProfileId } })
-        //         } else if (this.state.secondCourseType === "Snowboard") {
-        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Second day snow course"], profileId: this.state.userProfileId } })
-        //         }
+                if (this.state.secondCourseType === "Ski") {
+                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day ski course"], profileId: this.state.userProfileId } })
+                } else if (this.state.secondCourseType === "Snowboard") {
+                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day snow course"], profileId: this.state.userProfileId } })
+                }
 
-        //         if (this.state.doesSnowWalking) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowwalking"], profileId: this.state.userProfileId } })
-
-
-        //         if (this.state.doesSnowVolley) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowvolley"], profileId: this.state.userProfileId } })
+                if (this.state.doesSnowWalking) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Snowwalking"], profileId: this.state.userProfileId } })
 
 
-        //         if (this.state.doesHTF) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Human table football"], profileId: this.state.userProfileId } })
+                if (this.state.doesSnowVolley) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Snowvolley"], profileId: this.state.userProfileId } })
 
 
-        //         // DAY 3
-        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.userProfileId } })
-        //         mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.userProfileId } })
+                if (this.state.doesHTF) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Human table football"], profileId: this.state.userProfileId } })
 
-        //         if (this.state.thirdCourseType === "Ski") {
-        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.userProfileId } })
-        //         } else if (this.state.thirdCourseType === "Snowboard") {
-        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Third day snow course"], profileId: this.state.userProfileId } })
-        //         }
 
-        //         if (this.state.raceType === "Ski") {
-        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Ski race"], profileId: this.state.userProfileId } })
-        //         } else if (this.state.secondCourseType === "Snowboard") {
-        //             mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Snowboard race"], profileId: this.state.userProfileId } })
-        //         }
+                // DAY 3
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.userProfileId } })
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.userProfileId } })
 
-        //         // Extra activities happening during both days
-        //         if (this.state.doesBeerPong) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Beer pong"], profileId: this.state.userProfileId } })
-        //         if (this.state.doesLineDrag) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Line dragging"], profileId: this.state.userProfileId } })
-        //         if (this.state.doesTwister) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Twister"], profileId: this.state.userProfileId } })
-        //         if (this.state.doesSlackline) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.userProfileId } })
-        //         if (this.state.doesFlunkyBall) mutationFunctions[5]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.userProfileId } })
+                if (this.state.thirdCourseType === "Ski") {
+                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.userProfileId } })
+                } else if (this.state.thirdCourseType === "Snowboard") {
+                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day snow course"], profileId: this.state.userProfileId } })
+                }
 
-        //         // Part 2: Rental
-        //         if (this.state.secondRentalType !== "None") {
-        //             mutationFunctions[6]().then(newRental => {
-        //                 const rental_id = newRental.data.createRental.rental.id
+                if (this.state.raceType === "Ski") {
+                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Ski race"], profileId: this.state.userProfileId } })
+                } else if (this.state.secondCourseType === "Snowboard") {
+                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Snowboard race"], profileId: this.state.userProfileId } })
+                }
+
+                // Extra activities happening during both days
+                if (this.state.doesBeerPong) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Beer pong"], profileId: this.state.userProfileId } })
+                if (this.state.doesLineDrag) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Line dragging"], profileId: this.state.userProfileId } })
+                if (this.state.doesTwister) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Twister"], profileId: this.state.userProfileId } })
+                if (this.state.doesSlackline) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.userProfileId } })
+                if (this.state.doesFlunkyBall) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.userProfileId } })
+
+                // Part 2: Rental
+                if (this.state.secondRentalType !== "None") {
+                    mutationFunctions[2]().then(newRental => {
+                        const rental_id = newRental.data.createRental.rental.id
                         
-        //                 let rental_item = ""
-        //                 if (this.state.secondRentalType === "ski") {
-        //                     rental_item = "Second ski and skiboots"
-        //                 } else if (this.state.secondRentalType === "premiumski") {
-        //                     rental_item = "Second premium ski and skiboots"   
-        //                 } else if (this.state.secondRentalType === "snow") {
-        //                     rental_item = "Second snowboard and snowboots"  
-        //                 }
+                        let rental_item = ""
+                        if (this.state.secondRentalType === "ski") {
+                            rental_item = "Second ski and skiboots"
+                        } else if (this.state.secondRentalType === "premiumski") {
+                            rental_item = "Second premium ski and skiboots"   
+                        } else if (this.state.secondRentalType === "snow") {
+                            rental_item = "Second snowboard and snowboots"  
+                        }
 
-        //                 mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
-        //                     mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
-        //                 })
+                        mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
+                            mutationFunctions[4]({variables: {rentalId: rental_id, id: userid}})
+                        })
 
-        //                 console.log("added rental connection to the user")
-        //             })
-        //         }
+                        console.log("added rental connection to the user")
+                    })
+                }
 
-        //         if(this.state.thirdRentalType !== "None") {
-        //             mutationFunctions[6]().then(newRental => {
-        //                 const rental_id = newRental.data.createRental.rental.id
+                if(this.state.thirdRentalType !== "None") {
+                    mutationFunctions[2]().then(newRental => {
+                        const rental_id = newRental.data.createRental.rental.id
                         
-        //                 let rental_item = ""
+                        let rental_item = ""
                     
-        //                 if (this.state.thirdRentalType === "ski") {
-        //                     rental_item = "Third ski and skiboots"
-        //                 } else if (this.state.thirdRentalType === "premiumski") {
-        //                     rental_item = "Third premium ski and skiboots"   
-        //                 } else if (this.state.thirdRentalType === "snow") {
-        //                     rental_item = "Third snowboard and snowboots"    
-        //                 }
+                        if (this.state.thirdRentalType === "ski") {
+                            rental_item = "Third ski and skiboots"
+                        } else if (this.state.thirdRentalType === "premiumski") {
+                            rental_item = "Third premium ski and skiboots"   
+                        } else if (this.state.thirdRentalType === "snow") {
+                            rental_item = "Third snowboard and snowboots"    
+                        }
 
-        //                 mutationFunctions[7]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
-        //                     mutationFunctions[8]({variables: {rentalId: rental_id, id: userid}})
-        //                 })
+                        mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
+                            mutationFunctions[4]({variables: {rentalId: rental_id, id: userid}})
+                        })
 
-        //                 console.log("added rental connection to the user")
-        //             })
-        //         }
+                        console.log("added rental connection to the user")
+                    })
+                }
 
-        //         // Part 3: Merch (T-Shirt and Hoodie)
-        //         mutationFunctions[9]().then(purchaseData => {
+                // Part 3: Merch (T-Shirt and Hoodie)
+                mutationFunctions[5]().then(purchaseData => {
                     
-        //             const purchaseid = purchaseData.data.createPurchase.purchase.id
+                    const purchaseid = purchaseData.data.createPurchase.purchase.id
 
-        //             // 3.1 T-Shirt (All participants have it)
-        //             console.log(MERCH_ITEMS["T-Shirt"+this.state.teeSize]);
-        //             console.log(MERCH_ITEMS["Hoodie"+this.state.teeSize]);
+                    // 3.1 T-Shirt (All participants have it)
+                    console.log(MERCH_ITEMS["T-Shirt"+this.state.teeSize]);
+                    console.log(MERCH_ITEMS["Hoodie"+this.state.teeSize]);
 
                     
-        //             mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["T-Shirt"+this.state.teeSize], availableNo: 1}}).then(addTee => {
-        //                 mutationFunctions[11]({variables: {purchaseId: purchaseid, id: userid}})
-        //             })
+                    mutationFunctions[6]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["T-Shirt"+this.state.teeSize], availableNo: 1}}).then(addTee => {
+                        mutationFunctions[7]({variables: {purchaseId: purchaseid, id: userid}})
+                    })
                     
-        //             // 3.2 Hoodie (Participants need to choose if they want it or not)
-        //             if (this.state.wantsHoodie) {
-        //                 mutationFunctions[10]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["Hoodie"+this.state.hoodieSize], availableNo: 1}})
-        //             }
+                    // 3.2 Hoodie (Participants need to choose if they want it or not)
+                    if (this.state.wantsHoodie) {
+                        mutationFunctions[6]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["Hoodie"+this.state.hoodieSize], availableNo: 1}})
+                    }
 
-        //         })
+                })
 
-        //         mutationFunctions[12]({variables: {profileId: userid, id: this.state.accountId}}).then(data => {
-        //             alert("Congratulations, " + this.state.firstName +"! Welcome to Snowdays 2020: ");
-        //         })
+                mutationFunctions[8]({variables: {profileId: userid, id: this.state.accountId}}).then(data => {
+                    alert("Congratulations, " + this.state.name +"! Welcome to Snowdays 2020: ");
+                })
                 
-        //     });
-        // } else {
-        //     alert("You must accept all the terms of participation to complete your registration");
-        // }
-
+            });
+        } else {
+            alert("You must accept all the terms of participation to complete your registration");
+        }
+        this.props.history.push("/index")
         event.preventDefault();
     }
 
@@ -297,11 +297,9 @@ class ExternalRegistration extends React.Component {
         
         return (
             <Container>
-                
-                {/* {token &&
+                {token &&
                     <>
-                    <PreRegistration props={true} /> */}
-
+                    <PreRegistration props={true} />
                     <AvForm onValidSubmit={this.handleValidSubmit} onInvalidSubmit={this.handleInvalidSubmit}>
                         <Card className="p-2 mt-4">
                             <CardBody className="p-1">
@@ -362,7 +360,7 @@ class ExternalRegistration extends React.Component {
                                             <AvInput type="text" name="phoneNumber" id="phoneNumber" placeholder="+39 111 22 33 456" onChange={this.handleInputChange} 
                                                 validate ={{
                                                     required: {value: true},
-                                                    pattern: {value: '/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im'},
+                                                    pattern: {value: '^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$'},
                                                 }}
                                             />
                                             <AvFeedback>Please insert a valid phone number!</AvFeedback>
@@ -514,7 +512,7 @@ class ExternalRegistration extends React.Component {
                                 <h5 className="title category">First day activities</h5>
                                 <Row>
                                     <Col>
-                                        <p>We'll take care of it all, it'll be fun! 😎</p>
+                                        <p>We'll take care of it all, it'll be fun! <span role="img" aria-label="bossmode">😎</span></p>
                                     </Col>
                                 </Row>
                                 <h5 className="title category">Second day activities</h5>
@@ -974,7 +972,7 @@ class ExternalRegistration extends React.Component {
                                 }}
                             />,
                             <Mutation mutation={CREATE_RENTAL}
-                                variables={{experience: (this.state.xpLvl==="Beginner" ? "BEGINNER" : "INTERMEDIATE"), height: this.state.height, shoeSize: this.state.shoeSize, weight: this.state.weight}}
+                                variables={{experience: (this.state.xpLvl==="Beginner" ? "BEGINNER" : "INTERMEDIATE"), height: parseInt(this.state.height), shoeSize: parseInt(this.state.shoeSize), weight: parseInt(this.state.weight)}}
                                 onCompleted={(data) => {
                                     console.log("Created a rental entry for this user");
                                     console.log(data)
@@ -1050,12 +1048,7 @@ class ExternalRegistration extends React.Component {
                             {(mutationFunctions) => (
                                 <Button type="submit" className="btn btn-primary pull-right"
                                     onClick={() => {
-                                            this.setState({mutationFunctions: mutationFunctions})
-                                            // console.log(ACTIVITY_IDS);
-                                            // console.log(RENTAL_MATERIALS);
-                                            // console.log(MERCH_ITEMS);
-                                            // console.log(this.state.accountId);
-                                            // console.log(mutationFunctions);                                        
+                                            this.setState({mutationFunctions: mutationFunctions})                                
                                         }
                                     }
                                     >REGISTER</Button>
@@ -1063,17 +1056,17 @@ class ExternalRegistration extends React.Component {
                         </Composer>
 
                     </AvForm>
-                    {/* </> */}
-                {/* } */}
+                    </>
+                }
 
-                {/* {!token &&
+                {!token &&
                     <Card className="p-2 mt-4">
                         <CardBody className="p-1 pull-center text-center">
                             <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>You are not registered yet!</CardTitle>
                             <Link to="/signup" className="mt-2 h2" tag="h3">Please do that first!</Link>
                         </CardBody>
                     </Card>
-                } */}
+                }
 
             </Container> 
         );
