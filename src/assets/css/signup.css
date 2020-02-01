@@ -103,8 +103,8 @@ input:invalid {
     border-color: red;
 }
 
-@media (max-width: 500px) {
+/* @media (max-width: 500px) {
     label {
         font-size: 9px;
     }
-}
+} */

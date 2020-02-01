@@ -97,23 +97,22 @@ class ExternalRegistration extends React.Component {
         this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleYesNoSelectInput = this.handleYesNoSelectInput.bind(this)
+        this.handleCheckboxCheck = this.handleCheckboxCheck.bind(this)
     }
 
     handleValidSubmit(event) {
         let mutationFunctions = this.state.mutationFunctions
-        console.log("Form submitted with state:");
-        console.log(this.state)
-        console.log("Mutation functions from state");
         console.log(mutationFunctions);
         
         let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
         if (agreesToAll) {
+
             // Part 0: First create a profile only with the required data
             // Then we will update based on our state (form data)
             mutationFunctions[0]().then(data => {
                 let userid = data.data.createProfile.profile.id
 
-                // Part 1: What activities will the person do?
+                // Part 1: What activities will the person do?                
 
                 // DAY 2
                 mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.userProfileId } })
@@ -159,8 +158,9 @@ class ExternalRegistration extends React.Component {
                 if (this.state.doesSlackline) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.userProfileId } })
                 if (this.state.doesFlunkyBall) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.userProfileId } })
 
+
                 // Part 2: Rental
-                if (this.state.secondRentalType !== "None") {
+                if (this.state.secondRentalType !== "none") {
                     mutationFunctions[2]().then(newRental => {
                         const rental_id = newRental.data.createRental.rental.id
                         
@@ -175,13 +175,14 @@ class ExternalRegistration extends React.Component {
 
                         mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
                             mutationFunctions[4]({variables: {rentalId: rental_id, id: userid}})
+                            console.log("added rental connection to the user")
+
                         })
 
-                        console.log("added rental connection to the user")
                     })
                 }
 
-                if(this.state.thirdRentalType !== "None") {
+                if(this.state.thirdRentalType !== "none") {
                     mutationFunctions[2]().then(newRental => {
                         const rental_id = newRental.data.createRental.rental.id
                         
@@ -197,9 +198,9 @@ class ExternalRegistration extends React.Component {
 
                         mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
                             mutationFunctions[4]({variables: {rentalId: rental_id, id: userid}})
+                            console.log("added rental connection to the user")
                         })
 
-                        console.log("added rental connection to the user")
                     })
                 }
 
@@ -224,27 +225,35 @@ class ExternalRegistration extends React.Component {
 
                 })
 
-                mutationFunctions[8]({variables: {profileId: userid, id: this.state.accountId}}).then(data => {
-                    alert("Congratulations, " + this.state.name +"! Welcome to Snowdays 2020: ");
-                })
+                mutationFunctions[8]({variables: {profileId: userid, id: this.state.accountId}}).then(
+                    setTimeout(data => {                    
+                        alert("Congratulations, " + this.state.name +"! Welcome to Snowdays 2020.\nYou will receive a confirmation e-mail in the address you used to sign up.\nNow get ready, because there are no days like SNOWDAYS!")
+                        this.props.history.push("/index")
+                    }, 3000)
+                )
                 
             });
         } else {
-            alert("You must accept all the terms of participation to complete your registration");
+            alert("You must accept all the terms of participation to continue!");
         }
-        this.props.history.push("/index")
+
         event.preventDefault();
     }
 
     
     handleInvalidSubmit(event) {
-        alert("The input you have entered is not valid or incorrect.\nPlease check your data and try again!")
         event.preventDefault();
     }
 
     handleInputChange(event) {
         let stateName = event.target.name
         let eventVal = event.target.value
+        this.setState({[stateName]: eventVal})
+    }
+
+    handleCheckboxCheck(event) {
+        let stateName = event.target.name
+        let eventVal = event.target.checked
         this.setState({[stateName]: eventVal})
     }
 
@@ -299,7 +308,7 @@ class ExternalRegistration extends React.Component {
             <Container>
                 {token &&
                     <>
-                    <PreRegistration props={true} />
+                    <PreRegistration showModal={true} helpHostInfo={false}/>
                     <AvForm onValidSubmit={this.handleValidSubmit} onInvalidSubmit={this.handleInvalidSubmit}>
                         <Card className="p-2 mt-4">
                             <CardBody className="p-1">
@@ -309,7 +318,7 @@ class ExternalRegistration extends React.Component {
                                         <AvGroup>
                                             <Label for="name">Name</Label>
                                             <AvInput type="text" name="name" id="name" placeholder="Mario" onChange={this.handleInputChange}
-                                                validate ={{
+                                                validate = {{
                                                     required: {value: true},
                                                     pattern: {value: '^[^0-9]+$'},
                                                 }}
@@ -360,7 +369,7 @@ class ExternalRegistration extends React.Component {
                                             <AvInput type="text" name="phoneNumber" id="phoneNumber" placeholder="+39 111 22 33 456" onChange={this.handleInputChange} 
                                                 validate ={{
                                                     required: {value: true},
-                                                    pattern: {value: '^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$'},
+                                                    pattern: {value: '^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$'},
                                                 }}
                                             />
                                             <AvFeedback>Please insert a valid phone number!</AvFeedback>
@@ -556,18 +565,6 @@ class ExternalRegistration extends React.Component {
 
                                     <Col>
                                         <FormGroup>
-                                            <Label for="doesHTF">Human table football</Label>
-                                            <Input type="select" name="doesHTF" id="doesHTF" value={this.state.doesHTF ? "yes" : "no"}
-                                                onChange={this.handleYesNoSelectInput}
-                                            >
-                                                <option value="yes">Yes</option>
-                                                <option value="no">No</option>
-                                            </Input>
-                                        </FormGroup>
-                                    </Col>
-
-                                    <Col>
-                                        <FormGroup>
                                             <Label for="doesSnowWalking">Snowshoes walking</Label>
                                             <Input type="select" name="doesSnowWalking" id="doesSnowWalking" value={this.state.doesSnowWalking ? "yes" : "no"}
                                                 onChange={this.handleYesNoSelectInput}
@@ -614,6 +611,18 @@ class ExternalRegistration extends React.Component {
                                             </Input>
                                         </FormGroup>
                                     </Col>
+
+                                    <Col>
+                                        <FormGroup>
+                                            <Label for="doesHTF">Human table football</Label>
+                                            <Input type="select" name="doesHTF" id="doesHTF" value={this.state.doesHTF ? "yes" : "no"}
+                                                onChange={this.handleYesNoSelectInput}
+                                            >
+                                                <option value="yes">Yes</option>
+                                                <option value="no">No</option>
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
                                 </Row>
 
 
@@ -624,27 +633,27 @@ class ExternalRegistration extends React.Component {
                                     <div className="mt-2 container">
                                         <span className="check-separator">
                                             <label htmlFor="doesBeerPong">Beer pong</label>
-                                            <input className="rental-checkbox" type="checkbox" id="doesBeerPong" name="doesBeerPong" onChange={this.handleInputChange} />
+                                            <input className="rental-checkbox" type="checkbox" id="doesBeerPong" name="doesBeerPong" defaultChecked={this.state.doesBeerPong} onChange={this.handleCheckboxCheck} />
                                         </span>
 
                                         <span className="check-separator">
                                             <label htmlFor="doesLineDrag">Line dragging</label>
-                                            <input className="rental-checkbox" type="checkbox" id="doesLineDrag" name="doesLineDrag" onChange={this.handleInputChange} />
+                                            <input className="rental-checkbox" type="checkbox" id="doesLineDrag" name="doesLineDrag" defaultChecked={this.state.doesLineDrag} onChange={this.handleCheckboxCheck} />
                                         </span>
 
                                         <span className="check-separator">
                                             <label htmlFor="doesTwister">Twister</label>
-                                            <input className="rental-checkbox" type="checkbox" id="doesTwister" name="doesTwister" onChange={this.handleInputChange} />
+                                            <input className="rental-checkbox" type="checkbox" id="doesTwister" name="doesTwister" defaultChecked={this.state.doesTwister} onChange={this.handleCheckboxCheck} />
                                         </span>
 
                                         <span className="check-separator">
                                             <label htmlFor="doesSlackline">Slackline</label>
-                                            <input className="rental-checkbox" type="checkbox" id="doesSlackline" name="doesSlackline" onChange={this.handleInputChange} />
+                                            <input className="rental-checkbox" type="checkbox" id="doesSlackline" name="doesSlackline" defaultChecked={this.state.doesSlackline} onChange={this.handleCheckboxCheck} />
                                         </span>
 
                                         <span className="check-separator">
                                             <label htmlFor="doesFlunkyBall">Flunky ball</label>
-                                            <input className="rental-checkbox" type="checkbox" id="doesFlunkyBall" name="doesFlunkyBall" onChange={this.handleInputChange} />
+                                            <input className="rental-checkbox" type="checkbox" id="doesFlunkyBall" name="doesFlunkyBall" defaultChecked={this.state.doesFlunkyBall} onChange={this.handleCheckboxCheck} />
                                         </span>
 
                                     </div>
@@ -837,7 +846,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" defaultChecked={this.state.skipassAgree} onChange={this.handleInputChange} />
+                                        <input required className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" defaultChecked={this.state.skipassAgree} onChange={this.handleCheckboxCheck} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -852,7 +861,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" defaultChecked={this.state.rentalAgree} onChange={this.handleInputChange} />
+                                        <input required className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" defaultChecked={this.state.rentalAgree} onChange={this.handleCheckboxCheck} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -866,7 +875,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" defaultChecked={this.state.propertyAgree} onChange={this.handleInputChange} />
+                                        <input required className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" defaultChecked={this.state.propertyAgree} onChange={this.handleCheckboxCheck} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -889,7 +898,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" defaultChecked={this.state.riskAgree} onChange={this.handleInputChange} />
+                                        <input required className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" defaultChecked={this.state.riskAgree} onChange={this.handleCheckboxCheck} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -902,7 +911,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" defaultChecked={this.state.busAgree} onChange={this.handleInputChange} />
+                                        <input required className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" defaultChecked={this.state.busAgree} onChange={this.handleCheckboxCheck} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -919,7 +928,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" defaultChecked={this.state.allergiesAgree} onChange={this.handleInputChange} />
+                                        <input required className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" defaultChecked={this.state.allergiesAgree} onChange={this.handleCheckboxCheck} />
                                     </Col>
                                 </Row>
                                 <Row form>
@@ -930,7 +939,7 @@ class ExternalRegistration extends React.Component {
                                         </label>
                                     </Col>
                                     <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" defaultChecked={this.state.paymentAgree} onChange={this.handleInputChange} />
+                                        <input required className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" defaultChecked={this.state.paymentAgree} onChange={this.handleCheckboxCheck} />
                                     </Col>
                                 </Row>
                             </CardBody>
@@ -1000,7 +1009,7 @@ class ExternalRegistration extends React.Component {
                                 }}
                                 onError={(error) => {
                                     console.log(error);
-                                    alert("There was a problem with linking the rental to  your user data!")
+                                    alert("There was a problem with linking the rental to your user data!")
                                     window.location.reload()
                                 }}
                             />,
@@ -1010,7 +1019,7 @@ class ExternalRegistration extends React.Component {
                                 }}
                                 onError={(error) => {
                                     console.log(error);
-                                    alert("There was a problem with linking the rental to  your user data!")
+                                    alert("There was a problem with linking the purchase to your user data!")
                                     window.location.reload()
                                 }}
                             />,
@@ -1040,7 +1049,7 @@ class ExternalRegistration extends React.Component {
                                 }}
                                 onError={(error) => {
                                     console.log(error);
-                                    alert("There was a problem with linking the rental to  your user data!")
+                                    alert("There was a problem with linking this profile to the signed up user data!")
                                     window.location.reload()
                                 }}
                             />,

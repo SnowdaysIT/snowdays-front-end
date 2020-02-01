@@ -36,8 +36,9 @@ function Index() {
 
   const toggle = () => setModal(!modal);
 
-  sessionStorage.removeItem('token')
-  
+  // Clear token for API calls when user browses to this page
+  sessionStorage.removeItem('token');
+
   return (
     <>
       <IndexNavbar />

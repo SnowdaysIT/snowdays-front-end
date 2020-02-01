@@ -12,10 +12,8 @@ import { SIGNUP, USER_AUTH } from './RegistrationQueries.js';
 // Styling imports
 import {
   Button, Card, CardHeader, CardBody,
-  CardFooter, CardTitle, Form, Input,
-  InputGroupAddon, InputGroupText, InputGroup, Container,
-  Row, FormGroup, Label, Modal,
-  ModalHeader, ModalBody
+  CardFooter, CardTitle, Input, Container, 
+  Row, FormGroup, Label, Modal, ModalHeader, ModalBody
 } from "reactstrap";
 
 import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
@@ -34,6 +32,9 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
+// Clear token for API calls when user browses to this page
+sessionStorage.removeItem('token')
+
 
 class SignUp extends React.Component {
 
@@ -44,7 +45,7 @@ class SignUp extends React.Component {
       passwordFocus: false,
       userEmail: "",
       userPassword: "",
-      registrationType: "Internal",
+      registrationType: "External",
       acceptedPolicy: false,
       showPrivacyModal: false,
       mutationFunctions: []
@@ -57,8 +58,6 @@ class SignUp extends React.Component {
 
   handleValidSubmit(event) {
     let mutationFunctions = this.state.mutationFunctions
-    console.log("Mutation functions from state");
-    console.log(mutationFunctions);
 
     if (!this.state.acceptedPolicy) {
       alert("You must first agree to the privacy policy in order to register")
@@ -68,11 +67,10 @@ class SignUp extends React.Component {
       })
     }
 
-    event.preventDefault();
+    // event.preventDefault();
   }
 
   handleInvalidSubmit(event) {
-    alert("The input you have entered is not valid or incorrect.\nPlease check your data and try again!")
     event.preventDefault();
   }
 
@@ -400,60 +398,52 @@ class SignUp extends React.Component {
                 </CardTitle>
               </CardHeader>
               <CardBody style={{ marginTop: "-8%" }}>
-                <FormGroup>
+                <AvGroup>
                   <Label for="userEmail">Email</Label>
-                  <InputGroup
-                    className={
-                      "no-border" + (this.state.emailFocus ? " input-group-focus" : "")
-                    }
-                  >
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="fas fa-at pr-2"></i>
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
+                    <AvInput
+                      className={
+                        "no-border" + (this.state.emailFocus ? " input-group-focus" : "")
+                      }
                       placeholder="mario@unibz.it"
                       id="userEmail"
+                      name="userEmail"
                       type="text"
-                      required="required"
-                      pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/"
+                      validate={{
+                        required: {value: true, errorMessage: 'This field is required'},
+                        pattern: {value: '^[^0-9]+$', errorMessage: 'Please insert a valid e-mail address'},
+                      }}
                       onFocus={() => { this.setState({ emailFocus: true }) }}
                       onBlur={() => { this.setState({ emailFocus: false }) }}
                       onChange={(e) => { this.setState({ userEmail: e.target.value }) }}
-                    ></Input>
-                  </InputGroup>
-                </FormGroup>
-                <FormGroup>
+                    ></AvInput>
+                      <AvFeedback className="mt-1">Please insert a valid email!</AvFeedback>
+                </AvGroup>
+                <AvGroup>
                   <Label for="userPassword">Password</Label>
-                  <InputGroup
-                    className={
-                      "no-border" + (this.state.passwordFocus ? " input-group-focus" : "")
-                    }
-                  >
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="fas fa-unlock-alt"></i>
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
+                    <AvInput
+                      className={
+                        "no-border" + (this.state.passwordFocus ? " input-group-focus" : "")
+                      }
                       placeholder="......"
                       id="userPassword"
+                      name="userPassword"
                       type="password"
-                      required="required"
-                      minLength="6"
+                      validate={{
+                        required: {value: true},
+                        minLength: {value: 8},
+                      }}
                       onFocus={() => { this.setState({ passwordFocus: true }) }}
                       onBlur={() => { this.setState({ passwordFocus: true }) }}
                       onChange={(e) => { this.setState({ userPassword: e.target.value }) }}
-                    ></Input>
-                  </InputGroup>
-                </FormGroup>
+                    ></AvInput>
+                      <AvFeedback className="mt-1">Please insert a password that is at least 8 characters long!</AvFeedback>
+                </AvGroup>
                 <FormGroup>
                   <Label for="registrationType">Registration type</Label>
                   <Input type="select" name="registrationType" id="registrationType" value={this.state.registrationType}
                     onChange={(e) => { this.setState({registrationType: e.target.value}) }}
                   >
-                    <option value="Internal">Internal</option>
+                    <option value="Internal" disabled>Internal</option>
                     <option value="External">External</option>
                   </Input>
                 </FormGroup>
