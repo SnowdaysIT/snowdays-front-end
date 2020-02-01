@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Row, Button, Form, FormGroup, Label, Input, Card, CardBody, CardTitle, Container } from 'reactstrap';
 import "../../assets/css/signup.css"
-import FormGroupMultiple from '../../components/form/FormGroupMultiple';
+import MultipleChoiceDropdown from '../../components/form/MultipleChoiceDropdown';
 
 class InternalRegistration extends React.Component {
 
@@ -302,30 +302,44 @@ class InternalRegistration extends React.Component {
                                 </Col>
                             </Row>
                             <Row form>
-                                <FormGroupMultiple label="Other activities" inputName="secondDayActivities" elements={
-                                    [
-                                        "Beer pong",
-                                        "Snowshoes walking motherfuckers",
-                                        "Line dragging",
-                                        "Twister",
-                                        "Slackline",
-                                        "Flunky ball"
-                                    ]
-                                }></FormGroupMultiple>
+                                <Col xs="auto">
+                                    <FormGroup>
+                                        <Label for="secondDayActivities">Other activities</Label>
+                                        <MultipleChoiceDropdown
+                                            inputName="secondDayActivities"
+                                            elements={
+                                                [
+                                                    "Beer pong",
+                                                    "Snowshoes walking motherfuckers",
+                                                    "Line dragging",
+                                                    "Twister",
+                                                    "Slackline",
+                                                    "Flunky ball"
+                                                ]
+                                            }/>
+                                    </FormGroup>
+                                </Col>
                             </Row>
 
                             <Row form>
-                                <FormGroupMultiple label="Rental material *" inputName="secondDayRental" elements={
-                                    [
-                                        "Skiis",
-                                        "Ski boots",
-                                        "Ski sticks",
-                                        "Snowboard",
-                                        "Snowboard Boots",
-                                        "Helmet"
-                                    ]
-                                }></FormGroupMultiple>
-                                <span className="details">* Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information</span>                             
+                                <Col xs="auto">
+                                    <FormGroup>
+                                        <Label for="secondDayRental">Rental material *</Label>
+                                        <MultipleChoiceDropdown
+                                            inputName="secondDayRental"
+                                            elements={
+                                                [
+                                                    "Skiis",
+                                                    "Ski boots",
+                                                    "Ski sticks",
+                                                    "Snowboard",
+                                                    "Snowboard Boots",
+                                                    "Helmet"
+                                                ]
+                                            }/>
+                                        <span className="details">* Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information</span>
+                                    </FormGroup>
+                                </Col>
                             </Row>
 
                             <h5 className="title category">Third day activities</h5>
@@ -361,29 +375,43 @@ class InternalRegistration extends React.Component {
                                 </Col>
                             </Row>
                             <Row form>
-                                <FormGroupMultiple label="Other activities" inputName="thirdDayActivities" elements={
-                                    [
-                                        "Beer pong",
-                                        "Table boulder contest",
-                                        "Line dragging",
-                                        "Twister",
-                                        "Slackline",
-                                        "Flunky ball"
-                                    ]
-                                }></FormGroupMultiple>                              
+                                <Col xs="auto">
+                                    <FormGroup>
+                                        <Label for="secondDayRental">Other activities</Label>
+                                        <MultipleChoiceDropdown
+                                            inputName="thirdDayActivities"
+                                            elements={
+                                                [
+                                                    "Beer pong",
+                                                    "Table boulder contest",
+                                                    "Line dragging",
+                                                    "Twister",
+                                                    "Slackline",
+                                                    "Flunky ball"
+                                                ]
+                                            }/>
+                                    </FormGroup>
+                                </Col>                              
                             </Row>
 
                             <Row form>
-                                <FormGroupMultiple label="Rental material *" inputName="thirdDayRental" elements={
-                                    [
-                                        "Skiis",
-                                        "Ski boots",
-                                        "Ski sticks",
-                                        "Snowboard",
-                                        "Snowboard Boots",
-                                        "Helmet"
-                                    ]
-                                }></FormGroupMultiple>                                                              
+                                <Col xs="auto">
+                                    <FormGroup>
+                                        <Label for="secondDayRental">Rental material *</Label>
+                                        <MultipleChoiceDropdown
+                                            inputName="thirdDayRental"
+                                            elements={
+                                                [
+                                                    "Skiis",
+                                                    "Ski boots",
+                                                    "Ski sticks",
+                                                    "Snowboard",
+                                                    "Snowboard Boots",
+                                                    "Helmet"
+                                                ]
+                                            }/>
+                                    </FormGroup>
+                                </Col>                                                             
                             </Row>
                         
                         </CardBody>
