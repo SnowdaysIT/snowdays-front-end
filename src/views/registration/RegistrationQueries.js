@@ -84,6 +84,19 @@ export const GET_CURRENT_ACCOUNT_ID = gql`
     currentAccountId
 }
 `
+export const GET_UNIVERSITIES = gql`
+{
+    universities {
+        edges {
+            node {
+                name
+                id
+            }
+        }
+    }
+}
+`
+
 
 
 // MUTATIONS
@@ -112,6 +125,13 @@ export const CREATE_PROFILE = gql`
         profile {
             id
         }
+    }
+  }
+`
+export const DELETE_PROFILE = gql`
+  mutation DeleteProfileMutation($id: UUID!) {
+    deleteProfile(input: {id: $id}) {
+        deletedProfileNodeId
     }
   }
 `

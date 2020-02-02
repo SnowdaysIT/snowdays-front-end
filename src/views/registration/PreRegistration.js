@@ -59,10 +59,13 @@ const PreRegistration = (props) => {
                 During the days different sport activities will be provided which you can choose from here. If you want to rent equipment for skiing, please put in your data. 
                 Moreover, you will receive a (aggettivo) T-Shirt at the beginning of the event, so just enter your preferred size. 
                 Please notice: if you choose to rent equipment you will be asked to pay the fee in advance at the same time as you pay the participation fee!</p>
-
-                <h4 style={{color: "#4BB5FF"}}>*PARTY ANIMAL*</h4>
-                <p>If you want to host but cannot participate to all of the three days don’t worry: you will have free entry and free drinks at the second party! 
-                Min. number of hosted students: 4 </p>
+                {helpHostInfo &&
+                  <>
+                  <h4 style={{color: "#4BB5FF"}}>*PARTY ANIMAL*</h4>
+                  <p>If you want to host but cannot participate to all of the three days don’t worry: you will have free entry and free drinks at the second party! 
+                  Min. number of hosted students: 4 </p>
+                  </>
+                }  
             </div>
         </ModalBody>
         <ModalFooter>

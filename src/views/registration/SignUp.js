@@ -33,7 +33,7 @@ const client = new ApolloClient({
 });
 
 // Clear token for API calls when user browses to this page
-sessionStorage.removeItem('token')
+//sessionStorage.removeItem('token')
 
 
 class SignUp extends React.Component {
@@ -443,7 +443,7 @@ class SignUp extends React.Component {
                   <Input type="select" name="registrationType" id="registrationType" value={this.state.registrationType}
                     onChange={(e) => { this.setState({registrationType: e.target.value}) }}
                   >
-                    <option value="Internal" disabled>Internal</option>
+                    {/* <option value="Internal" disabled>Internal</option> */}
                     <option value="External">External</option>
                   </Input>
                 </FormGroup>

@@ -66,7 +66,7 @@ ReactDOM.render(
       <Switch>
           <Switch>
             <Route path="/index" render={props => <Index {...props} />} />
-            <Route path="/internal-registration" render={props => <InternalRegistration {...props} client={client} />} />
+            {/* <Route path="/internal-registration" render={props => <InternalRegistration {...props} client={client} />} /> */}
             <Route path="/external-registration" render={props => <ExternalRegistration {...props} client={client} />} />
             <Route path="/signup" render={props => <SignUp {...props} />} />
             {/* <Route path="/profile-page" render={props => <ProfilePage {...props} />}/> */}
