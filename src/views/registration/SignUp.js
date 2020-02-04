@@ -33,7 +33,7 @@ const client = new ApolloClient({
 });
 
 // Clear token for API calls when user browses to this page
-//sessionStorage.removeItem('token')
+// localStorage.removeItem('token')
 
 
 class SignUp extends React.Component {
@@ -57,21 +57,26 @@ class SignUp extends React.Component {
   }
 
   handleValidSubmit(event) {
+    event.preventDefault()
     let mutationFunctions = this.state.mutationFunctions
 
     if (!this.state.acceptedPolicy) {
       alert("You must first agree to the privacy policy in order to register")
     } else {
-      mutationFunctions[0]().then(() => {
-        mutationFunctions[1]();
+      mutationFunctions[0]().then( sdata => {
+        console.log("Signed up user!");
+        mutationFunctions[1]().then( adata => {
+          let token = adata.data.authenticate.jwtToken;
+          localStorage.setItem('token', token)
+          console.log("token set, now proceeding to nav");
+          this.props.history.push("/external-registration")
+        });
       })
     }
-
-    // event.preventDefault();
   }
 
   handleInvalidSubmit(event) {
-    event.preventDefault();
+
   }
 
   handlePrivacyToggle() {
@@ -409,8 +414,8 @@ class SignUp extends React.Component {
                       name="userEmail"
                       type="text"
                       validate={{
-                        required: {value: true, errorMessage: 'This field is required'},
-                        pattern: {value: '^[^0-9]+$', errorMessage: 'Please insert a valid e-mail address'},
+                        required: {value: true},
+                        pattern: {value: '/^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[A-Za-z]+$/'},
                       }}
                       onFocus={() => { this.setState({ emailFocus: true }) }}
                       onBlur={() => { this.setState({ emailFocus: false }) }}
@@ -527,25 +532,14 @@ class SignUp extends React.Component {
 
                 <Composer components={[
                   <Mutation mutation={SIGNUP} variables={{ email: this.state.userEmail, password: this.state.userPassword }} client={client}
-                    onCompleted={(data) => {
-                      console.log("Signed up user!");
-                    }}
                     onError={(error) => {
                       console.log(error)
                       alert("There was a problem with the registration!\nPlease make sure you fill out all the fields.\n\nYou might also have inserted an email that is already registered.")
                       window.location.reload(true);
                     }}
                   />,
+
                   <Mutation mutation={USER_AUTH} variables={{ email: this.state.userEmail, password: this.state.userPassword }} client={client}
-                    onCompleted={(adata) => {
-                      let token = adata.authenticate.jwtToken;
-                      sessionStorage.setItem('token', token)
-                      if (this.state.registrationType === "Internal") {
-                        this.props.history.push("/internal-registration")
-                      } else {
-                        this.props.history.push("/external-registration")
-                      }
-                    }}
                     onError={(error) => {
                       console.log(error);
                       alert("There was a problem with the authentication!\nThis is likely to be a server error, please check back later.")
@@ -555,9 +549,9 @@ class SignUp extends React.Component {
                 ]}>
                   {(mutationFunctions) => (
                     <Button type="submit" className="btn btn-round mr-3" size="lg" style={{ backgroundColor: "white", color: "#4BB5FF" }}
-                      onClick={() => {
-                        this.setState({ mutationFunctions: mutationFunctions })
-                      }
+                        onClick={() => {
+                          this.setState({ mutationFunctions: mutationFunctions })
+                        }
                       }
                     >
                       Get started

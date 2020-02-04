@@ -63,7 +63,7 @@ export const GET_MERCH_ITEMS = gql`
                 description
             }
         }
-  }
+    }
 }
 `
 
@@ -120,8 +120,8 @@ export const USER_AUTH = gql`
 `
 
 export const CREATE_PROFILE = gql`
-  mutation CreateProfileMutation($firstName: String!, $lastName: String!, $mobilePhone: String!, $badgeNumber: String!, $gender: Gender!, $isVegetarian: Boolean!, $idNumber: String!, $universityId: UUID!) {
-    createProfile(input: {profile: {firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, badgeNumber: $badgeNumber, gender: $gender, isVegetarian: $isVegetarian, idNumber: $idNumber, universityId: $universityId}}){
+  mutation CreateProfileMutation($firstName: String!, $lastName: String!, $mobilePhone: String!, $badgeNumber: String!, $gender: Gender!, $isVegetarian: Boolean!, $idNumber: String!, $universityId: UUID!, $needsAccommodation: Boolean!) {
+    createProfile(input: {profile: {firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, badgeNumber: $badgeNumber, gender: $gender, isVegetarian: $isVegetarian, idNumber: $idNumber, universityId: $universityId, needsAccommodation: $needsAccommodation}}){
         profile {
             id
         }
@@ -246,10 +246,8 @@ export const ADD_PURCHASE = gql`
 `
 export const LINK_PROFILE_TO_ACCOUNT = gql`
   mutation LinkProfileMutation($profileId: UUID!, $id: UUID!) {
-    updateAccount(input: {patch: {profileId: $profileId}, id: $id}) {
-        account {
-            id
-        }
+    linkProfileAccount(input: {profile: $profileId, accountId: $id}) {
+        clientMutationId
     }
   }
 `

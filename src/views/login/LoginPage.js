@@ -368,7 +368,7 @@ class LoginPage extends React.Component {
                           console.log("User authentication was successful");
                           console.log(adata);
                           let token = adata.authenticate.jwtToken;
-                          sessionStorage.setItem('token', token);
+                          localStorage.setItem('token', token);
                           this.props.history.push("/internal-registration")
                         }}
                         onError={(authError) => {

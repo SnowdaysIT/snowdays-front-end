@@ -50,6 +50,10 @@ const RENTAL_MATERIALS = {}
 
 const MERCH_ITEMS = {}
 
+// Auth token for API calls
+const token = localStorage.getItem('token');
+console.log(token);
+
 class InternalRegistration extends React.Component {
 
     constructor() {
@@ -161,9 +165,6 @@ class InternalRegistration extends React.Component {
     }
 
     render() {
-        const token = sessionStorage.getItem('token');
-        console.log(token);
-        
         return (
             <Container>
                 

@@ -30,10 +30,10 @@ import "assets/scss/now-ui-kit.scss";
 
 // pages
 import Index from "views/index/Index.js";
-import InternalRegistration from "views/registration/InternalRegistration.js";
 import ExternalRegistration from "views/registration/ExternalRegistration.js";
 import SignUp from "views/registration/SignUp.js";
-// Pages we are not using for now
+// Created pages we are not using for now
+// import InternalRegistration from "views/registration/InternalRegistration.js";
 // import LoginPage from "views/login/LoginPage.js";
 // import ProfilePage from "views/profile/ProfilePage.js";
 // import Sponsors from "views/sponsors/Sponsors.js"
@@ -45,7 +45,9 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = sessionStorage.getItem('token');
+  const token = localStorage.getItem('token');
+  console.log(token);
+  
   // return the headers to the context so httpLink can read them
   return {
     headers: {
@@ -66,9 +68,9 @@ ReactDOM.render(
       <Switch>
           <Switch>
             <Route path="/index" render={props => <Index {...props} />} />
-            {/* <Route path="/internal-registration" render={props => <InternalRegistration {...props} client={client} />} /> */}
-            <Route path="/external-registration" render={props => <ExternalRegistration {...props} client={client} />} />
             <Route path="/signup" render={props => <SignUp {...props} />} />
+            <Route path="/external-registration" render={props => <ExternalRegistration {...props} client={client} />} />
+            {/* <Route path="/internal-registration" render={props => <InternalRegistration {...props} client={client} />} /> */}
             {/* <Route path="/profile-page" render={props => <ProfilePage {...props} />}/> */}
             {/* <Route path="/login" render={props => <LoginPage {...props} />} /> */}
             {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}

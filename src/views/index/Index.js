@@ -37,7 +37,7 @@ function Index() {
   const toggle = () => setModal(!modal);
 
   // Clear token for API calls when user browses to this page
-  sessionStorage.removeItem('token');
+  localStorage.removeItem('token');
 
   return (
     <>
