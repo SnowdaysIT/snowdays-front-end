@@ -70,11 +70,19 @@ function Index() {
             <ModalHeader toggle={toggle}>Cookie Policy</ModalHeader>
             <ModalBody>
             <b>What are cookies?</b><br/>
+<<<<<<< HEAD
             Cookies are small text files sent from the site to the computer of the interested party, where they are stored before being sent back to the site at the next visit by the same user. In this document, the term 'cookie' refers to both cookies, properly so-called, and to all similar technologies.
             <br/>
             <br/>
             <b>First or third-party cookies</b><br/>
             The so-called "first-party" cookies refer to cookies developed by the owner of the site, while "third-party" cookies are cookies developed by third parties, that is, different from the owner of the site. This is because on each site there may be elements (images, maps, sounds, specific links to web pages of other domains, etc.) that reside on servers other than the site visited.
+=======
+            Cookies are small text files sent from the site to the computer of the interested party, where they are stored before being sent back to the site at the next visit by the same user. In this document, the term 'cookie' refers to both cookies, properly so-called, and to all similar technologies.            <br/>
+            <br/>
+            <br/>
+            <b>First or third-party cookies</b><br/>
+            The so-called "first-party" cookies refer to cookies developed by the owner of the site, while "third-party" cookies are cookies developed by third parties, which means different from the owner of the site. This is because on each site there may be elements (images, maps, sounds, specific links to web pages of other domains, etc.) that reside on servers other than the site visited.
+>>>>>>> c5115c1490c3b4309d7f9a1be5257508b53238ec
             <br/>
             <br/>
             <b>1.	Technical cookies</b><br/>
@@ -105,6 +113,7 @@ function Index() {
             You can disable / delete cookies by accessing the configuration panel of your browser. Here is the link to the configuration panels of some known browsers:
 
             Chrome 
+<<<<<<< HEAD
             For more information visit the following website.
             Mozilla Firefox 
             For more information visit the following website.
@@ -122,6 +131,25 @@ function Index() {
             <br/>
             <b>Acceptance and waiver of cookies</b><br/>
             Continuing with browsing and closing the newsletter (banner) you accept the Cookie Policy and cookies will be set and collected. Through the aforementioned methods, the user will have the option to disable the collection of cookies at any time.
+=======
+            For more information visit the <a href="https://support.google.com/chrome/answer/95647">following website</a>.
+            Mozilla Firefox 
+            For more information visit the <a href="https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences">following website</a>.
+            Internet Explorer
+            For more information visit the <a href="http://windows.microsoft.com/it-it/windows-vista/block-or-allow-cookies">following website</a>.
+            Microsoft Edge
+            For more information visit the <a href="http://windows.microsoft.com/it-it/windows-10/edge-privacy-faq">following website</a>.
+            Safari 6
+            For more information visit the <a href="https://support.apple.com/kb/PH17191?locale=it_IT">following website</a>.
+            IOS Safari (mobile devices)
+            For more information visit the <a href="https://support.apple.com/en-us/HT201265">following website</a>.
+            Opera
+            For more information visit the <a href="http://www.opera.com/help/tutorials/security/privacy/">following website</a>.
+            <br/>
+            <br/>
+            <b>Acceptance and waiver of cookies</b><br/>
+            Continuing with browsing and closing the banner you accept the Cookie Policy and cookies will be set and collected. Through the aforementioned methods, the user will have the option to disable the collection of cookies at any time.
+>>>>>>> c5115c1490c3b4309d7f9a1be5257508b53238ec
 
             </ModalBody>
             <ModalFooter>
