@@ -15,19 +15,11 @@ function Videos() {
         <Carousel showThumbs={false} showIndicators={false} showStatus={false}>
             <div className="yt-video-container">
                 <iframe width="1000" height="600" title="2019" src="https://www.youtube.com/embed/68TUBKxxVug"
-                  allowfullscreen="allowfullscreen"
-                  mozallowfullscreen="mozallowfullscreen" 
-                  msallowfullscreen="msallowfullscreen" 
-                  oallowfullscreen="oallowfullscreen" 
-                  webkitallowfullscreen="webkitallowfullscreen" />
+                  allowFullScreen="allowfullscreen"></iframe>
             </div>
             <div className="yt-video-container">
                 <iframe width="1000" height="600" title="2018" src="https://www.youtube.com/embed/GsRB5R4m8qA"
-                allowfullscreen="allowfullscreen"
-                mozallowfullscreen="mozallowfullscreen" 
-                msallowfullscreen="msallowfullscreen" 
-                oallowfullscreen="oallowfullscreen" 
-                webkitallowfullscreen="webkitallowfullscreen" />
+                allowFullScreen="allowfullscreen"></iframe>
             </div>
         </Carousel>
     </Container>

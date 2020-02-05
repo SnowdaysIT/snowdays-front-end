@@ -84,7 +84,14 @@
 }
 
 .staff-carousel .carousel-item {
-    height: 100vh;
+    height: 90vh;
+}
+
+.staff-carousel .carousel-caption h3 {
+    font-weight: bold;
+    background-color: #0C4996;
+    width: 30%;
+    margin-left: 35%;
 }
 @media (max-width: 500px) {
     .staff-carousel .carousel-item {
@@ -94,10 +101,10 @@
 
 .explanation-carousel .carousel-inner{
     display: table-cell;
-    vertical-align: middle
+    vertical-align: middle;
 }
 
 .explanation-carousel .carousel-item {
-    height: 490px;
+    height: 66vh;
     width: 100%;
 }
