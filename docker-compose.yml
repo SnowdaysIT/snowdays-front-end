@@ -12,9 +12,10 @@ services:
       service: node_base
     command: /bin/sh docker_dev_node_install.sh
 
+  ## development use, watches scss and launches react in dev
   webserver:
     extends:
       service: node_base
-    command: npm start
+    command: npm run forest
     ports:
       - 8088:3000 ##port on your network:port on docker network

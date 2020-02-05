@@ -67,7 +67,7 @@ const items = [
 const StaffCarousel = () => {
   return (
     <>
-      <h3 className="title-up category">The ones who make it possible</h3>
+      <h3 className="title-up category text-center">The ones who make it possible</h3>
       <UncontrolledCarousel className="staff-carousel" items={items} autoPlay={false} enableTouch={true} cssModule={carouselStyle}/>
     </>
   );

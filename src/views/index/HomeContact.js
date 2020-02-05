@@ -47,50 +47,49 @@ function HomeContact(params) {
                     </Form>
                 </Row>
                 <h3 className="text-center mt-2">Follow us on social media!</h3>
-                <Row className="justify-content-center text-center">
-                    <Button
-                        className="btn-neutral btn-icon btn-round mr-3"
-                        color="twitter"
-                        href="https://twitter.com/bolzanosnowdays"
-                        id="tooltip86114138"
-                        size="lg"
-                        target="_blank"
-                    >
-                        <i className="fab fa-twitter"></i>
-                    </Button>
-                    <UncontrolledTooltip delay={0} target="tooltip86114138">
-                        Follow us
-                        </UncontrolledTooltip>
-
+                <Row className="justify-content-center text-center social-icons">
                     <Button
                         className="btn-neutral btn-icon btn-round"
-                        color="facebook"
-                        href="https://www.facebook.com/Snowdays.Bolzano/"
-                        id="tooltip735272548"
-                        size="lg"
-                        target="_blank"
-                    >
-                        <i className="fab fa-facebook-square"></i>
-                    </Button>
-                    <UncontrolledTooltip delay={0} target="tooltip735272548">
-                        Like us
-                        </UncontrolledTooltip>
-
-                    <Button
-                        className="btn-neutral btn-icon btn-round ml-3"
                         color="instagram"
                         href="https://www.instagram.com/snowdays.bolzano/"
-                        id="tooltip647117716"
+                        id="instagram-button"
                         size="lg"
                         target="_blank"
                     >
                         <i className="fab fa-instagram"></i>
                     </Button>
-                    <UncontrolledTooltip delay={0} target="tooltip647117716">
-                        Follow us
-                        </UncontrolledTooltip>
-                </Row>
+                    <UncontrolledTooltip delay={0} target="instagram-button">
+                        Follow
+                    </UncontrolledTooltip>
 
+                    <Button
+                        className="btn-neutral btn-icon btn-round ml-3"
+                        color="facebook"
+                        href="https://www.facebook.com/Snowdays.Bolzano/"
+                        id="facebook-button"
+                        size="lg"
+                        target="_blank"
+                    >
+                        <i className="fab fa-facebook-square"></i>
+                    </Button>
+                    <UncontrolledTooltip delay={0} target="facebook-button">
+                        Like
+                    </UncontrolledTooltip>
+
+                    <Button
+                        className="btn-neutral btn-icon btn-round ml-3"
+                        color="youtube"
+                        href="https://www.youtube.com/channel/UCthdDzE2fTo47z26YIDDf-g"
+                        id="youtube-button"
+                        size="lg"
+                        target="_blank"
+                    >
+                        <i className="fab fa-youtube"></i>
+                    </Button>
+                    <UncontrolledTooltip delay={0} target="youtube-button">
+                       Subscribe
+                    </UncontrolledTooltip>
+                </Row>
             </CardBody>
         </>
     )

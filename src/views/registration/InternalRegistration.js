@@ -310,7 +310,7 @@ class InternalRegistration extends React.Component {
                                             elements={
                                                 [
                                                     "Beer pong",
-                                                    "Snowshoes walking motherfuckers",
+                                                    "Snowshoes walking",
                                                     "Line dragging",
                                                     "Twister",
                                                     "Slackline",
@@ -410,6 +410,7 @@ class InternalRegistration extends React.Component {
                                                     "Helmet"
                                                 ]
                                             }/>
+                                            <span className="details">* Beware that you won't be able to modify the information given here after the enrolment closes. Rental material will be prepared before the event based on the given information</span>
                                     </FormGroup>
                                 </Col>                                                             
                             </Row>
