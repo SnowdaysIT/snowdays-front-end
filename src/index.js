@@ -38,9 +38,10 @@ import SignUp from "views/registration/SignUp.js";
 // import ProfilePage from "views/profile/ProfilePage.js";
 // import Sponsors from "views/sponsors/Sponsors.js"
 
+console.log(process.env.REACT_APP_API_ENDPOINT);
+
 const httpLink = createHttpLink({
-  // TODO: Add process.env variable reference
-  uri: 'http://localhost:3000/graphql',
+  uri: process.env.REACT_APP_API_ENDPOINT
 });
 
 const authLink = setContext((_, { headers }) => {

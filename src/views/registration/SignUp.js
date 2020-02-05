@@ -20,11 +20,9 @@ import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-valida
 
 import '../../assets/css/signup.css'
 
-
 // Apollo Client set-up for sign-up since the person visiting this page should not have a token
 const httpLink = createHttpLink({
-  // TODO: Add process.env variable reference
-  uri: 'http://localhost:3000/graphql',
+  uri: process.env.REACT_APP_API_ENDPOINT
 });
 
 const client = new ApolloClient({
