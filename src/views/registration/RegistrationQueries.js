@@ -84,6 +84,11 @@ export const GET_CURRENT_ACCOUNT_ID = gql`
     currentAccountId
 }
 `
+export const GET_CURRENT_PROFILE_ID = gql`
+{
+    currentProfileId
+}
+`
 export const GET_UNIVERSITIES = gql`
 {
     universities {
@@ -119,12 +124,10 @@ export const USER_AUTH = gql`
   }
 `
 
-export const CREATE_PROFILE = gql`
-  mutation CreateProfileMutation($firstName: String!, $lastName: String!, $mobilePhone: String!, $badgeNumber: String!, $gender: Gender!, $isVegetarian: Boolean!, $idNumber: String!, $universityId: UUID!, $needsAccommodation: Boolean!) {
-    createProfile(input: {profile: {firstName: $firstName, lastName: $lastName, mobilePhone: $mobilePhone, badgeNumber: $badgeNumber, gender: $gender, isVegetarian: $isVegetarian, idNumber: $idNumber, universityId: $universityId, needsAccommodation: $needsAccommodation}}){
-        profile {
-            id
-        }
+export const UPDATE_PROFILE = gql`
+  mutation UpdateProfileMutation($firstName: String!, $lastName: String!, $mobilePhone: String!, $badgeNumber: String!, $gender: Gender!, $isVegetarian: Boolean!, $idNumber: String!, $universityId: UUID!, $needsAccommodation: Boolean!, $profileId: UUID!) {
+    updateProfile(input: {patch: {firstName: $firstName, lastName: $lastName, needsAccommodation: $needsAccommodation, mobilePhone: $mobilePhone, isVegetarian: $isVegetarian, idNumber: $idNumber, badgeNumber: $badgeNumber, universityId: $universityId, gender: $gender}, id: $profileId}) {
+        clientMutationId            
     }
   }
 `

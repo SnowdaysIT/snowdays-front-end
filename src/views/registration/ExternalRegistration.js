@@ -6,10 +6,10 @@ import Composer from 'react-composer';
 
 // GraphQL queries
 import {GET_ACTIVITIES, GET_MERCH_ITEMS,  GET_UNIVERSITIES,
-    GET_RENTAL_MATERIALS, GET_CURRENT_ACCOUNT_ID} from './RegistrationQueries.js'
+    GET_RENTAL_MATERIALS, GET_CURRENT_PROFILE_ID} from './RegistrationQueries.js'
 
 // GraphQL mutations
-import { CREATE_PROFILE, ADD_ACTIVITY, 
+import { UPDATE_PROFILE, ADD_ACTIVITY, 
     CREATE_RENTAL, ADD_MATERIALS_TO_RENTAL, ADD_RENTAL, 
     CREATE_PURCHASE, ADD_ITEM_TO_PURCHASE, ADD_PURCHASE,
     LINK_PROFILE_TO_ACCOUNT, DELETE_PROFILE } from './RegistrationQueries.js'
@@ -42,8 +42,6 @@ const RENTAL_MATERIALS = {}
 const MERCH_ITEMS = {}
 
 const UNIVERSITIES = {}
-
-
 
 class ExternalRegistration extends React.Component {
 
@@ -94,7 +92,7 @@ class ExternalRegistration extends React.Component {
             wantsHoodie: false,
             hoodieSize: "S",
             showTermsModal: false,
-            userProfileId: "",
+            profileId: "",
             accountId: "",
             mutationFunctions: [],
             mutationError: false,
@@ -113,165 +111,161 @@ class ExternalRegistration extends React.Component {
     // Functions which handle the form submission 
 
     handleValidSubmit(event) {   
-        console.log(this.state); 
+        console.log(this.state);
+        console.log(this.state.profileId); 
         let mutationFunctions = this.state.mutationFunctions
+        
+        // First of all check that if this person is doing basecamp activities in the first or second day.
+        // This way we make sure to set the state as not skiing so that the person does create a "false positive skipass request"
+        if (this.doesBasecampActivityOnSecondDay()) this.setState({secondDaySkiOrSnow: false, secondCourseType: "None"}) 
+        if (this.doesBasecampActivityOnThirdDay()) this.setState({thirdDaySkiOrSnow: false, thirdCourseType: "None", raceType: "None"})
 
-        let agreesToAll = (this.state.skipassAgree && this.state.rentalAgree && this.state.propertyAgree && this.state.riskAgree && this.state.busAgree && this.state.allergiesAgree && this.state.paymentAgree)
-        if (agreesToAll) {
-            // First of all check that if this person is doing basecamp activities in the first or second day.
-            // This way we make sure to set the state as not skiing so that the person does create a "false positive skipass request"
-            if (this.doesBasecampActivityOnSecondDay()) this.setState({secondDaySkiOrSnow: false, secondCourseType: "None"}) 
-            if (this.doesBasecampActivityOnThirdDay()) this.setState({thirdDaySkiOrSnow: false, thirdCourseType: "None", raceType: "None"})
+        // Part 0: First create a profile only with the required data
+        // Then we will update based on our state (form data)
+        mutationFunctions[0]().then(data => {
+            console.log("UPDATED PROFILE");
+            console.log(data);
+            
+            // Part 1: What activities will the person do?           
+            // DAY 2
+            mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.profileId } })
+            mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day dinner"], profileId: this.state.profileId } })
+            
+            if (this.state.secondDaySkiOrSnow) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day ski"], profileId: this.state.profileId } })
+            
+            if (this.state.secondCourseType === "Ski") {
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day ski course"], profileId: this.state.profileId } })
+            } else if (this.state.secondCourseType === "Snowboard") {
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day snowboard course"], profileId: this.state.profileId } })
+            }
 
-            // Part 0: First create a profile only with the required data
-            // Then we will update based on our state (form data)
-            mutationFunctions[0]().then(data => {
+            if (this.state.doesSnowWalking) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Snowwalking"], profileId: this.state.profileId } })
 
-                let userid = data.data.createProfile.profile.id
+            if (this.state.doesSnowVolley) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Snowvolley"], profileId: this.state.profileId } })
 
-                // Part 1: What activities will the person do?            
-                // DAY 2
-                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.userProfileId } })
-                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day dinner"], profileId: this.state.userProfileId } })
-                
-                if (this.state.secondDaySkiOrSnow) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day ski"], profileId: this.state.userProfileId } })
-                
-                if (this.state.secondCourseType === "Ski") {
-                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day ski course"], profileId: this.state.userProfileId } })
-                } else if (this.state.secondCourseType === "Snowboard") {
-                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day snow course"], profileId: this.state.userProfileId } })
-                }
-
-                if (this.state.doesSnowWalking) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Snowwalking"], profileId: this.state.userProfileId } })
-
-                if (this.state.doesSnowVolley) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Snowvolley"], profileId: this.state.userProfileId } })
-
-                if (this.state.doesHTF) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Human table football"], profileId: this.state.userProfileId } })
+            if (this.state.doesHTF) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Human table football"], profileId: this.state.profileId } })
 
 
-                // DAY 3
-                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.userProfileId } })
-                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.userProfileId } })
+            // DAY 3
+            mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.profileId } })
+            mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.profileId } })
 
-                console.log("3 DAY SKI: " + this.state.thirdDaySkiOrSnow);
-                if (this.state.thirdDaySkiOrSnow) console.log("Add ski in second day");
-                if (this.state.thirdDaySkiOrSnow) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day ski"], profileId: this.state.userProfileId } })
-
-
-                if (this.state.thirdCourseType === "Ski") {
-                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.userProfileId } })
-                } else if (this.state.thirdCourseType === "Snowboard") {
-                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day snow course"], profileId: this.state.userProfileId } })
-                }
-
-                if (this.state.raceType === "Ski") {
-                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Ski race"], profileId: this.state.userProfileId } })
-                } else if (this.state.secondCourseType === "Snowboard") {
-                    mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Snowboard race"], profileId: this.state.userProfileId } })
-                }
-
-                if (this.state.doesBull) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Mechanical bull"], profileId: this.state.userProfileId } })
-
-                // Basecamp activities
-                if (this.state.doesBeerPong) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Beer pong"], profileId: this.state.userProfileId } })
-                if (this.state.doesLineDrag) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Line dragging"], profileId: this.state.userProfileId } })
-                if (this.state.doesTwister) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Twister"], profileId: this.state.userProfileId } })
-                if (this.state.doesSlackline) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.userProfileId } })
-                if (this.state.doesFlunkyBall) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.userProfileId } })
-                if (this.state.doesSponsorActivities) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Sponsor activities"], profileId: this.state.userProfileId } })
+            console.log("3 DAY SKI: " + this.state.thirdDaySkiOrSnow);
+            if (this.state.thirdDaySkiOrSnow) console.log("Add ski in second day");
+            if (this.state.thirdDaySkiOrSnow) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day ski"], profileId: this.state.profileId } })
 
 
-                // Part 2: Rental
-                if (this.state.secondRentalType !== "None") {
-                    mutationFunctions[2]().then(newRental => {
-                        const rental_id = newRental.data.createRental.rental.id
-                        
-                        let rental_item = ""
-                        if (this.state.secondRentalType === "ski") {
-                            rental_item = "Second ski and skiboots"
-                        } else if (this.state.secondRentalType === "premiumski") {
-                            rental_item = "Second premium ski and skiboots"   
-                        } else if (this.state.secondRentalType === "snow") {
-                            rental_item = "Second snowboard and snowboots"  
-                        }
+            if (this.state.thirdCourseType === "Ski") {
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.profileId } })
+            } else if (this.state.thirdCourseType === "Snowboard") {
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day snowboard course"], profileId: this.state.profileId } })
+            }
 
-                        mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
-                            mutationFunctions[4]({variables: {rentalId: rental_id, id: userid}})
-                            console.log("added rental connection to the user")
+            if (this.state.raceType === "Ski") {
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Ski race"], profileId: this.state.profileId } })
+            } else if (this.state.secondCourseType === "Snowboard") {
+                mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Snowboard race"], profileId: this.state.profileId } })
+            }
 
-                        })
+            if (this.state.doesBull) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Mechanical bull"], profileId: this.state.profileId } })
 
-                    })
-                }
+            // Basecamp activities
+            if (this.state.doesBeerPong) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Beer pong"], profileId: this.state.profileId } })
+            if (this.state.doesLineDrag) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Line dragging"], profileId: this.state.profileId } })
+            if (this.state.doesTwister) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Twister"], profileId: this.state.profileId } })
+            if (this.state.doesSlackline) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.profileId } })
+            if (this.state.doesFlunkyBall) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.profileId } })
+            if (this.state.doesSponsorActivities) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Sponsor activities"], profileId: this.state.profileId } })
 
-                if(this.state.thirdRentalType !== "None") {
-                    mutationFunctions[2]().then(newRental => {
-                        const rental_id = newRental.data.createRental.rental.id
-                        
-                        let rental_item = ""
+
+            // Part 2: Rental
+            if (this.state.secondRentalType !== "None") {
+                mutationFunctions[2]().then(newRental => {
+                    const rental_id = newRental.data.createRental.rental.id
                     
-                        if (this.state.thirdRentalType === "ski") {
-                            rental_item = "Third ski and skiboots"
-                        } else if (this.state.thirdRentalType === "premiumski") {
-                            rental_item = "Third premium ski and skiboots"   
-                        } else if (this.state.thirdRentalType === "snow") {
-                            rental_item = "Third snowboard and snowboots"    
-                        }
-
-                        mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
-                            mutationFunctions[4]({variables: {rentalId: rental_id, id: userid}})
-                            console.log("added rental connection to the user")
-                        })
-
-                    })
-                }
-
-                // Part 3: Merch (T-Shirt and Hoodie)
-                mutationFunctions[5]().then(purchaseData => {
-                    
-                    const purchaseid = purchaseData.data.createPurchase.purchase.id
-
-                    // 3.1 T-Shirt (All participants have it)
-                    mutationFunctions[6]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["T-Shirt"+this.state.teeSize], availableNo: 1}}).then(addTee => {
-                        mutationFunctions[7]({variables: {purchaseId: purchaseid, id: userid}})
-                    })
-                    
-                    // 3.2 Hoodie (Participants need to choose if they want it or not)
-                    if (this.state.wantsHoodie) {
-                        mutationFunctions[6]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["Hoodie"+this.state.hoodieSize], availableNo: 1}})
+                    let rental_item = ""
+                    if (this.state.secondRentalType === "ski") {
+                        rental_item = "Second ski and skiboots"
+                    } else if (this.state.secondRentalType === "premiumski") {
+                        rental_item = "Second premium ski and skiboots"   
+                    } else if (this.state.secondRentalType === "snow") {
+                        rental_item = "Second snowboard and snowboots"  
                     }
 
+                    mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
+                        mutationFunctions[4]({variables: {rentalId: rental_id, id: this.state.profileId}})
+                        console.log("added rental connection to the user")
+
+                    })
+
                 })
+            }
 
-                console.log("Mutations error state");
-                console.log(this.state.mutationError)
+            if(this.state.thirdRentalType !== "None") {
+                mutationFunctions[2]().then(newRental => {
+                    const rental_id = newRental.data.createRental.rental.id
+                    
+                    let rental_item = ""
+                
+                    if (this.state.thirdRentalType === "ski") {
+                        rental_item = "Third ski and skiboots"
+                    } else if (this.state.thirdRentalType === "premiumski") {
+                        rental_item = "Third premium ski and skiboots"   
+                    } else if (this.state.thirdRentalType === "snow") {
+                        rental_item = "Third snowboard and snowboots"    
+                    }
 
-                mutationFunctions[8]({variables: {profileId: userid, id: this.state.accountId}}).then(
-                    setTimeout(data => {
-                        if (this.state.mutationError === true) {
-                            mutationFunctions[9]({variables: {id: userid}}).then(faultData => {
-                                    console.log(faultData);
-                                    console.log("Deleted faulty profile on submission");
-                                }
-                            )
-                        } else {
-                            alert("Congratulations, " + this.state.name +"! Welcome to Snowdays 2020.\nYou will receive a confirmation e-mail in the address you used to sign up.\nNow get ready, because there are no days like SNOWDAYS!")
-                            this.props.history.push("/index")
+                    mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
+                        mutationFunctions[4]({variables: {rentalId: rental_id, id: this.state.profileId}})
+                        console.log("added rental connection to the user")
+                    })
+
+                })
+            }
+
+            // Part 3: Merch (T-Shirt and Hoodie)
+            mutationFunctions[5]().then(purchaseData => {
+                
+                const purchaseid = purchaseData.data.createPurchase.purchase.id
+
+                // 3.1 T-Shirt (All participants have it)
+                mutationFunctions[6]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["T-Shirt"+this.state.teeSize], availableNo: 1}}).then(addTee => {
+                    mutationFunctions[7]({variables: {purchaseId: purchaseid, id: this.state.profileId}})
+                })
+                
+                // 3.2 Hoodie (Participants need to choose if they want it or not)
+                if (this.state.wantsHoodie) {
+                    mutationFunctions[6]({variables: {purchaseId: purchaseid, itemId: MERCH_ITEMS["Hoodie"+this.state.hoodieSize], availableNo: 1}})
+                }
+
+            })
+
+            console.log("Mutations error state");
+            console.log(this.state.mutationError)
+
+            setTimeout(timeOut => {
+                if (this.state.mutationError === true) {
+                    mutationFunctions[9]({variables: {id: this.state.profileId}}).then(faultData => {
+                            console.log(faultData);
+                            console.log("Deleted faulty profile on submission");
                         }
-                    }, 2500)
-                )
+                    )
+                } else {
+                    alert("Congratulations, " + this.state.name +"! Welcome to Snowdays 2020.\nYou will receive a confirmation e-mail in the address you used to sign up.\nNow get ready, because there are no days like SNOWDAYS!")
+                    this.props.history.push("/index")
+                }
+            }, 2000)
 
-
-            });
-        } else {
-            alert("You must accept all the terms of participation to continue!");
-        }
+        });
+       
 
     }
 
     
     handleInvalidSubmit(event) {
-
+        // If the submission is invalid simply leave an empty handler.
+        // This way form data does not get reset and the validaton feedback
+        // can be visible.
     }
     // ----------------------------------------------
     // Functions which handle changes in the user input
@@ -611,7 +605,7 @@ class ExternalRegistration extends React.Component {
                                 </div>
                                 <div className={this.isAlumni() ? "collapsed": ""}>
                                     <h5 className="title category">Second day activities</h5>
-                                    <span className="details mb-2">*Insert message about activities and skiing exclusion here*</span>
+                                    <span className="details mb-2">*<b>IMPORTANT:</b>Beware that you won’t be able take part at the basecamp activities if you ski/snowboard and viceversa.*</span>
                                     <Row className="mt-3">
                                         <Col>
                                             <FormGroup>
@@ -702,7 +696,7 @@ class ExternalRegistration extends React.Component {
                                     </Row>
                                 </div>
                                 <h5 className="title category">Third day activities</h5>
-                                <span className="details">*Insert message about activities and skiing exclusion here*</span>
+                                <span className="details mb-2">*<b>IMPORTANT:</b>Beware that you won’t be able take part at the basecamp activities if you ski/snowboard and viceversa.*</span>
                                 <Row className="mt-3">
                                     <Col>
                                         <FormGroup>
@@ -1073,10 +1067,11 @@ class ExternalRegistration extends React.Component {
                             </CardBody>
                         </Card>
 
-                        <Query query={GET_CURRENT_ACCOUNT_ID} onCompleted={data => this.setState({accountId: data.currentAccountId})} >
+                        <Query query={GET_CURRENT_PROFILE_ID} onCompleted={data => this.setState({profileId: data.currentProfileId})} >
                             {({ loading, error, data }) => {
                                 if (loading) return <div></div>
                                 if (error) return <div></div>
+                                
                                 return (
                                     <div>
                                     </div>
@@ -1086,17 +1081,17 @@ class ExternalRegistration extends React.Component {
                         
                         {/* TODO: If there is an error with mutations add the error to the state and then delete the profile */}
                         <Composer components={[
-                            <Mutation mutation={CREATE_PROFILE}
+                            <Mutation mutation={UPDATE_PROFILE}
                                 variables={{
                                     firstName: this.state.name, lastName: this.state.surname, mobilePhone: this.state.phoneNumber, 
                                     badgeNumber: this.state.enrollmentNumber.toString(), gender: (this.state.gender === "male" ? "MALE" : "FEMALE"), 
                                     isVegetarian: this.state.isVeg, idNumber: this.state.personalIdNr.toString(), 
                                     universityId: UNIVERSITIES[this.state.universityName], 
-                                    needsAccommodation: this.state.needsAccommodation }}
+                                    needsAccommodation: this.state.needsAccommodation,
+                                    profileId: this.state.profileId
+                                }}
                                 onCompleted={(data) => {
-                                    this.setState({ userProfileId: data.createProfile.profile.id })
                                     console.log("Created user profile");
-
                                 }}
                                 onError={(createError) => {
                                     console.log(createError);
