@@ -20,7 +20,8 @@ import { Col, Row, Button,
 
 import { AvForm, AvGroup, AvInput, AvFeedback} from 'availity-reactstrap-validation';
 
-import PreRegistration from "./PreRegistration.js"
+import PreRegistrationModal from "./PreRegistrationModal.js"
+import ExternalTermsOfAgreementModal from "./ExternalTermsOfAgreementModal.js"
 import "../../assets/css/signup.css"
 
 
@@ -92,24 +93,21 @@ class ExternalRegistration extends React.Component {
             doesSponsorActivities: false,
             wantsHoodie: false,
             hoodieSize: "S",
-            skipassAgree: true,
-            rentalAgree: true,
-            propertyAgree: true,
-            riskAgree: true,
-            busAgree: true,
-            allergiesAgree: true,
-            paymentAgree: true,
+            showTermsModal: false,
             userProfileId: "",
             accountId: "",
             mutationFunctions: [],
             mutationError: false,
         }
 
+        // bind the "this" object to the handler methods so they
+        // can understand we are referring to this component and it's state
         this.handleValidSubmit = this.handleValidSubmit.bind(this)
         this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleYesNoSelectInput = this.handleYesNoSelectInput.bind(this)
         this.handleCheckboxCheck = this.handleCheckboxCheck.bind(this)
+        this.handleTPToggle = this.handleTPToggle.bind(this)
     }
 
     // Functions which handle the form submission 
@@ -300,6 +298,12 @@ class ExternalRegistration extends React.Component {
         }
     }
 
+    handleTPToggle() {
+        this.setState(prevState => ({
+          showTermsModal: !prevState.showTermsModal
+        }))
+      }
+
     // ----------------------------------------------
     // Auxilliary/util functions
 
@@ -382,7 +386,7 @@ class ExternalRegistration extends React.Component {
             <Container>
                 {this.state.apiToken &&
                     <>
-                    <PreRegistration showModal={true} helpHostInfo={false}/>
+                    <PreRegistrationModal showModal={true} helpHostInfo={false}/>
                     <AvForm onValidSubmit={this.handleValidSubmit} onInvalidSubmit={this.handleInvalidSubmit}>
 
                         {/* Load universities from DB */}
@@ -1047,126 +1051,28 @@ class ExternalRegistration extends React.Component {
 
                         <Card className="p-2 mt-1">
                             <CardBody className="p-1">
-                                <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Payment Information</CardTitle>
-                                <p>Based on your information, you will have to pay a total of €{this.calculateFinalPrice()[0]} to attend Snowdays 2020 plus a total of €{this.calculateFinalPrice()[1]} that you will pay at the check-in (in cash) for rental material.</p>
-                                <span>For payment details please contact your university's contact person.</span>
+                                <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Final Information</CardTitle>
+                                <Row className="mt-1">
+                                    <Col>
+                                        <span style={{fontSize: "16px"}}>
+                                            Based on your information, you will have to pay a total of €{this.calculateFinalPrice()[0]} to 
+                                            attend Snowdays 2020 plus a total of €{this.calculateFinalPrice()[1]} that you will pay 
+                                            at the check-in (in cash) for rental material. For payment details please contact your university's contact person.
+                                        </span>
+                                    </Col>
+                                </Row>
+                                <Row className="mt-2">
+                                    <Col>
+                                        <span style={{fontSize: "16px"}}>
+                                            By registering to Snowdays 2020 you acknowledge that you have <b>read, and do hereby accept</b> our 
+                                            <b className="title" style={{cursor: "pointer", color: "#4BB5FF"}} onClick={this.handleTPToggle}> terms of partecipation.</b>
+                                        </span> 
+                                    </Col>                                  
+                                </Row>
+                                <ExternalTermsOfAgreementModal isOpen={this.state.showTermsModal} toggle={this.handleTPToggle} size="lg"/>
                             </CardBody>
                         </Card>
 
-                        <Card className="p-2 mt-1">
-                            <CardBody className="p-1">
-                                <CardTitle className="mb-2" tag="h2" style={{ color: "#4BB5FF" }}>Terms of partecipation</CardTitle>
-                                <Row form>
-                                    <Col>
-                                        <label htmlFor="skipassAgree">
-                                            <h5>SKIPASSES</h5>
-                                            <p>When you arrive in Bolzano and do the check-in you will receive the skipasses for
-                                            the following days.
-                                            Non-skiers will also receive a skipass for the second day in order to reach the
-                                            basecamp.
-                                            From the moment you receive the skipass/es you are fully responsible for them. In
-                                        case of loss you will have to buy a new one on your own.</p>
-                                        </label>
-                                    </Col>
-                                    <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="skipassAgree" name="skipassAgree" defaultChecked={this.state.skipassAgree} onChange={this.handleCheckboxCheck} />
-                                    </Col>
-                                </Row>
-                                <Row form>
-                                    <Col>
-                                        <label htmlFor="rentalAgree">
-                                            <h5>RENTAL MATERIAL</h5>
-                                            <p>If you are renting any material or equipment, you agree to return all
-                                            equipment in the same condition as received, reasonable wear and tear excepted. If the
-                                            equipment is not returned in good condition at the end of the event or if repairs or replacements
-                                            are   required,   you  agree  to   pay   all   labor,   material   and   shipping   charges   to  replace   any
-                                            equipment which is lost, stolen or damaged beyond repair.</p>
-                                        </label>
-                                    </Col>
-                                    <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="rentalAgree" name="rentalAgree" defaultChecked={this.state.rentalAgree} onChange={this.handleCheckboxCheck} />
-                                    </Col>
-                                </Row>
-                                <Row form>
-                                    <Col>
-                                        <label htmlFor="propertyAgree">
-                                            <h5>LOSS OR DAMAGE TO PROPERTY</h5>
-                                            <p>Snowdays does not accept responsibility and expressly
-                                            excludes liability to the fullest extent permitted by law for any loss, theft, damage or destruction to
-                                            any personal property in whole or in part for any reason whatsoever, even if left in the care of the
-                                            staff and/or helpers of the event.</p>
-                                        </label>
-                                    </Col>
-                                    <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="propertyAgree" name="propertyAgree" defaultChecked={this.state.propertyAgree} onChange={this.handleCheckboxCheck} />
-                                    </Col>
-                                </Row>
-                                <Row form>
-                                    <Col>
-                                        <label htmlFor="riskAgree">
-                                            <h5>ASSUMPTION OF RISKS</h5>
-                                            <p>In consideration of your participation at Snowdays, you acknowledge
-                                            that you are aware of the possible risks, dangers and hazards associated with your participation
-                                            in the event, including the possible risk of severe or fatal injury to yourself or others. These risks
-                                            include but are not limited to the following: the risks associated with travel to and from locations to
-                                            be visited during the event, including transportation provided by commercial, private and/or public
-                                            motor vehicles; intoxication and/or alcohol poisoning from the alcohol you consume whether
-                                            voluntarily or through coercion. You acknowledge that your participation to Snowdays entail
-                                            known and unknown risks that could result in physical or emotional injury, pregnancy, paralysis,
-                                            death, or damage to yourself, to property or to third parties. You expressly agree and promise to
-                                            accept and assume all of the risks existing the event. Your participation to the event is purely
-                                            voluntary, and you elect to participate despite the risks.
-                                            You expressly renounce any future claim
-                                            or legal action against Snowdays and its staff.</p>
-                                        </label>
-                                    </Col>
-                                    <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="riskAgree" name="riskAgree" defaultChecked={this.state.riskAgree} onChange={this.handleCheckboxCheck} />
-                                    </Col>
-                                </Row>
-                                <Row form>
-                                    <Col>
-                                        <label htmlFor="busAgree">
-                                            <h5>BUS DAMAGES</h5>
-                                            <p>For every damage (including vomit) that occurs to the buses caused by yourself,
-                                            you will pay a fee of 100€ or the amount necessary to cover the damages caused, as agreed with
-                                            the bus company.</p>
-                                        </label>
-                                    </Col>
-                                    <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="busAgree" name="busAgree" defaultChecked={this.state.busAgree} onChange={this.handleCheckboxCheck} />
-                                    </Col>
-                                </Row>
-                                <Row form>
-                                    <Col>
-                                        <label htmlFor="allergiesAgree">
-                                            <h5>ALLERGIES</h5>
-                                            <p>Snowdays makes every effort to accommodate the various dietary requirements of
-                                            the participants and handles food allergies seriously. Every effort is made to instruct our staff
-                                            regarding the potential severity of food allergies and to minimize allergic reactions. Please be
-                                            advised that every effort will be made to have no allergic reactions, food may come in contact
-                                            with   items   containing   allergens,   and   there   is   always   a   risk   of   contamination   or   cross
-                                            contamination. Participants with concerns need to be aware of these risks. Snowdays will
-                                            assume no liability for any adverse reactions that may occur during the event.</p>
-                                        </label>
-                                    </Col>
-                                    <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="allergiesAgree" name="allergiesAgree" defaultChecked={this.state.allergiesAgree} onChange={this.handleCheckboxCheck} />
-                                    </Col>
-                                </Row>
-                                <Row form>
-                                    <Col>
-                                        <label htmlFor="paymentAgree">
-                                            <h5>PAYMENT</h5>
-                                            <p>You will receive a confirmation email after the enrolment. The participation fee is payable within 5 days.</p>
-                                        </label>
-                                    </Col>
-                                    <Col className="col-1 col-md-1 mt-5">
-                                        <input required className="rental-checkbox" type="checkbox" id="paymentAgree" name="paymentAgree" defaultChecked={this.state.paymentAgree} onChange={this.handleCheckboxCheck} />
-                                    </Col>
-                                </Row>
-                            </CardBody>
-                        </Card>
                         <Query query={GET_CURRENT_ACCOUNT_ID} onCompleted={data => this.setState({accountId: data.currentAccountId})} >
                             {({ loading, error, data }) => {
                                 if (loading) return <div></div>

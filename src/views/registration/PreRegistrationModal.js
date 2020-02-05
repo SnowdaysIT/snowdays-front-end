@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
-const PreRegistration = (props) => {
+const PreRegistrationModal = (props) => {
   const showModal = props.showModal;
   const helpHostInfo = props.helpHostInfo;
   const [modal, setModal] = useState(showModal);
@@ -76,4 +76,4 @@ const PreRegistration = (props) => {
   );
 }
 
-export default PreRegistration;
+export default PreRegistrationModal;

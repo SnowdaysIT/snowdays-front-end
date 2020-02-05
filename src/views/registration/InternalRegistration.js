@@ -20,7 +20,7 @@ import { Col, Row, Button,
     Form, FormGroup, Label, 
     Input, Card, CardBody, 
     CardTitle, Container } from 'reactstrap'
-import PreRegistration from "./PreRegistration.js"
+import PreRegistrationModal from "./PreRegistrationModal.js"
 import "../../assets/css/signup.css"
 
 
@@ -170,7 +170,7 @@ class InternalRegistration extends React.Component {
                 
                 {token &&
                     <>
-                    <PreRegistration props={true} />
+                    <PreRegistrationModal showModal={true} helpHostInfo={true}/>
 
                     <Form onSubmit={this.handleSubmit}>
                         <Card className="p-2 mt-4">
