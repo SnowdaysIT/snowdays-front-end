@@ -35,7 +35,7 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
     "forest": "run-p -c start styles:watch",
     "start": "react-scripts -r @cypress/instrument-cra start",
-    "build": "run-p -c build:syles build:react",
+    "build": "run-p -c build:styles build:react",
     "build:react": "react-scripts build",
     "build:styles": "run-p \"sass:*\"",
     "serve": "npm run build && npm run serve:only",
@@ -47,7 +47,6 @@
     "test:react": "react-scripts test --coverage",
     "lint": "eslint ./src/",
     "styles:watch": "run-p \"sass:* -- -w\"",
-    
     "sass:compile": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.css",
     "sass:minify": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.min.css --output-style compressed",
     "sass:map": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.css --source-map true",

@@ -1,6 +1,5 @@
 import React from 'react';
 import { UncontrolledCarousel } from 'reactstrap';
-import carouselStyle from '../../assets/css/UncontrolledCarousel.module.css'
 
 const items = [
   {
@@ -75,7 +74,7 @@ const StaffCarousel = () => {
   return (
     <>
       <h3 className="title-up category text-center">The ones who make it possible</h3>
-      <UncontrolledCarousel className="staff-carousel" items={items} autoPlay={false} enableTouch={true} cssModule={carouselStyle}/>
+      <UncontrolledCarousel className="staff-carousel" items={items} autoPlay={false} enableTouch={true}/>
     </>
   );
 }
