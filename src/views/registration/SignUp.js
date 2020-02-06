@@ -407,13 +407,13 @@ class SignUp extends React.Component {
                       className={
                         "no-border" + (this.state.emailFocus ? " input-group-focus" : "")
                       }
-                      placeholder="mario@unibz.it"
+                      placeholder="Mario.Pizza@unibz.it"
                       id="userEmail"
                       name="userEmail"
                       type="text"
                       validate={{
                         required: {value: true},
-                        pattern: {value: '/^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[A-Za-z]+$/'},
+                        pattern: {value: `${/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/}`},
                       }}
                       onFocus={() => { this.setState({ emailFocus: true }) }}
                       onBlur={() => { this.setState({ emailFocus: false }) }}
@@ -427,7 +427,7 @@ class SignUp extends React.Component {
                       className={
                         "no-border" + (this.state.passwordFocus ? " input-group-focus" : "")
                       }
-                      placeholder="......"
+                      placeholder="********"
                       id="userPassword"
                       name="userPassword"
                       type="password"
