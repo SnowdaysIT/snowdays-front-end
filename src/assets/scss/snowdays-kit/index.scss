@@ -1,0 +1,163 @@
+@font-face {
+    font-family: 'Circular';
+    src: url("../fonts/Circular-Book.eot");
+    src: url("../fonts/Circular-Book.eot") format("embedded-opentype"), url("../fonts/Circular-Book.woff2") format("woff2"), url("../fonts/Circular-Book.woff") format("woff"), url("../fonts/Circular-Book.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Jaapoki';
+    src: url("../fonts/jaapokki-regular-webfont.eot");
+    src: url("../fonts/jaapokki-regular-webfont.eot") format("embedded-opentype"), url("../fonts/jaapokki-regular-webfont.woff2") format("woff2"), url("../fonts/jaapokki-regular-webfont.woff") format("woff"), url("../fonts/jaapokki-regular-webfont.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal; 
+}
+
+* {
+    font-family: 'Circular';
+}
+
+@media (max-width: 500px) {
+    h3 {
+        font-size: 5vw;
+    }
+}
+
+@media (min-width: 1100px){
+    html {
+        font-size:1.1vw !important;
+    }
+}
+
+html {
+    font-size: 1.5vw;
+}
+
+.info-icon {
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 16px;
+}
+
+.category {
+    color: #4BB5FF;
+    margin-left: 0px !important;
+    width: 100%;
+}
+
+.explanationList {
+    list-style-type: none;
+    font-size: medium;
+    font-weight: 200;
+    margin-top: 10px;
+}
+
+.explanationListItem:before {
+    content: '\2744';
+    margin-left: -20px;
+    margin-right: 10px;
+    margin-top: 100px;
+    font-size: 18px;
+    color: #4BB5FF;
+}
+
+.main-header-div {
+    margin-top: -4vw;
+}
+
+.main-header-text {
+    font-size: 7rem;
+    font-family: 'Jaapoki';
+}
+@media (max-width: 500px) {
+    .main-header-text {
+        font-size: 14vw;
+        font-family: 'Jaapoki';
+    }
+}
+
+.yt-video-container {
+    background-color: white;
+    iframe {
+        width: 70vw;
+        height: 40vw;
+        margin: 0;
+        box-shadow: 0px 10px 25px 0px rgba(0, 0, 0, 0.3);
+        border-radius: 0.1875rem;
+    }
+}
+    
+.type1-card {
+    border-radius: 2%;
+}
+
+.register-button {
+    border-color: #4BB5FF;
+    background-color: white;
+    color: #4BB5FF;
+}
+
+.register-button:hover, .register-button:focus, .register-button:active, .register-button.active, .open>.dropdown-toggle.register-button {
+    color: #fff;
+    background-color: #4BB5FF;
+    border-color: #285e8e; /*set the color you want here*/
+}
+
+.staff-carousel .carousel-item {
+    height: auto;
+}
+
+.staff-carousel .carousel-caption h3 {
+    font-weight: bold;
+    background-color: #0C4996;
+    width: 30%;
+    margin-left: 35%;
+}
+
+.explanation-carousel .carousel-item, .explanation-card {
+    height: 70vh;
+    min-height: 580px;
+    width: 100%;
+}
+
+.explanation-card {
+    .nav-tabs {
+        display: flex;
+        .nav-item{
+            .nav-link {
+                background-color: rgba(255, 255, 255, 0.2);
+                &.disabled {
+                    padding-right: 10px;
+                    padding-left: 10px;
+                    background-color: transparent;
+                }
+                &.active {
+                    background-color: rgba(255, 255, 255, 0.4);
+                }
+            }
+        }
+    }
+    
+}
+
+.social-icons {
+    .btn {
+        &.btn-round{
+            border-radius: 4rem !important;
+        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 25px !important;
+        min-width: 25px !important;
+        i.fab {
+            position: unset !important;
+            width: fit-content !important;
+            height: fit-content !important;
+            transform: unset !important;
+            @media (max-width: 420px) {
+                font-size: 2rem !important;
+            }
+        }
+    }
+
+}

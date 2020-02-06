@@ -87,9 +87,13 @@ function Event() {
             <div className="section">
                 <Container>
                     <Row> 
-                        <h3 className="h3-seo category ml-3">THERE ARE NO DAYS LIKE SNOWDAYS</h3>
-                        <Col className="ml-auto mr-auto" md="11" xl="7">
-                            <Card>
+                        <h3 className="h3-seo category ml-3 text-center">THERE ARE NO DAYS LIKE SNOWDAYS</h3>
+                    </Row>
+                    <Row>
+                        <Col className="ml-auto mr-auto" md="12" lg="7">
+                            <Card
+                                className="explanation-card"
+                            >
                                 <CardHeader>
                                     <Nav
                                         className="nav-tabs-neutral justify-content-center"
@@ -114,7 +118,9 @@ function Event() {
                                         </NavItem>
 
                                         <NavItem>
-                                            <NavLink className="disabled" style={{marginTop: "12%"}}>
+                                            <NavLink className="disabled"
+                                                style={{marginTop: "12%"}}
+                                            >
                                                 <i className="fas fa-plus info-icon"></i>
                                             </NavLink>
                                         </NavItem>
@@ -126,7 +132,7 @@ function Event() {
                                                 onClick={e => {
                                                     e.preventDefault();
                                                     setIconPills("2");
-                                                    changeIndex(6);
+                                                    changeIndex(5);
                                                 }}
                                                 style={{marginTop: "7%"}}
                                             >
@@ -136,7 +142,9 @@ function Event() {
                                         </NavItem>
 
                                         <NavItem>
-                                            <NavLink className="disabled" style={{marginTop: "12%"}}>
+                                            <NavLink className="disabled"
+                                                style={{marginTop: "12%"}}
+                                            >
                                                 <i className="fas fa-equals info-icon"></i>
                                             </NavLink>
                                         </NavItem>
@@ -153,7 +161,6 @@ function Event() {
                                                 <i className="far fa-snowflake info-icon" style={{fontSize: 38}}></i>
                                             </NavLink>
                                         </NavItem>
-
                                     </Nav>
                                 </CardHeader>
                                 <CardBody>
@@ -191,22 +198,32 @@ function Event() {
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col className="ml-auto mr-auto">
+                        <Col className="ml-auto mr-auto" md="12" lg="5">
                         <Carousel
                             activeIndex={activeIndex}
                             next={next}
                             previous={previous}
                             className="explanation-carousel"
                             >
-                            {carousel_images.map(item => {
+                            {carousel_images.map((item, index) => {
                                 return (
                                 <CarouselItem
                                     onExiting={onExiting}
                                     onExited={onExited}
-                                    key={item.src}
-                                    style={{width: "100%"}}
+                                    key={'carousel-item-'+index}
                                 >
-                                    <img src={item.src} alt="carousel" className=""/>
+                                    <div className="carousel-item-image"
+                                        id={'carousel-item-'+index}
+                                        style={
+                                            {
+                                                backgroundImage: 'url('+item.src+')',
+                                                backgroundSize: 'cover',
+                                                backgroundPosition: '50% 50%',
+                                                minWidth: '100%',
+                                                minHeight: '100%'
+                                            }
+                                        }
+                                    />
                                 </CarouselItem>
                                 );
                             })}

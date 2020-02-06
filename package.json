@@ -28,13 +28,16 @@
     "react-router-dom": "5.0.1",
     "react-scripts": "^3.3.0",
     "reactstrap": "8.0.1",
-    "serve": "^11.2.0"
+    "serve": "^11.2.0",
+    "sizeof-loader": "^1.1.1"
   },
   "scripts": {
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
     "forest": "run-p -c start styles:watch",
     "start": "react-scripts -r @cypress/instrument-cra start",
-    "build": "react-scripts build",
+    "build": "run-p -c build:styles build:react",
+    "build:react": "react-scripts build",
+    "build:styles": "run-p \"sass:*\"",
     "serve": "npm run build && npm run serve:only",
     "serve:only": "serve -s build -l 3000",
     "serve:docker": "serve -s build -l 8080",
@@ -47,6 +50,7 @@
     "sass:compile": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.css",
     "sass:minify": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.min.css --output-style compressed",
     "sass:map": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.css --source-map true",
+    "sass:snowdays": "node-sass src/assets/scss/snowdays-kit/ --output src/assets/css/ --output-style compressed --source-map true",
     "eject": "react-scripts eject"
   },
   "browserslist": {

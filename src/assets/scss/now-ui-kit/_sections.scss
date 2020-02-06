@@ -19,8 +19,7 @@
 }
 
 .page-header{
-  min-height: 100vh;
-  max-height: 999px;
+  height: 100vh;
   padding: 0;
   color: $white-color;
   position: relative;
@@ -50,7 +49,7 @@
     .page-header-image{
         position: absolute;
         background-size: cover;
-        background-position: center center;
+        background-position: bottom center;
         width: 100%;
         height: 100%;
         z-index: -1;
@@ -58,7 +57,7 @@
 
     .content-center{
       position: absolute;
-      top: 50%;
+      top: 55%;
       left: 50%;
       z-index: 2;
       -ms-transform: translate(-50%, -50%);
@@ -110,6 +109,9 @@
 
     &[filter-color="orange"]{
         @include linear-gradient(rgba($black-color,.20), rgba(224, 23, 3, 0.6));
+    }
+    &[filter-color="grey"]{
+        @include linear-gradient(rgba($black-color,0), rgba($black-color,.60));
     }
 }
 
