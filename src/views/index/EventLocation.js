@@ -39,7 +39,7 @@ function EventLocation() {
             <Col sm="12" md="12" lg="6" xl="6">
               <Card body outline color="#4BB5FF" className="type1-card">
                 <CardHeader>
-                  <h3 className="category">Hosted in the province of Trentino-South Tyrol in Italy</h3>
+                  <h3 className="category">Hosted in the province of South-Tyrol in Italy</h3>
                 </CardHeader>
                 <CardText>
                   Snowdays is set on the best ski slopes of the Italian Dolomites; 
