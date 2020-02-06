@@ -106,6 +106,13 @@ html {
     height: auto;
 }
 
+.staff-carousel .carousel-caption h3 {
+    font-weight: bold;
+    background-color: #0C4996;
+    width: 30%;
+    margin-left: 35%;
+}
+
 .explanation-carousel .carousel-item, .explanation-card {
     height: 70vh;
     min-height: 580px;

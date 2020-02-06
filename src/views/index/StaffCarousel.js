@@ -48,6 +48,7 @@ const items = [
   {
     src: require("assets/img/staff/party.jpg"),
     header: 'Party',
+    caption: '',
     key: '8'
   },
   {
@@ -61,6 +62,12 @@ const items = [
     header: 'Sponsors',
     caption: '',
     key: '10'
+  },
+  {
+    src: require("assets/img/staff/sports.jpg"),
+    header: 'Sports',
+    caption: '',
+    key: '11'
   },
 ];
 

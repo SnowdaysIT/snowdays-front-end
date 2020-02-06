@@ -1,4 +1,3 @@
-/* colors */
 @font-face {
     font-family: 'Circular';
     src: url("../fonts/Circular-Book.eot");
@@ -18,6 +17,7 @@
 .login-title {
     font-family: 'Jaapoki';
 }
+
 .svgContainer {
     position: relative;
     width: 200px;
