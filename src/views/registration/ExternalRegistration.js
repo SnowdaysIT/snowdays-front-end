@@ -488,7 +488,7 @@ class ExternalRegistration extends React.Component {
                                             <AvInput type="number" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456" value="0" onChange={this.handleInputChange}
                                                 validate ={{
                                                     required: {value: true},
-                                                    pattern: {value: '^[0-9]+$'},
+                                                    pattern: {value: '^[A-Za-z0-9]+$'},
                                                 }}
                                             />
                                             <AvFeedback>Please insert a valid enrollment number!</AvFeedback>
@@ -605,7 +605,7 @@ class ExternalRegistration extends React.Component {
                                 </div>
                                 <div className={this.isAlumni() ? "collapsed": ""}>
                                     <h5 className="title category">Second day activities</h5>
-                                    <span className="details mb-2">*<b>IMPORTANT:</b>Beware that you won’t be able take part at the basecamp activities if you ski/snowboard and viceversa.*</span>
+                                    <span className="details mb-2">*<b>IMPORTANT:</b> Beware that you won’t be able take part at the basecamp activities if you ski/snowboard and viceversa.*</span>
                                     <Row className="mt-3">
                                         <Col>
                                             <FormGroup>
@@ -696,7 +696,7 @@ class ExternalRegistration extends React.Component {
                                     </Row>
                                 </div>
                                 <h5 className="title category">Third day activities</h5>
-                                <span className="details mb-2">*<b>IMPORTANT:</b>Beware that you won’t be able take part at the basecamp activities if you ski/snowboard and viceversa.*</span>
+                                <span className="details mb-2">*<b>IMPORTANT:</b> Beware that you won’t be able take part at the basecamp activities if you ski/snowboard and viceversa.*</span>
                                 <Row className="mt-3">
                                     <Col>
                                         <FormGroup>
