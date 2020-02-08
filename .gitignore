@@ -16,6 +16,7 @@ package-lock.json
 
 # dotenv environment variables file
 .env
+.env.frontend
 
 # misc
 .DS_Store
