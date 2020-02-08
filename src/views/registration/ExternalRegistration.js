@@ -31,7 +31,7 @@ const SHOE_SIZES = [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 
 // Constant with list of prices for price calculation
 const PRICES = {
     external: 130,
-    alumni: 90
+    alumni: 80
 }
 
 // Constants that will be filled with IDs from DB data
@@ -395,7 +395,9 @@ class ExternalRegistration extends React.Component {
                                     for (let index = 0; index < results.length; index++) {
                                         let uni_name = results[index].node.name;
                                         let uni_id = results[index].node.id;
-                                        UNIVERSITIES[uni_name] = uni_id
+                                        if (uni_name !== "Free University of Bolzano") {
+                                            UNIVERSITIES[uni_name] = uni_id
+                                        }
                                     }
 
                                     return (
