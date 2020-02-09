@@ -53,7 +53,6 @@ const MERCH_ITEMS = {}
 
 // Auth token for API calls
 const token = localStorage.getItem('token');
-console.log(token);
 
 class InternalRegistration extends React.Component {
 
@@ -693,7 +692,6 @@ class InternalRegistration extends React.Component {
                                                 onChange={
                                                     (e) => {
                                                         const userInput = e.target.value
-                                                        console.log(userInput);
                                                         if (userInput === "yes") {
                                                             this.setState({ doesSnowVolley: true })
                                                         } else {
@@ -715,7 +713,6 @@ class InternalRegistration extends React.Component {
                                                 onChange={
                                                     (e) => {
                                                         const userInput = e.target.value
-                                                        console.log(userInput);
                                                         if (userInput === "yes") {
                                                             this.setState({ doesSnowVolley: true })
                                                         } else {
@@ -1205,7 +1202,6 @@ class InternalRegistration extends React.Component {
                                 onCompleted={(data) => {
                                     this.setState({ accommodationId: data.createAccommodation.accommodation.id })
                                     console.log("Created this users' accomodation for hosting");
-                                    console.log(this.state)
                                 }}
                                 onError={(createError) => {
                                     console.log(createError);
@@ -1217,7 +1213,6 @@ class InternalRegistration extends React.Component {
                                 variables={{ accommodationId: this.state.accommodationId, id: this.state.userProfileId }}
                                 onCompleted={(data) => {
                                     console.log("Made this user a host");
-                                    console.log(data)
                                 }}
                                 onError={(createError) => {
                                     console.log(createError);
@@ -1228,7 +1223,6 @@ class InternalRegistration extends React.Component {
                             <Mutation mutation={ADD_ACTIVITY}
                                 onCompleted={(data) => {
                                     console.log("Added activity for this user");
-                                    console.log(data)
                                 }}
                                 onError={(createError) => {
                                     console.log(createError);
@@ -1240,7 +1234,6 @@ class InternalRegistration extends React.Component {
                                 variables={{experience: (this.state.xpLvl==="Beginner" ? "BEGINNER" : "INTERMEDIATE"), height: this.state.height, shoeSize: this.state.shoeSize, weight: this.state.weight}}
                                 onCompleted={(data) => {
                                     console.log("Created a rental entry for this user");
-                                    console.log(data)
                                 }}
                                 onError={(error) => {
                                     console.log(error);
@@ -1251,7 +1244,6 @@ class InternalRegistration extends React.Component {
                             <Mutation mutation={ADD_MATERIALS_TO_RENTAL}
                                 onCompleted={(data) => {
                                     console.log("Adding materials to rentals entry for this user");
-                                    console.log(data)
                                 }}
                                 onError={(error) => {
                                     console.log(error);
@@ -1311,16 +1303,9 @@ class InternalRegistration extends React.Component {
                             />,
                         ]}>
                             {(mutationFunctions) => (
-                                <Button type="submit" className="btn btn-primary pull-right"
-                                    onClick={() => {
-                                        console.log(HELPER_IDS);
-                                        console.log(ACTIVITY_IDS);
-                                        console.log(STUDENT_DORM_ADDRESS_IDS);
-                                        console.log(RENTAL_MATERIALS);
-                                        console.log(MERCH_ITEMS);
-                                        console.log(this.state.accountId)
-                                        }
-                                    }>REGISTER</Button>
+                                <Button type="submit" className="btn btn-primary pull-right">
+                                    REGISTER
+                                </Button>
                             )}
                         </Composer>
 

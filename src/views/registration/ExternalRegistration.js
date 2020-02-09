@@ -48,8 +48,6 @@ class ExternalRegistration extends React.Component {
     constructor() {
         // Auth token for API calls
         const token = localStorage.getItem('token');
-        console.log("token inside state");
-        console.log(token);
 
         super()
         this.state = {
@@ -110,9 +108,7 @@ class ExternalRegistration extends React.Component {
 
     // Functions which handle the form submission 
 
-    handleValidSubmit(event) {   
-        console.log(this.state);
-        console.log(this.state.profileId); 
+    handleValidSubmit(event) {
         let mutationFunctions = this.state.mutationFunctions
         
         // First of all check that if this person is doing basecamp activities in the first or second day.
@@ -123,8 +119,6 @@ class ExternalRegistration extends React.Component {
         // Part 0: First create a profile only with the required data
         // Then we will update based on our state (form data)
         mutationFunctions[0]().then(data => {
-            console.log("UPDATED PROFILE");
-            console.log(data);
             
             // Part 1: What activities will the person do?           
             // DAY 2
@@ -150,8 +144,6 @@ class ExternalRegistration extends React.Component {
             mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.profileId } })
             mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.profileId } })
 
-            console.log("3 DAY SKI: " + this.state.thirdDaySkiOrSnow);
-            if (this.state.thirdDaySkiOrSnow) console.log("Add ski in second day");
             if (this.state.thirdDaySkiOrSnow) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day ski"], profileId: this.state.profileId } })
 
 
@@ -194,7 +186,6 @@ class ExternalRegistration extends React.Component {
 
                     mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
                         mutationFunctions[4]({variables: {rentalId: rental_id, id: this.state.profileId}})
-                        console.log("added rental connection to the user")
 
                     })
 
@@ -217,7 +208,6 @@ class ExternalRegistration extends React.Component {
 
                     mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
                         mutationFunctions[4]({variables: {rentalId: rental_id, id: this.state.profileId}})
-                        console.log("added rental connection to the user")
                     })
 
                 })
@@ -240,13 +230,10 @@ class ExternalRegistration extends React.Component {
 
             })
 
-            console.log("Mutations error state");
-            console.log(this.state.mutationError)
-
             setTimeout(timeOut => {
                 if (this.state.mutationError === true) {
-                    mutationFunctions[9]({variables: {id: this.state.profileId}}).then(faultData => {
-                            console.log(faultData);
+                    mutationFunctions[9]({variables: {id: this.state.profileId}}).then(
+                        faultData => {
                             console.log("Deleted faulty profile on submission");
                         }
                     )
@@ -1105,7 +1092,6 @@ class ExternalRegistration extends React.Component {
                             <Mutation mutation={ADD_ACTIVITY}
                                 onCompleted={(data) => {
                                     console.log("Added activity for this user");
-                                    console.log(data)
                                 }}
                                 onError={(createError) => {
                                     console.log(createError);
@@ -1118,7 +1104,6 @@ class ExternalRegistration extends React.Component {
                                 variables={{experience: (this.state.xpLvl==="Beginner" ? "BEGINNER" : "INTERMEDIATE"), height: parseInt(this.state.height), shoeSize: parseInt(this.state.shoeSize), weight: parseInt(this.state.weight)}}
                                 onCompleted={(data) => {
                                     console.log("Created a rental entry for this user");
-                                    console.log(data)
                                 }}
                                 onError={(error) => {
                                     console.log(error);
@@ -1130,7 +1115,6 @@ class ExternalRegistration extends React.Component {
                             <Mutation mutation={ADD_MATERIALS_TO_RENTAL}
                                 onCompleted={(data) => {
                                     console.log("Adding materials to rentals entry for this user");
-                                    console.log(data)
                                 }}
                                 onError={(error) => {
                                     console.log(error);
