@@ -48,8 +48,6 @@ class ExternalRegistration extends React.Component {
     constructor() {
         // Auth token for API calls
         const token = localStorage.getItem('token');
-        console.log("token inside state");
-        console.log(token);
 
         super()
         this.state = {
@@ -89,6 +87,7 @@ class ExternalRegistration extends React.Component {
             doesSlackline: false,
             doesFlunkyBall: false,
             doesSponsorActivities: false,
+            doesSpiritActivities: false,
             wantsHoodie: false,
             hoodieSize: "S",
             showTermsModal: false,
@@ -111,8 +110,6 @@ class ExternalRegistration extends React.Component {
     // Functions which handle the form submission 
 
     handleValidSubmit(event) {   
-        console.log(this.state);
-        console.log(this.state.profileId); 
         let mutationFunctions = this.state.mutationFunctions
         
         // First of all check that if this person is doing basecamp activities in the first or second day.
@@ -123,9 +120,6 @@ class ExternalRegistration extends React.Component {
         // Part 0: First create a profile only with the required data
         // Then we will update based on our state (form data)
         mutationFunctions[0]().then(data => {
-            console.log("UPDATED PROFILE");
-            console.log(data);
-            
             // Part 1: What activities will the person do?           
             // DAY 2
             mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Second day lunch"], profileId: this.state.profileId } })
@@ -150,10 +144,7 @@ class ExternalRegistration extends React.Component {
             mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day lunch"], profileId: this.state.profileId } })
             mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day dinner"], profileId: this.state.profileId } })
 
-            console.log("3 DAY SKI: " + this.state.thirdDaySkiOrSnow);
-            if (this.state.thirdDaySkiOrSnow) console.log("Add ski in second day");
             if (this.state.thirdDaySkiOrSnow) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day ski"], profileId: this.state.profileId } })
-
 
             if (this.state.thirdCourseType === "Ski") {
                 mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Third day ski course"], profileId: this.state.profileId } })
@@ -176,6 +167,7 @@ class ExternalRegistration extends React.Component {
             if (this.state.doesSlackline) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Slackline"], profileId: this.state.profileId } })
             if (this.state.doesFlunkyBall) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Flunkyball"], profileId: this.state.profileId } })
             if (this.state.doesSponsorActivities) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Sponsor activities"], profileId: this.state.profileId } })
+            if (this.state.doesSpiritActivities) mutationFunctions[1]({ variables: { activityId: ACTIVITY_IDS["Spirit activities"], profileId: this.state.profileId } })
 
 
             // Part 2: Rental
@@ -194,8 +186,6 @@ class ExternalRegistration extends React.Component {
 
                     mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then(()=> {
                         mutationFunctions[4]({variables: {rentalId: rental_id, id: this.state.profileId}})
-                        console.log("added rental connection to the user")
-
                     })
 
                 })
@@ -217,7 +207,6 @@ class ExternalRegistration extends React.Component {
 
                     mutationFunctions[3]({variables: {rentalId: rental_id, materialId: RENTAL_MATERIALS[rental_item]}}).then( updateRental => {
                         mutationFunctions[4]({variables: {rentalId: rental_id, id: this.state.profileId}})
-                        console.log("added rental connection to the user")
                     })
 
                 })
@@ -239,9 +228,6 @@ class ExternalRegistration extends React.Component {
                 }
 
             })
-
-            console.log("Mutations error state");
-            console.log(this.state.mutationError)
 
             setTimeout(timeOut => {
                 if (this.state.mutationError === true) {
@@ -864,6 +850,13 @@ class ExternalRegistration extends React.Component {
                                                 onChange={this.handleCheckboxCheck}
                                             />
                                         </span>
+                                        <span className="check-separator">
+                                            <label htmlFor="doesSpiritActivities" className={this.doesSkiOnBothDays() ? "text-muted" : ""}>Spirit activities</label>
+                                            <input className="rental-checkbox" type="checkbox" id="doesSpiritActivities" name="doesSpiritActivities"
+                                                defaultChecked={this.state.doesSpiritActivities} disabled={this.doesSkiOnBothDays()}
+                                                onChange={this.handleCheckboxCheck}
+                                            />
+                                        </span>
                                     </div>
                                 </Row>
                                 
@@ -1092,117 +1085,80 @@ class ExternalRegistration extends React.Component {
                                     needsAccommodation: this.state.needsAccommodation,
                                     profileId: this.state.profileId
                                 }}
-                                onCompleted={(data) => {
-                                    console.log("Created user profile");
-                                }}
                                 onError={(createError) => {
                                     console.log(createError);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with the profile creation!\nMake sure you fill out all the fields!")
-                                    window.location.reload()
+                                    alert("There was a problem with the profile creation!\Please try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={ADD_ACTIVITY}
-                                onCompleted={(data) => {
-                                    console.log("Added activity for this user");
-                                    console.log(data)
-                                }}
                                 onError={(createError) => {
                                     console.log(createError);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with your activity selection")
-                                    window.location.reload()
+                                    alert("There was a problem with your activity selection\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={CREATE_RENTAL}
-                                variables={{experience: (this.state.xpLvl==="Beginner" ? "BEGINNER" : "INTERMEDIATE"), height: parseInt(this.state.height), shoeSize: parseInt(this.state.shoeSize), weight: parseInt(this.state.weight)}}
-                                onCompleted={(data) => {
-                                    console.log("Created a rental entry for this user");
-                                    console.log(data)
+                                variables={{
+                                    experience: (this.state.xpLvl==="Beginner" ? "BEGINNER" : "INTERMEDIATE"), 
+                                    height: parseInt(this.state.height), 
+                                    shoeSize: parseInt(this.state.shoeSize), 
+                                    weight: parseInt(this.state.weight)
                                 }}
                                 onError={(error) => {
                                     console.log(error);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with the rental creation!")
-                                    window.location.reload()
+                                    alert("There was a problem with the rental creation\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={ADD_MATERIALS_TO_RENTAL}
-                                onCompleted={(data) => {
-                                    console.log("Adding materials to rentals entry for this user");
-                                    console.log(data)
-                                }}
                                 onError={(error) => {
                                     console.log(error);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with adding the request materials in the rental!")
-                                    window.location.reload()
+                                    alert("There was a problem with adding the requested materials as rental\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={ADD_RENTAL}
-                                onCompleted={(data) => {
-                                    console.log("Added rental entry to the user");
-                                }}
                                 onError={(error) => {
                                     console.log(error);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with linking the rental to your user data!")
-                                    window.location.reload()
+                                    alert("There was a problem with adding the requested materials as rental\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={CREATE_PURCHASE}
-                                onCompleted={(data) => {
-                                    console.log("Created purchase entry for the user");
-                                }}
+
                                 onError={(error) => {
                                     console.log(error);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with linking the purchase to your user data!")
-                                    window.location.reload()
+                                    alert("There was a problem with linking the purchase to your user data\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={ADD_ITEM_TO_PURCHASE}
-                                onCompleted={(data) => {
-                                    console.log("Adding items to purchase entry for this user");
-                                }}
                                 onError={(error) => {
                                     console.log(error);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with adding the requested items in the purchase!")
-                                    window.location.reload()
+                                    alert("There was a problem with adding the requested items in the purchase\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={ADD_PURCHASE}
-                                onCompleted={(data) => {
-                                    console.log("Linked purchase entry to the user");
-                                }}
                                 onError={(error) => {
                                     console.log(error);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with linking the rental to  your user data!")
-                                    window.location.reload()
+                                    alert("There was a problem with linking the rental to  your user data\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={LINK_PROFILE_TO_ACCOUNT}
-                            onCompleted={(data) => {
-                                    console.log("Linked profile to user, finished registration");
-                                }}
                                 onError={(error) => {
                                     console.log(error);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with linking this profile to the signed up user data!")
-                                    window.location.reload()
+                                    alert("There was a problem with linking this profile to the signed up user data\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={DELETE_PROFILE}
-                            onCompleted={(data) => {
-                                    console.log("Deleted the profile which was created for its faults");
-                                }}
                                 onError={(error) => {
                                     console.log(error);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with deleting this user profile!")
-                                    window.location.reload()
+                                    alert("There was a problem with deleting this user profile\nPlease try again or contact us by mail!")
                                 }}
                             />,
                         ]}>
