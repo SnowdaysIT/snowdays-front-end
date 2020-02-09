@@ -63,11 +63,9 @@ class SignUp extends React.Component {
       alert("You must first agree to the privacy policy in order to register")
     } else {
       mutationFunctions[0]().then( sdata => {
-        console.log("Signed up user!");
         mutationFunctions[1]().then( adata => {
           let token = adata.data.authenticate.jwtToken;
           localStorage.setItem('token', token)
-          console.log("token set, now proceeding to nav");
           this.props.history.push("/external-registration")
         });
       })
@@ -533,6 +531,7 @@ class SignUp extends React.Component {
                   <Mutation mutation={SIGNUP} variables={{ email: this.state.userEmail, password: this.state.userPassword }} client={client}
                     onError={(error) => {
                       console.log(error)
+                      localStorage.removeItem('token')
                       alert("There was a problem with the registration!\nPlease make sure you fill out all the fields.\n\nYou might also have inserted an email that is already registered.")
                       window.location.reload(true);
                     }}
@@ -542,6 +541,7 @@ class SignUp extends React.Component {
                     onError={(error) => {
                       console.log(error);
                       alert("There was a problem with the authentication!\nThis is likely to be a server error, please check back later.")
+                      localStorage.removeItem('token')
                       window.location.reload(true);
                     }}
                   />

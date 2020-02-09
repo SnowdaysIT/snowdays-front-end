@@ -62,7 +62,7 @@ function EventLocation() {
                 <CardText>
                   Every year hundreds of people gather from all over Europe for three gorgeous days full of sports, parties and friendly atmospheres.
                   The organising committee consists solely of volunteers, enthusiastic about sports, snow and mountains.
-                  Involved are students from the varying faculties of the UniBz, which is supporting the event.
+                  Involved are students from the varying faculties of the unibz, which is supporting the event.
                 </CardText>
               </Card>
             </Col>
