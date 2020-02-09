@@ -18,6 +18,9 @@ package-lock.json
 .env
 .env.frontend
 
+# JS ENV settings
+src/assets/js/runtime-config.js
+
 # misc
 .DS_Store
 .env.local

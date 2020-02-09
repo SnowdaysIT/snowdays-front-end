@@ -1,0 +1,9 @@
+ARG TAG=latest
+ARG REGISTRY_URL
+FROM ${REGISTRY_URL}snowdays/snowdays-frontend:${TAG}
+
+COPY .env.frontend /snowdays-front-end
+# THIS IS JUST BC REACT IS PICKY AF ABOUT RUNTIME STUFF
+RUN ./generate_runtime_config.sh
+
+RUN npm run build
