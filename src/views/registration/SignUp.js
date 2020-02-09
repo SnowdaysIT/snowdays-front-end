@@ -57,7 +57,6 @@ class SignUp extends React.Component {
   }
 
   handleValidSubmit(event) {
-    event.preventDefault()
     let mutationFunctions = this.state.mutationFunctions
 
     if (!this.state.acceptedPolicy) {
