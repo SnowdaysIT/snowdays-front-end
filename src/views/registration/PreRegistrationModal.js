@@ -14,15 +14,18 @@ const PreRegistrationModal = (props) => {
         <ModalBody>
             <div>
                 <h2 style={{color: "#4BB5FF"}}>Hey there Snowlover</h2>
-                <p>We are happy to welcome you to the enrolment for Snowdays 2020. We hope you are already excited to join us on this adventure. Just follow the enrolment steps, put in all the required data and become a part of the Snowdays’ family. 
-
-                Please keep your student ID near since you will be needing it to register. 
-
-                Organizing a unique event like Snowdays needs a lot of passionate hosts and helpers. If you want to contribute to this you can choose to become a helper and/or to host some of the external students who are coming. Please notice that for the enrolment we will give preference to those people who are going to host or help during the event. 
-                First year’s students must help or host in order to register to the event.</p>
+                <p>We are happy to welcome you to the enrolment for Snowdays 2020. We hope you are already excited to join us on this adventure. Just follow the enrolment steps, put in all the required data and become a part of the Snowdays’ family.</p>
+                
+                {helpHostInfo && 
+                  <p>
+                  Please keep your student ID near since you will be needing it to register. 
+                  Organizing a unique event like Snowdays needs a lot of passionate hosts and helpers. If you want to contribute to this you can choose to become a helper and/or to host some of the external students who are coming. Please notice that for the enrolment we will give preference to those people who are going to host or help during the event. 
+                  First year’s students must help or host in order to register to the event.
+                  </p>
+                }
 
                 <h4>General Data</h4>
-                <p>This part is about your general information. Tell us who you are and put in your contact dates so that you can receive all the important information regarding the event. We will also send a confirmation of your enrolment to your e-mail address.</p>
+                <p>This part is about your general information. Tell us who you are and put in your contact dates so that you can receive all the important information regarding the event.</p>
 
                 {helpHostInfo && 
                 <>
@@ -55,10 +58,12 @@ const PreRegistrationModal = (props) => {
                 }
 
                 <h4>Event and Sports Data</h4>
-                <p>You are almost there, there’s only one step left for you before becoming a part of Snowdays 2020!
-                During the days different sport activities will be provided which you can choose from here. If you want to rent equipment for skiing, please put in your data. 
-                Moreover, you will receive a (aggettivo) T-Shirt at the beginning of the event, so just enter your preferred size. 
-                Please notice: if you choose to rent equipment you will be asked to pay the fee in advance at the same time as you pay the participation fee!</p>
+                <p>
+                  You are almost there, there’s only one step left for you before becoming part of Snowdays 2020! 
+                  During the days different sport activities will be provided which you can choose from here. 
+                  If you want to rent equipment for skiing, please put in your data. Moreover, you will receive a fantastic T-Shirt at the beginning of the event, so just enter your preferred size. 
+                  Please notice: if you choose to rent equipment you will be asked to pay the rental fee at the check in in cash!
+                </p>
                 {helpHostInfo &&
                   <>
                   <h4 style={{color: "#4BB5FF"}}>*PARTY ANIMAL*</h4>

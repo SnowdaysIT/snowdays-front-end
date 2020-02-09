@@ -487,10 +487,10 @@ class ExternalRegistration extends React.Component {
                                     <Col sm={2} className={this.isAlumni() ? "collapsed":""}>
                                         <AvGroup>
                                             <Label for="enrollmentNumber">Enrollment Number</Label>
-                                            <AvInput type="number" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456" value="0" onChange={this.handleInputChange}
+                                            <AvInput type="text" name="enrollmentNumber" id="enrollmentNumber" placeholder="123456" value="0" onChange={this.handleInputChange}
                                                 validate ={{
                                                     required: {value: true},
-                                                    pattern: {value: '^[A-Za-z0-9]+$'},
+                                                    pattern: {value: '^[A-Za-z0-9]+$'}
                                                 }}
                                             />
                                             <AvFeedback>Please insert a valid enrollment number!</AvFeedback>
