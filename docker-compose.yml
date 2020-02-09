@@ -16,7 +16,8 @@ services:
   webserver:
     extends:
       service: node_base
-    command: sh -c 'npm run run:generate_env && npm run forest'
+    command: npm run forest
     env_file: .env.frontend
     ports:
       - 8088:3000 ##port on your network:port on docker network
+    container_name: webserver
