@@ -10,17 +10,47 @@ import {
   Col,
 } from "reactstrap";
 
-// core components
+// custom background animation
+import Background from "../../assets/img/event-bg_reversed.jpg";
+import {BackgroundSizeHelper, BackgroundOffsetHelper} from '../../components/helpers/helpers.js'
 
 function EventLocation() {
+
+  let eventBg = React.createRef();
+
+  const [bgImage] = React.useState(
+    // eslint-disable-next-line import/no-webpack-loader-syntax
+    require(
+      "sizeof-loader!../../assets/img/event-bg_reversed.jpg"
+    )
+  )
+
+  React.useEffect(() => {
+    const updateBgPlacing = () => {
+      eventBg.current.style.backgroundSize = BackgroundSizeHelper(bgImage)
+    }
+    window.addEventListener("resize", updateBgPlacing)
+    if (window.innerWidth > 991) {
+      const updateScroll = () => {
+        eventBg.current.style.backgroundPositionY = BackgroundOffsetHelper('top');
+      };
+      window.addEventListener("scroll", updateScroll);
+      return function cleanup() {
+        window.removeEventListener("scroll", updateScroll);
+      };
+    }
+  });
   
   return (
     <>
       <div
           className="section clear-filter" filter-color="blue"
           style={{
-            backgroundImage: "url(" + require("assets/img/event-bg.jpg") + ")"
-          }}
+            backgroundImage: "url(" + Background + ")",
+            backgroundPosition: "top center",
+            backgroundSize: BackgroundSizeHelper(bgImage),
+            backgroundRepeat: 'no-repeat'
+          }} ref={eventBg}
         >
         <Container>
           <Row>
@@ -39,7 +69,7 @@ function EventLocation() {
             <Col sm="12" md="12" lg="6" xl="6">
               <Card body outline color="#4BB5FF" className="type1-card">
                 <CardHeader>
-                  <h3 className="category">Hosted in the province of South-Tyrol in Italy</h3>
+                  <h3 className="category">Hosted in the province of Trentino-South Tyrol in Italy</h3>
                 </CardHeader>
                 <CardText>
                   Snowdays is set on the best ski slopes of the Italian Dolomites; 

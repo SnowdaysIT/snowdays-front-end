@@ -47,6 +47,7 @@ const items = [
   {
     src: require("assets/img/staff/party.jpg"),
     header: 'Party',
+    caption: '',
     key: '8'
   },
   {
@@ -61,13 +62,19 @@ const items = [
     caption: '',
     key: '10'
   },
+  {
+    src: require("assets/img/staff/sports.jpg"),
+    header: 'Sports',
+    caption: '',
+    key: '11'
+  },
 ];
 
 const StaffCarousel = () => {
   return (
     <>
-      <h3 className="title-up category">The ones who make it possible</h3>
-      <UncontrolledCarousel className="staff-carousel" items={items} autoPlay={false}/>
+      <h3 className="title-up category text-center">The ones who make it possible</h3>
+      <UncontrolledCarousel className="staff-carousel" items={items} autoPlay={false} enableTouch={true}/>
     </>
   );
 }

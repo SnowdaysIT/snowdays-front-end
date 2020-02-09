@@ -8,10 +8,12 @@
     "apollo-boost": "^0.4.7",
     "apollo-client": "^2.6.8",
     "apollo-link-context": "^1.0.19",
+    "availity-reactstrap-validation": "^2.6.1",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "moment": "2.24.0",
     "node-sass": "^4.12.0",
+    "npm-run-all": "^4.1.5",
     "nouislider": "14.0.2",
     "prop-types": "^15.7.2",
     "react": "16.8.6",
@@ -27,13 +29,17 @@
     "react-router-dom": "5.0.1",
     "react-scripts": "^3.3.0",
     "reactstrap": "8.0.1",
-    "serve": "^11.2.0"
+    "serve": "^11.2.0",
+    "sizeof-loader": "^1.1.1"
   },
   "scripts": {
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
     "forest": "run-p -c start styles:watch",
     "start": "react-scripts -r @cypress/instrument-cra start",
-    "build": "react-scripts build",
+    "build": "npm run run:generate_env && run-p -c build:styles build:react",
+    "build:react": "react-scripts build",
+    "build:styles": "run-p \"sass:*\"",
+    "run:generate_env": "./generate_runtime_config.sh",
     "serve": "npm run build && npm run serve:only",
     "serve:only": "serve -s build -l 3000",
     "serve:docker": "serve -s build -l 8080",
@@ -46,6 +52,7 @@
     "sass:compile": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.css",
     "sass:minify": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.min.css --output-style compressed",
     "sass:map": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.css --source-map true",
+    "sass:snowdays": "node-sass src/assets/scss/snowdays-kit/ --output src/assets/css/ --output-style compressed --source-map true",
     "eject": "react-scripts eject"
   },
   "browserslist": {
@@ -72,7 +79,6 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.2",
     "istanbul-lib-coverage": "^2.0.5",
-    "npm-run-all": "^4.1.5",
     "nyc": "^14.1.1",
     "prettier": "^1.19.1",
     "start-server-and-test": "^1.10.6"
