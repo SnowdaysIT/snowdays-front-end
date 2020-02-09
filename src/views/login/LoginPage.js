@@ -38,7 +38,6 @@ class LoginPage extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state)
     event.preventDefault();
   }
   
@@ -365,14 +364,11 @@ class LoginPage extends React.Component {
                     <Mutation mutation={USER_AUTH} 
                         variables={{email: this.state.userEmail, password: this.state.userPassword}}
                         onCompleted={ (adata) => {
-                          console.log("User authentication was successful");
-                          console.log(adata);
                           let token = adata.authenticate.jwtToken;
                           localStorage.setItem('token', token);
                           this.props.history.push("/internal-registration")
                         }}
                         onError={(authError) => {
-                          console.log(authError);
                           alert("There was a problem with the authentication!\nMake sure you inserted the correct name and password.")
                           window.location.reload()
                         }}

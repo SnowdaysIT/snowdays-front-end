@@ -231,8 +231,8 @@ class ExternalRegistration extends React.Component {
 
             setTimeout(timeOut => {
                 if (this.state.mutationError === true) {
-                    mutationFunctions[9]({variables: {id: this.state.profileId}}).then(faultData => {
-                            console.log(faultData);
+                    mutationFunctions[9]({variables: {id: this.state.profileId}}).then(
+                        faultData => {
                             console.log("Deleted faulty profile on submission");
                         }
                     )

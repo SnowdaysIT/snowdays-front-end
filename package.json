@@ -36,7 +36,7 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
     "forest": "run-p -c start styles:watch",
     "start": "react-scripts -r @cypress/instrument-cra start",
-    "build": "npm run:generate_env && run-p -c build:styles build:react",
+    "build": "npm run run:generate_env && run-p -c build:styles build:react",
     "build:react": "react-scripts build",
     "build:styles": "run-p \"sass:*\"",
     "run:generate_env": "./generate_runtime_config.sh",
