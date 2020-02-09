@@ -32,17 +32,20 @@ import "assets/scss/now-ui-kit.scss";
 import Index from "views/index/Index.js";
 import ExternalRegistration from "views/registration/ExternalRegistration.js";
 import SignUp from "views/registration/SignUp.js";
+
+import {API_ENDPOINT} from "assets/js/runtime-config.js";
+
 // Created pages we are not using for now
 // import InternalRegistration from "views/registration/InternalRegistration.js";
 // import LoginPage from "views/login/LoginPage.js";
 // import ProfilePage from "views/profile/ProfilePage.js";
 // import Sponsors from "views/sponsors/Sponsors.js"
 
-console.log(process.env.REACT_APP_API_ENDPOINT);
-
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_API_ENDPOINT
+  uri: API_ENDPOINT
 });
+
+console.log(API_ENDPOINT);
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists

@@ -20,9 +20,11 @@ import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-valida
 
 import '../../assets/css/signup.css'
 
+import {API_ENDPOINT} from "../../assets/js/runtime-config.js";
+
 // Apollo Client set-up for sign-up since the person visiting this page should not have a token
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_API_ENDPOINT
+  uri: API_ENDPOINT
 });
 
 const client = new ApolloClient({

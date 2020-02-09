@@ -6,12 +6,8 @@ RUN mkdir $DIR
 WORKDIR $DIR
 
 COPY package.json $DIR
-
 RUN npm install --production --no-package-lock
-
 COPY . $DIR
-
-RUN npm run build
 
 EXPOSE 8080
 

@@ -39,6 +39,7 @@
     "build": "run-p -c build:styles build:react",
     "build:react": "react-scripts build",
     "build:styles": "run-p \"sass:*\"",
+    "run:generate_env": "./generate_runtime_config.sh",
     "serve": "npm run build && npm run serve:only",
     "serve:only": "serve -s build -l 3000",
     "serve:docker": "serve -s build -l 8080",
