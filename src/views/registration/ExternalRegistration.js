@@ -114,8 +114,20 @@ class ExternalRegistration extends React.Component {
         
         // First of all check that if this person is doing basecamp activities in the first or second day.
         // This way we make sure to set the state as not skiing so that the person does create a "false positive skipass request"
+        // Also if they ski on both days then set all basecamp activities to false
         if (this.doesBasecampActivityOnSecondDay()) this.setState({secondDaySkiOrSnow: false, secondCourseType: "None"}) 
         if (this.doesBasecampActivityOnThirdDay()) this.setState({thirdDaySkiOrSnow: false, thirdCourseType: "None", raceType: "None"})
+        if (this.doesSkiOnBothDays()) {
+            this.setState({
+                doesBeerPong: false,
+                doesLineDrag: false,
+                doesTwister: false,
+                doesSlackline: false,
+                doesFlunkyBall: false,
+                doesSponsorActivities: false,
+                doesSpiritActivities: false,
+            });
+        }
 
         // Part 0: First create a profile only with the required data
         // Then we will update based on our state (form data)
@@ -322,15 +334,13 @@ class ExternalRegistration extends React.Component {
 
     doesBasecampActivityOnSecondDay() {
         return (
-            this.state.doesBeerPong || this.state.doesLineDrag || this.state.doesTwister ||
-            this.state.doesSlackline || this.state.doesFlunkyBall || this.state.doesSnowWalking || this.state.doesSnowVolley
+            this.state.doesSnowWalking || this.state.doesSnowVolley
         )
     }
 
     doesBasecampActivityOnThirdDay() {
         return (
-            this.state.doesBeerPong || this.state.doesLineDrag || this.state.doesTwister || this.state.doesBull ||
-            this.state.doesSlackline || this.state.doesFlunkyBall || this.state.doesHTF
+            this.state.doesHTF
         )
     }
 
