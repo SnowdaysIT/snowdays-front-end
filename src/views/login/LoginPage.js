@@ -12,8 +12,6 @@ import SignUpForm from '../../components/Login/SignUpForm.js'
 // stylesheets
 import '../../assets/css/signup.css'
 
-localStorage.removeItem('token')
-
 class LoginPage extends React.Component {
 
   static defaultProps = {
@@ -21,6 +19,9 @@ class LoginPage extends React.Component {
   }
 
   constructor(props) {
+    if (localStorage.token){
+      props.history.push('/auth_redirect')
+    }
     super(props)
     this.state = {
       /*

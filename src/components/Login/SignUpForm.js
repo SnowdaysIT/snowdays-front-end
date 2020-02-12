@@ -79,7 +79,7 @@ class SignUpForm extends React.Component {
           } else {
             localStorage.setItem('token', adata.data.authenticate.jwtToken)
             //TODO: send to signed-in router
-            this.props.history.push("/external-registration")
+            this.props.history.push("/auth_redirect")
           }
         }).catch((gqlError) => {
           console.error(gqlError)

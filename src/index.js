@@ -37,6 +37,7 @@ import {API_ENDPOINT} from "assets/js/runtime-config.js";
 // Created pages we are not using for now
 // import InternalRegistration from "views/registration/InternalRegistration.js";
 import LoginPage from "views/login/LoginPage.js";
+import AuthRedirect from "views/login/AuthRedirect.js";
 // import ProfilePage from "views/profile/ProfilePage.js";
 // import Sponsors from "views/sponsors/Sponsors.js"
 
@@ -67,17 +68,18 @@ ReactDOM.render(
     <BrowserRouter>
       <Switch>
           <Switch>
-            <Route path="/index" render={props => <Index {...props} />} />
+            <Route exact path="/" render={props => <Index {...props} />} />
             <Route path="/external-registration" render={props => <ExternalRegistration {...props} client={client} />} />
             {/* <Route path="/internal-registration" render={props => <InternalRegistration {...props} client={client} />} /> */}
             {/* <Route path="/profile-page" render={props => <ProfilePage {...props} />}/> */}
             <Route path="/login" render={props => <LoginPage login={true} {...props} />} />
             <Route path="/signup" render={props => <LoginPage login={false} {...props} />} />
+            <Route path="/auth_redirect" render={props => <AuthRedirect login={false} {...props} />} />
             {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}
             {/* <Route path="/eg" render={props => <PageFetchingData {...props} />} /> */}
 
-            <Redirect to="/index" />
-            <Redirect from="/" to="/index" />
+            <Redirect to="/" />
+            <Redirect from="/index" to="/" />
           </Switch>
       </Switch>
     </BrowserRouter>
