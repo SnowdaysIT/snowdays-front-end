@@ -1088,7 +1088,7 @@ class ExternalRegistration extends React.Component {
                                 onError={(createError) => {
                                     console.log(createError);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with the profile creation!\Please try again or contact us by mail!")
+                                    alert("There was a problem with the profile creation!\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={ADD_ACTIVITY}

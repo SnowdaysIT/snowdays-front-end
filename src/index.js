@@ -31,13 +31,12 @@ import "assets/scss/now-ui-kit.scss";
 // pages
 import Index from "views/index/Index.js";
 import ExternalRegistration from "views/registration/ExternalRegistration.js";
-import SignUp from "views/registration/SignUp.js";
 
 import {API_ENDPOINT} from "assets/js/runtime-config.js";
 
 // Created pages we are not using for now
 // import InternalRegistration from "views/registration/InternalRegistration.js";
-// import LoginPage from "views/login/LoginPage.js";
+import LoginPage from "views/login/LoginPage.js";
 // import ProfilePage from "views/profile/ProfilePage.js";
 // import Sponsors from "views/sponsors/Sponsors.js"
 
@@ -69,11 +68,11 @@ ReactDOM.render(
       <Switch>
           <Switch>
             <Route path="/index" render={props => <Index {...props} />} />
-            <Route path="/signup" render={props => <SignUp {...props} />} />
             <Route path="/external-registration" render={props => <ExternalRegistration {...props} client={client} />} />
             {/* <Route path="/internal-registration" render={props => <InternalRegistration {...props} client={client} />} /> */}
             {/* <Route path="/profile-page" render={props => <ProfilePage {...props} />}/> */}
-            {/* <Route path="/login" render={props => <LoginPage {...props} />} /> */}
+            <Route path="/login" render={props => <LoginPage login={true} {...props} />} />
+            <Route path="/signup" render={props => <LoginPage login={false} {...props} />} />
             {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}
             {/* <Route path="/eg" render={props => <PageFetchingData {...props} />} /> */}
 
