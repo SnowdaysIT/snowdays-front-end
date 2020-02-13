@@ -12,7 +12,7 @@ import {GET_ACTIVITIES, GET_MERCH_ITEMS,  GET_UNIVERSITIES,
 import { UPDATE_PROFILE, ADD_ACTIVITY, 
     CREATE_RENTAL, ADD_MATERIALS_TO_RENTAL, ADD_RENTAL, 
     CREATE_PURCHASE, ADD_ITEM_TO_PURCHASE, ADD_PURCHASE,
-    LINK_PROFILE_TO_ACCOUNT, DELETE_PROFILE } from './RegistrationQueries.js'
+    DELETE_PROFILE } from './RegistrationQueries.js'
 
 import { Col, Row, Button, 
     FormGroup, Label, Input, 
@@ -47,57 +47,58 @@ let CURRENT_RENTAL = 0
 
 class ExternalRegistration extends React.Component {
 
-    constructor() {
-        // Auth token for API calls
-        const token = localStorage.getItem('token');
+    static initialState = {
+        name: "",
+        surname: "",
+        phoneNumber: "",
+        participationType: "External",
+        gender: "male",
+        universityName: "Alumni Free University of Bolzano",
+        enrollmentNumber: 0,
+        personalId: "ci",
+        personalIdNr: 0,
+        needsAccommodation: true,
+        height: 0,
+        weight: 0,
+        shoeSize: 35,
+        teeSize: "S",
+        xpLvl: "Beginner",
+        lunchTime: "12-13",
+        dinnerTime: "18-19",
+        isVeg: false,
+        secondDaySkiOrSnow: false,
+        secondCourseType: "None",
+        doesSnowWalking: false,
+        doesSnowVolley: false,
+        doesHTF: false,
+        secondRentalType: "None",
+        thirdDaySkiOrSnow: false,
+        thirdCourseType: "None",
+        raceType: "None",
+        doesBull: false,
+        thirdRentalType: "None",
+        doesBeerPong: false,
+        doesLineDrag: false,
+        doesTwister: false,
+        doesSlackline: false,
+        doesFlunkyBall: false,
+        doesSponsorActivities: false,
+        doesSpiritActivities: false,
+        wantsHoodie: false,
+        hoodieSize: "S",
+        showTermsModal: false,
+        profileId: "",
+        accountId: "",
+        mutationFunctions: [],
+        mutationError: false,
+    }
 
+    constructor() {
         super()
-        this.state = {
-            apiToken: token,
-            name: "",
-            surname: "",
-            phoneNumber: "",
-            participationType: "External",
-            gender: "male",
-            universityName: "Alumni Free University of Bolzano",
-            enrollmentNumber: 0,
-            personalId: "ci",
-            personalIdNr: 0,
-            needsAccommodation: true,
-            height: 0,
-            weight: 0,
-            shoeSize: 35,
-            teeSize: "S",
-            xpLvl: "Beginner",
-            lunchTime: "12-13",
-            dinnerTime: "18-19",
-            isVeg: false,
-            secondDaySkiOrSnow: false,
-            secondCourseType: "None",
-            doesSnowWalking: false,
-            doesSnowVolley: false,
-            doesHTF: false,
-            secondRentalType: "None",
-            thirdDaySkiOrSnow: false,
-            thirdCourseType: "None",
-            raceType: "None",
-            doesBull: false,
-            thirdRentalType: "None",
-            doesBeerPong: false,
-            doesLineDrag: false,
-            doesTwister: false,
-            doesSlackline: false,
-            doesFlunkyBall: false,
-            doesSponsorActivities: false,
-            doesSpiritActivities: false,
-            wantsHoodie: false,
-            hoodieSize: "S",
-            showTermsModal: false,
-            profileId: "",
-            accountId: "",
-            mutationFunctions: [],
-            mutationError: false,
-        }
+
+        this.state = ExternalRegistration.initialState
+        // Auth token for API calls
+        this.state.apiToken = localStorage.getItem('token')
 
         // bind the "this" object to the handler methods so they
         // can understand we are referring to this component and it's state
@@ -107,6 +108,11 @@ class ExternalRegistration extends React.Component {
         this.handleYesNoSelectInput = this.handleYesNoSelectInput.bind(this)
         this.handleCheckboxCheck = this.handleCheckboxCheck.bind(this)
         this.handleTPToggle = this.handleTPToggle.bind(this)
+    }
+
+    resetState(){
+        this.setState(ExternalRegistration.initialState)
+        this.setState({apiToken: localStorage.getItem('token')})
     }
 
     // Functions which handle the form submission 
@@ -245,7 +251,7 @@ class ExternalRegistration extends React.Component {
 
             setTimeout(timeOut => {
                 if (this.state.mutationError === true) {
-                    mutationFunctions[9]({variables: {id: this.state.profileId}}).then(
+                    mutationFunctions[8]({variables: {id: this.state.profileId}}).then(
                         faultData => {
                             console.log("Deleted faulty profile on submission");
                         }
@@ -372,6 +378,10 @@ class ExternalRegistration extends React.Component {
         return (this.state.universityName === "Alumni Free University of Bolzano")
     }
     // ----------------------------------------------
+
+    componentDidMount(){
+        this.resetState()
+    }
 
     render() {
         return (
@@ -1065,8 +1075,6 @@ class ExternalRegistration extends React.Component {
                                                 <option value="XL">XL</option>
                                             </Input>
                                         </FormGroup>
-
-
                                     </Col>
                                 </Row>
                             </CardBody>
@@ -1096,10 +1104,12 @@ class ExternalRegistration extends React.Component {
                             </CardBody>
                         </Card>
 
-                        <Query query={GET_CURRENT_PROFILE_ID} onCompleted={data => this.setState({profileId: data.currentProfileId})} >
+                        <Query query={GET_CURRENT_PROFILE_ID} fetchPolicy='network-only' onCompleted={data => {
+                            this.setState({profileId: data.currentProfileId})
+                        }}>
                             {({ loading, error, data }) => {
                                 if (loading) return <div></div>
-                                if (error) return <div></div>
+                                else if (error) return <div></div>
                                 
                                 return (
                                     <div>
@@ -1123,7 +1133,7 @@ class ExternalRegistration extends React.Component {
                                     console.log(createError);
                                     console.log(this.state.profileId);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with the profile creation!\Please try again or contact us by mail!")
+                                    alert("There was a problem with the profile creation!\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={ADD_ACTIVITY}
@@ -1180,13 +1190,6 @@ class ExternalRegistration extends React.Component {
                                     console.log(error);
                                     this.setState({mutationError: true})
                                     alert("There was a problem with linking the rental to  your user data\nPlease try again or contact us by mail!")
-                                }}
-                            />,
-                            <Mutation mutation={LINK_PROFILE_TO_ACCOUNT}
-                                onError={(error) => {
-                                    console.log(error);
-                                    this.setState({mutationError: true})
-                                    alert("There was a problem with linking this profile to the signed up user data\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={DELETE_PROFILE}
