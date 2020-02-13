@@ -15,29 +15,29 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import React from "react"
+import ReactDOM from "react-dom"
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom"
 import { ApolloProvider } from 'react-apollo'
-import { ApolloClient } from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
-import { setContext } from 'apollo-link-context';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient } from 'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { setContext } from 'apollo-link-context'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 
 // styles
-import "assets/css/bootstrap.min.css";
-import "assets/scss/now-ui-kit.scss";
+import "assets/css/bootstrap.min.css"
+import "assets/scss/now-ui-kit.scss"
 
 // pages
-import Index from "views/index/Index.js";
-import ExternalRegistration from "views/registration/ExternalRegistration.js";
+import Index from "views/index/Index.js"
+import ExternalRegistration from "views/registration/ExternalRegistration.js"
 
-import {API_ENDPOINT} from "assets/js/runtime-config.js";
+import {API_ENDPOINT} from "assets/js/runtime-config.js"
 
 // Created pages we are not using for now
 // import InternalRegistration from "views/registration/InternalRegistration.js";
-import LoginPage from "views/login/LoginPage.js";
-import AuthRedirect from "views/login/AuthRedirect.js";
+import LoginPage from "views/login/LoginPage.js"
+import AuthRedirect from "views/login/AuthRedirect.js"
 // import ProfilePage from "views/profile/ProfilePage.js";
 // import Sponsors from "views/sponsors/Sponsors.js"
 
@@ -46,14 +46,12 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('token');
-  
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      // get the authentication token from local storage if it exists
+      authorization: localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : "",
     }
   }
 });
