@@ -102,6 +102,18 @@ export const GET_UNIVERSITIES = gql`
 }
 `
 
+export const GET_TOTAL_RENTAL_COUNTS = gql`
+{
+    materials {
+        nodes {
+            name
+            rentalMaterials {
+                totalCount
+            }
+        }
+    }
+}
+`
 
 
 // MUTATIONS

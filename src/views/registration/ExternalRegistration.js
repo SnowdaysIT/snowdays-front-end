@@ -6,13 +6,13 @@ import Composer from 'react-composer';
 
 // GraphQL queries
 import {GET_ACTIVITIES, GET_MERCH_ITEMS,  GET_UNIVERSITIES,
-    GET_RENTAL_MATERIALS, GET_CURRENT_PROFILE_ID} from './RegistrationQueries.js'
+    GET_RENTAL_MATERIALS, GET_CURRENT_PROFILE_ID, GET_TOTAL_RENTAL_COUNTS} from './RegistrationQueries.js'
 
 // GraphQL mutations
 import { UPDATE_PROFILE, ADD_ACTIVITY, 
     CREATE_RENTAL, ADD_MATERIALS_TO_RENTAL, ADD_RENTAL, 
     CREATE_PURCHASE, ADD_ITEM_TO_PURCHASE, ADD_PURCHASE,
-    LINK_PROFILE_TO_ACCOUNT, DELETE_PROFILE } from './RegistrationQueries.js'
+    DELETE_PROFILE } from './RegistrationQueries.js'
 
 import { Col, Row, Button, 
     FormGroup, Label, Input, 
@@ -43,59 +43,62 @@ const MERCH_ITEMS = {}
 
 const UNIVERSITIES = {}
 
+let CURRENT_RENTAL = 0
+
 class ExternalRegistration extends React.Component {
 
-    constructor() {
-        // Auth token for API calls
-        const token = localStorage.getItem('token');
+    static initialState = {
+        name: "",
+        surname: "",
+        phoneNumber: "",
+        participationType: "External",
+        gender: "male",
+        universityName: "Alumni Free University of Bolzano",
+        enrollmentNumber: 0,
+        personalId: "ci",
+        personalIdNr: 0,
+        needsAccommodation: true,
+        height: 0,
+        weight: 0,
+        shoeSize: 35,
+        teeSize: "S",
+        xpLvl: "Beginner",
+        lunchTime: "12-13",
+        dinnerTime: "18-19",
+        isVeg: false,
+        secondDaySkiOrSnow: false,
+        secondCourseType: "None",
+        doesSnowWalking: false,
+        doesSnowVolley: false,
+        doesHTF: false,
+        secondRentalType: "None",
+        thirdDaySkiOrSnow: false,
+        thirdCourseType: "None",
+        raceType: "None",
+        doesBull: false,
+        thirdRentalType: "None",
+        doesBeerPong: false,
+        doesLineDrag: false,
+        doesTwister: false,
+        doesSlackline: false,
+        doesFlunkyBall: false,
+        doesSponsorActivities: false,
+        doesSpiritActivities: false,
+        wantsHoodie: false,
+        hoodieSize: "S",
+        showTermsModal: false,
+        profileId: "",
+        accountId: "",
+        mutationFunctions: [],
+        mutationError: false,
+    }
 
+    constructor() {
         super()
-        this.state = {
-            apiToken: token,
-            name: "",
-            surname: "",
-            phoneNumber: "",
-            participationType: "External",
-            gender: "male",
-            universityName: "Alumni Free University of Bolzano",
-            enrollmentNumber: 0,
-            personalId: "ci",
-            personalIdNr: 0,
-            needsAccommodation: true,
-            height: 0,
-            weight: 0,
-            shoeSize: 35,
-            teeSize: "S",
-            xpLvl: "Beginner",
-            lunchTime: "12-13",
-            dinnerTime: "18-19",
-            isVeg: false,
-            secondDaySkiOrSnow: false,
-            secondCourseType: "None",
-            doesSnowWalking: false,
-            doesSnowVolley: false,
-            doesHTF: false,
-            secondRentalType: "None",
-            thirdDaySkiOrSnow: false,
-            thirdCourseType: "None",
-            raceType: "None",
-            doesBull: false,
-            thirdRentalType: "None",
-            doesBeerPong: false,
-            doesLineDrag: false,
-            doesTwister: false,
-            doesSlackline: false,
-            doesFlunkyBall: false,
-            doesSponsorActivities: false,
-            doesSpiritActivities: false,
-            wantsHoodie: false,
-            hoodieSize: "S",
-            showTermsModal: false,
-            profileId: "",
-            accountId: "",
-            mutationFunctions: [],
-            mutationError: false,
-        }
+
+        this.state = ExternalRegistration.initialState
+        // Auth token for API calls
+        this.state.apiToken = localStorage.getItem('token')
 
         // bind the "this" object to the handler methods so they
         // can understand we are referring to this component and it's state
@@ -105,6 +108,11 @@ class ExternalRegistration extends React.Component {
         this.handleYesNoSelectInput = this.handleYesNoSelectInput.bind(this)
         this.handleCheckboxCheck = this.handleCheckboxCheck.bind(this)
         this.handleTPToggle = this.handleTPToggle.bind(this)
+    }
+
+    resetState(){
+        this.setState(ExternalRegistration.initialState)
+        this.setState({apiToken: localStorage.getItem('token')})
     }
 
     // Functions which handle the form submission 
@@ -243,13 +251,13 @@ class ExternalRegistration extends React.Component {
 
             setTimeout(timeOut => {
                 if (this.state.mutationError === true) {
-                    mutationFunctions[9]({variables: {id: this.state.profileId}}).then(
+                    mutationFunctions[8]({variables: {id: this.state.profileId}}).then(
                         faultData => {
                             console.log("Deleted faulty profile on submission");
                         }
                     )
                 } else {
-                    alert("Congratulations, " + this.state.name +"! Welcome to Snowdays 2020.\nYou will receive a confirmation e-mail in the address you used to sign up.\nNow get ready, because there are no days like SNOWDAYS!")
+                    alert("Congratulations, " + this.state.name +"! Welcome to Snowdays 2020.\nNow get ready, because there are no days like SNOWDAYS!")
                     this.props.history.push("/index")
                 }
             }, 2000)
@@ -370,6 +378,10 @@ class ExternalRegistration extends React.Component {
         return (this.state.universityName === "Alumni Free University of Bolzano")
     }
     // ----------------------------------------------
+
+    componentDidMount(){
+        this.resetState()
+    }
 
     render() {
         return (
@@ -892,6 +904,8 @@ class ExternalRegistration extends React.Component {
                                     }}
                                 </Query>
 
+                                
+
                                 <h5 className="title category">Rental information</h5>
                                 <Row form>
                                     <Col>
@@ -944,9 +958,28 @@ class ExternalRegistration extends React.Component {
                                         </FormGroup>
                                     </Col>
                                 </Row>
+                                {/* Load rental material from DB */}
+                                <Query query={GET_TOTAL_RENTAL_COUNTS}>
+                                    {({ loading, error, data }) => {
+                                        if (loading) return <div></div>
+                                        if (error) return <div></div>
 
+                                        let tempRentalNr = 0
+                                        const results = data.materials.nodes
+
+                                        tempRentalNr += results[1].rentalMaterials.totalCount + results[3].rentalMaterials.totalCount + results[5].rentalMaterials.totalCount
+                                        CURRENT_RENTAL = tempRentalNr                                        
+
+                                        return (
+                                            <div>
+                                            </div>
+                                        )
+                                    }}
+                                </Query>
+
+                                <span className={this.isAlumni()? "collapsed details": "details"}> There are only {(200-CURRENT_RENTAL)} rental requests left for the second day rental!</span>
                                 <Row form>
-                                    <Col className={this.isAlumni() ? "collapsed": ""}>
+                                    <Col className={(this.isAlumni() || CURRENT_RENTAL >= 200)? "collapsed": ""}>
                                         <h6 className="title category">Second day rental requests</h6>
                                         <FormGroup>
                                             <Input type="select" name="secondRentalType" id="secondRentalType" value={this.state.secondRentalType}
@@ -1041,8 +1074,6 @@ class ExternalRegistration extends React.Component {
                                                 <option value="XL">XL</option>
                                             </Input>
                                         </FormGroup>
-
-
                                     </Col>
                                 </Row>
                             </CardBody>
@@ -1072,10 +1103,12 @@ class ExternalRegistration extends React.Component {
                             </CardBody>
                         </Card>
 
-                        <Query query={GET_CURRENT_PROFILE_ID} onCompleted={data => this.setState({profileId: data.currentProfileId})} >
+                        <Query query={GET_CURRENT_PROFILE_ID} fetchPolicy='network-only' onCompleted={data => {
+                            this.setState({profileId: data.currentProfileId})
+                        }}>
                             {({ loading, error, data }) => {
                                 if (loading) return <div></div>
-                                if (error) return <div></div>
+                                else if (error) return <div></div>
                                 
                                 return (
                                     <div>
@@ -1097,8 +1130,9 @@ class ExternalRegistration extends React.Component {
                                 }}
                                 onError={(createError) => {
                                     console.log(createError);
+                                    console.log(this.state.profileId);
                                     this.setState({mutationError: true})
-                                    alert("There was a problem with the profile creation!\Please try again or contact us by mail!")
+                                    alert("There was a problem with the profile creation!\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={ADD_ACTIVITY}
@@ -1155,13 +1189,6 @@ class ExternalRegistration extends React.Component {
                                     console.log(error);
                                     this.setState({mutationError: true})
                                     alert("There was a problem with linking the rental to  your user data\nPlease try again or contact us by mail!")
-                                }}
-                            />,
-                            <Mutation mutation={LINK_PROFILE_TO_ACCOUNT}
-                                onError={(error) => {
-                                    console.log(error);
-                                    this.setState({mutationError: true})
-                                    alert("There was a problem with linking this profile to the signed up user data\nPlease try again or contact us by mail!")
                                 }}
                             />,
                             <Mutation mutation={DELETE_PROFILE}
