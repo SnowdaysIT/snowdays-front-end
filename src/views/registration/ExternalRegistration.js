@@ -6,7 +6,7 @@ import Composer from 'react-composer';
 
 // GraphQL queries
 import {GET_ACTIVITIES, GET_MERCH_ITEMS,  GET_UNIVERSITIES,
-    GET_RENTAL_MATERIALS, GET_CURRENT_PROFILE_ID} from './RegistrationQueries.js'
+    GET_RENTAL_MATERIALS, GET_CURRENT_PROFILE_ID, GET_TOTAL_RENTAL_COUNTS} from './RegistrationQueries.js'
 
 // GraphQL mutations
 import { UPDATE_PROFILE, ADD_ACTIVITY, 
@@ -42,6 +42,8 @@ const RENTAL_MATERIALS = {}
 const MERCH_ITEMS = {}
 
 const UNIVERSITIES = {}
+
+let CURRENT_RENTAL = 0
 
 class ExternalRegistration extends React.Component {
 
@@ -249,7 +251,7 @@ class ExternalRegistration extends React.Component {
                         }
                     )
                 } else {
-                    alert("Congratulations, " + this.state.name +"! Welcome to Snowdays 2020.\nYou will receive a confirmation e-mail in the address you used to sign up.\nNow get ready, because there are no days like SNOWDAYS!")
+                    alert("Congratulations, " + this.state.name +"! Welcome to Snowdays 2020.\nNow get ready, because there are no days like SNOWDAYS!")
                     this.props.history.push("/index")
                 }
             }, 2000)
@@ -892,6 +894,8 @@ class ExternalRegistration extends React.Component {
                                     }}
                                 </Query>
 
+                                
+
                                 <h5 className="title category">Rental information</h5>
                                 <Row form>
                                     <Col>
@@ -944,9 +948,29 @@ class ExternalRegistration extends React.Component {
                                         </FormGroup>
                                     </Col>
                                 </Row>
+                                {/* Load rental material from DB */}
+                                <Query query={GET_TOTAL_RENTAL_COUNTS}>
+                                    {({ loading, error, data }) => {
+                                        if (loading) return <div></div>
+                                        if (error) return <div></div>
 
+                                        let tempRentalNr = 0
+                                        const results = data.materials.nodes
+
+                                        tempRentalNr += results[1].rentalMaterials.totalCount + results[3].rentalMaterials.totalCount + results[5].rentalMaterials.totalCount
+                                        CURRENT_RENTAL = tempRentalNr                                        
+
+                                        return (
+                                            <div>
+                                            </div>
+                                        )
+                                    }}
+                                </Query>
+
+                                <span className={this.isAlumni()? "collapsed details": "details"}> There are only {(200-CURRENT_RENTAL)} rental requests left for the second day rental!</span>
                                 <Row form>
-                                    <Col className={this.isAlumni() ? "collapsed": ""}>
+                                    {/* TODO: Second day rental */}
+                                    <Col className={(this.isAlumni() || CURRENT_RENTAL >= 3)? "collapsed": ""}>
                                         <h6 className="title category">Second day rental requests</h6>
                                         <FormGroup>
                                             <Input type="select" name="secondRentalType" id="secondRentalType" value={this.state.secondRentalType}
@@ -1097,6 +1121,7 @@ class ExternalRegistration extends React.Component {
                                 }}
                                 onError={(createError) => {
                                     console.log(createError);
+                                    console.log(this.state.profileId);
                                     this.setState({mutationError: true})
                                     alert("There was a problem with the profile creation!\Please try again or contact us by mail!")
                                 }}
