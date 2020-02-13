@@ -72,7 +72,7 @@ ReactDOM.render(
             {/* <Route path="/profile-page" render={props => <ProfilePage {...props} />}/> */}
             <Route path="/login" render={props => <LoginPage login={true} {...props} />} />
             <Route path="/signup" render={props => <LoginPage login={false} {...props} />} />
-            <Route path="/auth_redirect" render={props => <AuthRedirect login={false} {...props} />} />
+            <Route path="/auth_redirect" render={props => <AuthRedirect {...props} />} />
             {/* <Route path="/sponsors" render={props => <Sponsors {...props} />} /> */}
             {/* <Route path="/eg" render={props => <PageFetchingData {...props} />} /> */}
 
