@@ -17,44 +17,33 @@ import {
     CarouselItem
 } from "reactstrap";
 
-const carousel_images = [
-    // {
-    //     src: require("assets/img/sport1.jpg"),
-    // },
-    {
-        src: require("assets/img/sport2.jpg"),
-    },
-    {
-        src: require("assets/img/sport3.jpg"),
-    },
-    {
-        src: require("assets/img/sport4.jpg"),
-    },
-    {
-        src: require("assets/img/sport5.jpg"),
-    },
-    {
-        src: require("assets/img/sport6.jpg"),
-    },
-    // {
-    //     src: require("assets/img/party1.jpg"),
-    // },
-    // {
-    //     src: require("assets/img/party2.jpg"),
-    // },
-    // {
-    //     src: require("assets/img/party3.jpg"),
-    // },
-    // {
-    //     src: require("assets/img/party4.jpg"),
-    // },
-    // {
-    //     src: require("assets/img/party5.jpg"),
-    // },
-    {
-        src: require("assets/img/party6.jpg"),
-    }
-];
+const carousel_images = {
+    sport: [
+        {
+            src: require("assets/img/fassa.jpg"),
+        },
+        {
+            src: require("assets/img/sport2.jpg"),
+        },
+        {
+            src: require("assets/img/sport3.jpg"),
+        },
+        {
+            src: require("assets/img/sport4.jpg"),
+        },
+        {
+            src: require("assets/img/sport5.jpg"),
+        },
+        {
+            src: require("assets/img/sport6.jpg"),
+        },
+    ],
+    party:[
+        {
+            src: require("assets/img/party6.jpg"),
+        }
+    ],
+};
 
 
 function Event() {
@@ -62,6 +51,7 @@ function Event() {
     const [iconPills, setIconPills] = React.useState("1");
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [animating, setAnimating] = React.useState(false);
+    const [eventCarouselFocus, setEventCarouselFocus] = React.useState('sport')
     const onExiting = () => {
       setAnimating(true);
     };
@@ -70,16 +60,19 @@ function Event() {
     };
     const next = () => {
       if (animating) return;
-      const nextIndex = activeIndex === carousel_images.length - 1 ? 0 : activeIndex + 1;
+      const nextIndex = activeIndex === carousel_images[eventCarouselFocus].length - 1 ? 0 : activeIndex + 1;
       setActiveIndex(nextIndex);
     };
     const previous = () => {
       if (animating) return;
-      const nextIndex = activeIndex === 0 ? carousel_images.length - 1 : activeIndex - 1;
+      const nextIndex = activeIndex === 0 ? carousel_images[eventCarouselFocus].length - 1 : activeIndex - 1;
       setActiveIndex(nextIndex);
     };
     const changeIndex = (index) => {
-      setActiveIndex(index);
+        console.log(eventCarouselFocus)
+        debugger
+        setEventCarouselFocus((eventCarouselFocus === 'sport' ? 'party' : 'sport'))
+        setActiveIndex(0);
     }
 
     return (
@@ -205,7 +198,7 @@ function Event() {
                             previous={previous}
                             className="explanation-carousel"
                             >
-                            {carousel_images.map((item, index) => {
+                            {carousel_images[eventCarouselFocus].map((item, index) => {
                                 return (
                                 <CarouselItem
                                     onExiting={onExiting}

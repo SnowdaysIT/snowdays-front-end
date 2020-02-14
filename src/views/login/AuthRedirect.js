@@ -28,8 +28,11 @@ class AuthRedirect extends React.Component {
         switch(profile.role){
             case 'participant_user':
                 if (profile.type === 'Internal') {
-                    window.open(GOOGLE_FORM_URL)
-                    this.props.history.push('/')
+                    return (
+                        <p>To complete your internal student registration, you will be proceding outside snowdays.it into Google Forms. <a href={GOOGLE_FORM_URL}>To confirm, click here</a></p>
+                    )
+                    // window.open(GOOGLE_FORM_URL)
+                    // this.props.history.push('/')
                 } else {
                     if (profile.name === 'dummyName')
                         this.props.history.push('/external-registration')
@@ -42,6 +45,7 @@ class AuthRedirect extends React.Component {
                 this.props.history.push('/')
                 break
         }
+        return null
     }
 
     render() {
@@ -56,12 +60,11 @@ class AuthRedirect extends React.Component {
                                 if (loading) return <div></div>
                                 else if (error) return <div></div>
                                 else {
-                                    this.route({
+                                    return this.route({
                                         name: data.account.profile.firstName,
                                         role: data.account.roleName,
                                         type: (this.state.registrationType ? this.state.registrationType : 'Other')
                                     })
-                                    return null
                                 }
                             }}
                         </Query>
