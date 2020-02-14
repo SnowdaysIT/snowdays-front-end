@@ -34,3 +34,4 @@ yarn-debug.log*
 yarn-error.log*
 
 .scannerwork
+useful_queries.sql

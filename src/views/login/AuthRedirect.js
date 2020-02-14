@@ -3,6 +3,8 @@ import { Query } from 'react-apollo';
 
 import {GET_ACCOUNT_ID, GET_ACCOUNT_PROFILE_INFO} from "./RedirectQueries.js"
 
+const GOOGLE_FORM_URL = 'https://forms.gle/zAmgL8R8GoTSTLJU8'
+
 /**
  * Pseudo-routing component, handles after-login routing
  * to profile information and falls back to login without token
@@ -11,6 +13,9 @@ class AuthRedirect extends React.Component {
     constructor(props){
         super(props)
         if (localStorage.token) {
+            this.state = {
+                registrationType: this.props.history.location.state.registrationType
+            }
             // inspect user type
             //props.history.push('/external-registration')
         } else {
@@ -19,13 +24,17 @@ class AuthRedirect extends React.Component {
         }
     }
 
-    route(data) {
-        switch(data.role){
+    route(profile) {
+        switch(profile.role){
             case 'participant_user':
-                if (data.name === 'dummyName')
-                    this.props.history.push('/external-registration')
-                else {
+                if (profile.type === 'Internal') {
+                    window.open(GOOGLE_FORM_URL)
                     this.props.history.push('/')
+                } else {
+                    if (profile.name === 'dummyName')
+                        this.props.history.push('/external-registration')
+                    else
+                        this.props.history.push('/')
                 }
                 break
 
@@ -49,7 +58,8 @@ class AuthRedirect extends React.Component {
                                 else {
                                     this.route({
                                         name: data.account.profile.firstName,
-                                        role: data.account.roleName
+                                        role: data.account.roleName,
+                                        type: (this.state.registrationType ? this.state.registrationType : 'Other')
                                     })
                                     return null
                                 }
