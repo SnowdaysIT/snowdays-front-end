@@ -13,9 +13,16 @@ class AuthRedirect extends React.Component {
     constructor(props){
         super(props)
         if (localStorage.token) {
-            this.state = {
-                registrationType: this.props.history.location.state.registrationType
+            try {
+                this.state = {
+                    registrationType: this.props.history.location.state.registrationType
+                }
+            } catch(e){
+                this.state = {
+                    registrationType: ""
+                }
             }
+            
             // inspect user type
             //props.history.push('/external-registration')
         } else {
@@ -40,7 +47,6 @@ class AuthRedirect extends React.Component {
                         this.props.history.push('/')
                 }
                 break
-
             default:
                 this.props.history.push('/')
                 break
