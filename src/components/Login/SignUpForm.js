@@ -198,8 +198,8 @@ class SignUpForm extends React.Component {
             <Input type="select" name="registrationType" id="registrationType" value={this.state.registrationType}
               onChange={(e) => { this.setState({registrationType: e.target.value}) }}
             >
-              <option value="External">External</option>
-              <option value="Internal">Internal</option>
+              <option value="External" style={{color:"#000"}}>External</option>
+              <option value="Internal" style={{color:"#000"}}>Internal</option>
             </Input>
           </FormGroup>
           <FormGroup inline className="mt-3 ml-1">
