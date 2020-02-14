@@ -979,8 +979,7 @@ class ExternalRegistration extends React.Component {
 
                                 <span className={this.isAlumni()? "collapsed details": "details"}> There are only {(200-CURRENT_RENTAL)} rental requests left for the second day rental!</span>
                                 <Row form>
-                                    {/* TODO: Second day rental */}
-                                    <Col className={(this.isAlumni() || CURRENT_RENTAL >= 3)? "collapsed": ""}>
+                                    <Col className={(this.isAlumni() || CURRENT_RENTAL >= 200)? "collapsed": ""}>
                                         <h6 className="title category">Second day rental requests</h6>
                                         <FormGroup>
                                             <Input type="select" name="secondRentalType" id="secondRentalType" value={this.state.secondRentalType}
