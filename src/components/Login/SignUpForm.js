@@ -25,12 +25,12 @@ import {API_ENDPOINT} from "../../assets/js/runtime-config.js";
 // Apollo Client set-up for sign-up since the person visiting this page should not have a token
 const httpLink = createHttpLink({
   uri: API_ENDPOINT
-});
+})
 
 const client = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache()
-});
+})
 
 // Clear token for API calls when user browses to this page
 // localStorage.removeItem('token')
@@ -66,7 +66,7 @@ class SignUpForm extends React.Component {
           formError: "You must first agree to the privacy policy in order to register"
         }
       )
-    } else {      
+    } else {
       mutationFunctions[0]().then( sdata => {
         mutationFunctions[1]().then( adata => {
           if (adata.data.authenticate.jwtToken == null){
@@ -78,8 +78,14 @@ class SignUpForm extends React.Component {
             )
           } else {
             localStorage.setItem('token', adata.data.authenticate.jwtToken)
-            //TODO: send to signed-in router
-            this.props.history.push("/auth_redirect")
+            this.props.history.push(
+              {
+                pathname: "/auth_redirect",
+                state: {
+                  registrationType: this.state.registrationType
+                }
+              }
+            )
           }
         }).catch((gqlError) => {
           console.error(gqlError)
@@ -192,8 +198,8 @@ class SignUpForm extends React.Component {
             <Input type="select" name="registrationType" id="registrationType" value={this.state.registrationType}
               onChange={(e) => { this.setState({registrationType: e.target.value}) }}
             >
-              {/* <option value="Internal" disabled>Internal</option> */}
-              <option value="External">External</option>
+              <option value="External" style={{color:"#000"}}>External</option>
+              <option value="Internal" style={{color:"#000"}}>Internal</option>
             </Input>
           </FormGroup>
           <FormGroup inline className="mt-3 ml-1">
@@ -277,15 +283,15 @@ class SignUpForm extends React.Component {
 
           <Composer components={[
             <Mutation mutation={SIGNUP} variables={{ email: this.state.userEmail, password: this.state.userPassword }} client={client}
-              // onError={(error) => {
-              //   console.log(error)
-              //   localStorage.removeItem('token')
-              //   this.setState(
-              //     {
-              //       formError: "The email you inserted is already registered, you might need to head to the Login Yeti."
-              //     }
-              //   )
-              // }}
+              onError={(error) => {
+                console.log(error)
+                localStorage.removeItem('token')
+                this.setState(
+                  {
+                    formError: "The email you inserted is already registered, you might need to head to the Login Yeti."
+                  }
+                )
+              }}
             />,
 
             <Mutation mutation={USER_AUTH} variables={{ email: this.state.userEmail, password: this.state.userPassword }} client={client}
@@ -304,11 +310,11 @@ class SignUpForm extends React.Component {
               <Button type="submit" className="btn btn-round mr-3" size="lg" style={{ backgroundColor: "white", color: "#4BB5FF" }}
                   onClick={() => {
                     this.setState({ mutationFunctions: mutationFunctions })
-                  }
+                  } 
                 }
               >
                 Get started
-            </Button>
+              </Button>
             )}
           </Composer>
           <Row>
